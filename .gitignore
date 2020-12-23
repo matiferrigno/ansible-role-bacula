@@ -1,0 +1,6 @@
+env/
+lib/
+.vscode/
+*.retry
+*/__pycache__
+*.pyc

@@ -1,0 +1,4 @@
+ansible==2.10.4
+ansible-lint==4.3.7
+molecule==3.2.0
+molecule-podman==0.3.0

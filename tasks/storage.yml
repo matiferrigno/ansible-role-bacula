@@ -1,0 +1,87 @@
+---
+
+- name: Install bacula storage Part 1/4
+  apt:
+    name: "{{ bacula_sd_package_name }}"
+    state: present
+    install_recommends: false
+    update_cache: true
+  ignore_errors: true
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Install storage (Fix Bug on 9.4.2-2+deb10u1) Part 2/4
+  lineinfile:
+    path: /var/lib/dpkg/info/bacula-sd.postinst
+    regexp: "^.*chmod 640"
+    line: chmod 666 $TMP_CONFIG
+  when: ansible_distribution == 'Debian' and ansible_distribution_version == '10'
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Install storage (Fix Bug on 9.4.2-2+deb10u1) Part 3/4
+  lineinfile:
+    path: /var/lib/dpkg/info/bacula-sd.postinst
+    regexp: "^.*chown bacula:bacula.*"
+    line: chown root:root $TMP_CONFIG
+  when: ansible_distribution == 'Debian' and ansible_distribution_version == '10'
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Install storage (Fix Bug) Part 4/4
+  apt:
+    name: "{{ bacula_sd_package_name }}"
+    state: present
+    install_recommends: false
+    update_cache: false
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Ensure directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: bacula
+    group: tape
+    mode: 0740
+  with_items:
+    - /etc/bacula/conf.d
+    - /etc/bacula/clients.d
+    - /etc/bacula/policies.d
+    - /etc/bacula/devs.d
+    - /etc/bacula/certs/crt
+    - /etc/bacula/certs/private
+    - /etc/bacula/certs/csr
+  no_log: "{{ bacula_no_log|bool }}"
+
+- include_tasks: secure.yml
+
+- name: Configure storage
+  template:
+    src: bacula-sd.conf.j2
+    dest: /etc/bacula/bacula-sd.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Ensure clients device directories exists
+  file:
+    path: "{{ bacula_sd_device }}/{{ item.name }}"
+    state: directory
+    owner: bacula
+    group: bacula
+    mode: 0740
+  when:
+    - item.enabled|bool
+  with_items:
+    - "{{ bacula_clients }}"
+  no_log: "{{ bacula_no_log|bool }}"
+
+- include_tasks: client-storage-delete.yml
+  when:
+    - not (item.enabled|bool)
+  with_items:
+    - "{{ bacula_clients }}"
+
+- include_tasks: client-storage-add.yml
+  when:
+    - item.enabled|bool
+  with_items:
+    - "{{ bacula_clients }}"

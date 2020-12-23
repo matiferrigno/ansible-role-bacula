@@ -1,0 +1,12 @@
+---
+# handlers file for matiferrigno.ansible-bacula
+
+- name: Bacula-director restarted
+  systemd:
+    name: bacula-director
+    state: restarted
+
+- name: Bacula-storage restarted
+  systemd:
+    name: bacula-sd
+    state: restarted

@@ -1,0 +1,326 @@
+---
+# defaults file for matiferrigno.ansible-bacula
+
+##########                     ##########
+##########  Debug              ##########
+##########                     ##########
+
+# bacula_no_log: (yes | no)
+#   Set no_log on all tasks
+
+##########                     ##########
+##########  CA                 ##########
+##########                     ##########
+#   Defines the Bacula Director's Catalog Resource
+#   Currently, only one is supported.
+#
+
+# bacula_ca_enabled:
+#   if bacula_ca_enabled: Path where the certificate will be stored.
+#   else: Path where CA certificate already must exists.
+
+##########                     ##########
+##########  Bacula Director    ##########
+##########                     ##########
+
+# bacula_dir_external: (yes | no)
+#   Set it 'yes' if you don't want to let the role manages
+#   the Director.
+
+# bacula_dir_package_name: string
+#   Name of package on repository
+
+# bacula_dir_database_connector: ('mysql' | 'pgsql')
+#   Database engine used on catalog.
+
+#   Regardless bacula_dir_external value, you must provide connection
+#   parameters. If bacula_dir_external is 'yes', so it will be used
+#   only to connect to Bacula Director, but if it is 'no' also to
+#   install it.
+#
+# bacula_dir_name: string
+#   Director identification name
+# bacula_dir_address: string
+#   Listen ip address of Director
+# bacula_dir_pass: string
+#   Password required to connect to Director
+
+# bacula_dir_fqdn: string
+#   Used to connect to the director and also to generate certificates.
+#   DNS must exist.
+
+# bacula_dir_device: string
+#   Path where backups will be stored.
+
+# bacula_dir_force_regenerate_certs: (yes | no)
+#   The first time the role is applied, self-signed certs for Bacula.
+#   If you set it 'yes' will force regeneration next time the role is applied.
+#   (It only works when the role manages Director)
+
+# bacula_dir_additional_options: []Option
+# Element Option
+#   name: string
+#   value: string
+#   comment: string
+#   enabled: (yes | no)
+
+# bacula_clients:
+#    List of Bacula's Clients []BaculaClient
+# Element BaculaClient
+#     name: string
+#        A name to identify the client.
+#     fqdn: string
+#        Used to connect to the client and also to generate certificates.
+#        DNS must exist.
+#     pass: string
+#        A secure password used between Bacula and Bacula-fd
+#     enabled: (yes | no)
+#        Set 'no' if you want disable the client.
+#        Data already stored will not be deleted.
+#     fdport: int
+#        Port used for fd client
+#     policies: []BaculaClientPolicy
+#     file_retention: string
+#     job_retention: string
+#     auto_prune: (yes | no)
+#     maximum_concurrent_jobs: int
+#     tls_enabled: (yes | no)
+#     tls_require: (yes | no)
+#     tls_verify_peer: (yes | no)
+#     tls_ca_certificate: string
+#     force_regenerate_certs: (yes | no)
+#        The first time the role is applied, it generates a CA certs and
+#        self-signed certs for Bacula.
+#        If you set it 'yes' will force regeneration next time the role is applied.
+
+# Element BaculaClientPolicy:
+#     name: string
+#        A name to reference the policy template.
+#     enabled: (yes | no)
+#        Set 'no' if you want disable the policy.
+#        Data already stored will not be deleted.
+#     run_before: string
+#        A command to execute on client before begin backup.
+#     run_after: string
+#        A command to execute on client after backup ends.
+#     files: []string
+#        List of paths to be backuped on client.
+
+
+##########                     ##########
+##########      Catalog        ##########
+##########                     ##########
+#
+#   Defines the Bacula Director's Catalog Resource
+#   Currently, only one is supported.
+#
+
+# mysql_root_password: string
+#   Used to create database and user, either if database engine is external or not.
+
+# bacula_catalog_name: string
+#   A name for Message Resource
+
+# bacula_catalog_external:
+#   Set it 'yes' if you don't want to let the role manages
+#   the database.
+
+#   Regardless bacula_catalog_external value, you must provide connection
+#   parameters. If bacula_catalog_external is 'yes', so it will be used
+#   only to connect to Database, but if it is 'no' also to
+#   install Database and create grants.
+#
+# bacula_catalog_dbname: string
+# bacula_catalog_dbhost: string
+# bacula_catalog_dbuser: string
+# bacula_catalog_dbpass: string
+# bacula_catalog_dbport: int
+
+# bacula_catalog_create_database: (yes | no)
+#   Set yes if database is needed.
+#   Also works if database engine is external.
+#   Set mysql_root_username and mysql_root_password is needed.
+
+# bacula_catalog_create_tables: (yes | no)
+#   Set yes if create tables is needed.
+#   Also works if database engine is external.
+#   Set mysql_root_username and mysql_root_password is needed.
+
+##########                     ##########
+##########      Storage        ##########
+##########                     ##########
+#
+#   Defines the Bacula Director's Storage Daemon
+#   Currently, only one is supported.
+#
+
+# bacula_sd_external: (yes | no)
+#   Set it 'yes' if you don't want to let the role manages
+#   the Storage Daemon.
+
+#   Regardless bacula_sd_external value, you must provide connection
+#   parameters. If bacula_sd_external is 'yes', so it will be used
+#   only to connect to Storage Daemon, but if it is 'no' also to
+#   install it.
+#
+# bacula_sd_additional_options: []
+# bacula_sd_name: string
+# bacula_sd_address: string
+
+# bacula_sd_device: string
+
+# bacula_sd_fqdn: string
+#   Used to connect to the storage and also to generate certificates. DNS must exist.
+
+# bacula_sd_tls_enabled: (yes | no)
+
+# bacula_sd_force_regenerate_certs: (yes | no)
+#   The first time the role is applied, self-signed certs for Bacula.
+#   If you set it 'yes' will force regeneration next time the role is applied.
+#   (It only works when the role manages Bacula Storage)
+
+##########                     ##########
+##########      Messages       ##########
+##########                     ##########
+#
+#   Defines the Bacula Director's Message Resource
+#   to let it notice you about events.
+#   Currently, only one is supported.
+#
+
+# bacula_messages_name: string
+#   A name for Message Resource
+
+# bacula_messages_mail: string
+#   Defines a mail address where notifications will be sent.
+
+# bacula_messages_mail_command: string
+#   Defines the command to execute when send mail is required.
+
+# bacula_messages_mail_command: string
+
+# bacula_messages_operator_command: string
+#   Defines the command to execute when send mail is required.
+
+##########                     ##########
+##########      Policies       ##########
+##########                     ##########
+#
+# bacula_policies_template_folder: []string
+#   Due it isn't possible to override a template outside the
+#   role in-self, a workaround to do it is to use this list
+#   to add the template folder you want.
+#   Path must be relative to ansible-playbook command.
+
+##########                     ##########
+##########      Logrotate      ##########
+##########                     ##########
+#
+
+# bacula_logrotate_enabled: (yes | no)
+
+##########                     ##########
+##########      Console        ##########
+##########                     ##########
+#
+
+# bacula_console_package_name: string
+#   Name of package on repository
+
+##########      Default Variables       ##########
+########## a priori for internal usage  ##########
+#
+# Using them you will be able to set your own default variables.
+#
+# Caution:
+#   The variables defined on this file are needed for internal role use.
+#   If you override them, do it carefully.
+#
+
+bacula_mysql_root_password: toor
+bacula__default__no_log: true
+bacula__default__ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
+bacula__default__ca_enabled: true
+bacula__default__ca_force_regenerate: false
+bacula__default__catalog_create_database: true
+bacula__default__catalog_create_tables: true
+bacula__default__catalog_dbhost: 127.0.0.1
+bacula__default__catalog_dbname: bacula-catalog
+bacula__default__catalog_dbpass: toor
+bacula__default__catalog_dbport: 3306
+bacula__default__catalog_dbuser: baculausr
+bacula__default__catalog_external: false
+bacula__default__catalog_name: bacula-catalog
+bacula__default__client_auto_prune: true
+bacula__default__client_fdport: 9102
+bacula__default__client_file_retention: '3 months'
+bacula__default__client_force_regenerate_certs: false
+bacula__default__client_job_retention: '3 months'
+bacula__default__client_maximum_concurrent_jobs: 10
+bacula__default__client_run_before: undefined
+bacula__default__client_run_after: undefined
+bacula__default__client_tls_enabled: true
+bacula__default__client_tls_require: true
+bacula__default__client_tls_verify_peer: false
+bacula__default__clients: []
+bacula__default__console_package_name: bacula-console
+bacula__default__device_always_open: false
+bacula__default__device_automatic_mount: true
+bacula__default__device_label_media: true
+bacula__default__device_maximum_concurrent_jobs: 50
+bacula__default__device_media_type: File
+bacula__default__device_random_access: true
+bacula__default__device_removable_media: false
+bacula__default__dir_additional_options: []
+bacula__default__dir_address: 0.0.0.0
+bacula__default__dir_database_connector: mysql
+bacula__default__dir_description: ''
+bacula__default__dir_device: /bacula/backups
+bacula__default__dir_external: false
+bacula__default__dir_force_regenerate_certs: false
+bacula__default__dir_fqdn: localhost
+bacula__default__dir_heartbeat_interval: 5
+bacula__default__dir_maximum_concurrent_jobs: 2000
+bacula__default__dir_messages: '{{ bacula__default__messages_name }}'
+bacula__default__dir_mysql_connector_package: bacula-director-mysql
+bacula__default__dir_name: bacula-dir
+bacula__default__dir_package_name: bacula-director
+bacula__default__dir_pass: 123456
+bacula__default__dir_pid_directory: /var/run/bacula/
+bacula__default__dir_port: 9101
+bacula__default__dir_psql_connector_package: bacula-director-pgsql
+bacula__default__dir_query_file: /etc/bacula/scripts/query.sql
+bacula__default__dir_tls_ca: /etc/bacula/certs/private/bacula.pem
+bacula__default__dir_tls_certificate: /etc/bacula/certs/crt/bacula.crt
+bacula__default__dir_tls_enabled: true
+bacula__default__dir_tls_key: /etc/bacula/certs/private/bacula.pem
+bacula__default__dir_tls_require: true
+bacula__default__dir_tls_verify_peer: false
+bacula__default__dir_working_directory: /var/lib/bacula/
+bacula__default__logrotate_enabled: true
+bacula__default__messages_mail: 'test@mailtrap.io'
+bacula__default__messages_mail_command: ''
+bacula__default__messages_name: bacula-msg
+bacula__default__messages_operator_command: ''
+bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d'}}"
+bacula__default__sd_address: 0.0.0.0
+bacula__default__sd_additional_options: []
+bacula__default__sd_device: /bacula/backups
+bacula__default__sd_external: false
+bacula__default__sd_force_regenerate_certs: false
+bacula__default__sd_fqdn: localhost
+bacula__default__sd_heartbeat_interval: 3
+bacula__default__sd_maximum_concurrent_jobs: 200
+bacula__default__sd_messages: '{{ bacula__default__messages_name }}'
+bacula__default__sd_name: bacula-sd
+bacula__default__sd_package_name: bacula-sd
+bacula__default__sd_pass: '{{ bacula_dir_pass }}'
+bacula__default__sd_pid_directory: /var/run/bacula/
+bacula__default__sd_port: 9103
+bacula__default__sd_query_file: /etc/bacula/scripts/query.sql
+bacula__default__sd_tls_certificate: /etc/bacula/certs/crt/bacula-sd.crt
+bacula__default__sd_tls_enabled: true
+bacula__default__sd_tls_key: /etc/bacula/certs/private/bacula-sd.pem
+bacula__default__sd_tls_require: true
+bacula__default__sd_tls_verify_peer: false
+bacula__default__sd_working_directory: /var/lib/bacula/

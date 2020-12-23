@@ -1,0 +1,10 @@
+---
+
+- name: Configure logrotate
+  template:
+    src: bacula.logrotate.j2
+    dest: /etc/logrotate.d/bacula.conf
+    owner: root
+    group: root
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"

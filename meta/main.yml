@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: bacula
+  author: matiferrigno
+  description: installs Bacula on Linux.
+  company: self-employed
+
+  license: "license (BSD, MIT)"
+
+  min_ansible_version: 2.10
+
+  platforms:
+    - name: debian
+      versions:
+        - 10
+    - name: ubuntu
+      versions:
+        - 20.04
+
+  galaxy_tags:
+    - system
+    - server
+    - backup
+    - bacula
+
+dependencies: []

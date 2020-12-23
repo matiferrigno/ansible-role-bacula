@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Instalando matiferrigno.bacula
+      include_role:
+        name: matiferrigno.bacula

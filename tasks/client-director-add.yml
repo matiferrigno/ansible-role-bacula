@@ -1,0 +1,65 @@
+---
+
+- name: "Generate private key certificate for client {{ item.name }}"
+  community.crypto.openssl_privatekey:
+    path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    size: 4096
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    owner: bacula
+    group: tape
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Generate certificate signing request for client {{ item.name }}"
+  community.crypto.openssl_csr:
+    path: "/etc/bacula/certs/csr/{{ item.name }}.csr"
+    privatekey_path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    common_name: "{{ item.fqdn }}"
+    basic_constraints:
+      - CA:FALSE
+    basic_constraints_critical: true
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    owner: bacula
+    group: tape
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Generate self-signed public certificate for client {{ item.name }}"
+  community.crypto.x509_certificate:
+    path: "/etc/bacula/certs/crt/{{ item.name }}.crt"
+    csr_path: "/etc/bacula/certs/csr/{{ item.name }}.csr"
+    privatekey_path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
+    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    provider: ownca
+    owner: bacula
+    group: tape
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Configure client {{ item.name }}"
+  template:
+    src: client.conf.j2
+    dest: "/etc/bacula/clients.d/{{ item.name }}.conf"
+    owner: bacula
+    group: tape
+    mode: 0640
+  notify:
+    - Bacula-director restarted
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Clean client {{ item.name }} policies (enabled: false)"
+  file:
+    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf"
+    state: absent
+  when: not (policy.enabled|bool)
+  loop: "{{ item.policies }}"
+  loop_control:
+    loop_var: policy
+  notify:
+    - Bacula-director restarted
+  no_log: "{{ bacula_no_log|bool }}"
+
+- include_tasks: client-policy.yml
+  when: policy.enabled|bool
+  loop: "{{ item.policies }}"
+  loop_control:
+    loop_var: policy

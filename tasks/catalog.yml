@@ -1,0 +1,38 @@
+---
+
+- name: Create database
+  mysql_db:
+    name: "{{ bacula_catalog_dbname }}"
+    login_user: "root"
+    login_password: "{{ bacula_mysql_root_password }}"
+    state: present
+  when:
+    - bacula_catalog_create_database|bool
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Create user for database
+  mysql_user:
+    name: "{{ bacula_catalog_dbuser }}"
+    login_user: "root"
+    login_password: "{{ bacula_mysql_root_password }}"
+    password: "{{ bacula_catalog_dbpass }}"
+    priv: "{{ bacula_catalog_dbname }}.*:ALL"
+    host: "{{ bacula_catalog_dbhost }}"
+    state: present
+  when:
+    - bacula_catalog_create_database|bool
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Create tables
+  command:
+    argv:
+      - /usr/share/bacula-director/make_mysql_tables
+      - "-u {{ bacula_catalog_dbuser }} "
+      - "--password={{ bacula_catalog_dbpass }}"
+      - "-h {{ bacula_catalog_dbhost }}"
+      - "{{ bacula_catalog_dbname }}"
+  environment:
+    - dbname: "{{ bacula_catalog_dbname }}"
+  when:
+    - bacula_catalog_create_tables|bool
+  no_log: "{{ bacula_no_log|bool }}"

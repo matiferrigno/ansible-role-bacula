@@ -1,0 +1,504 @@
+---
+
+- name: Set default value to bacula_no_log
+  set_fact:
+    bacula_no_log: '{{ bacula__default__no_log }}'
+  when: bacula_no_log is not defined
+
+- name: Set default value to bacula_ca_certificate
+  set_fact:
+    bacula_ca_certificate: '{{ bacula__default__ca_certificate }}'
+  when: bacula_ca_certificate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_ca_enabled
+  set_fact:
+    bacula_ca_enabled: '{{ bacula__default__ca_enabled }}'
+  when: bacula_ca_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_ca_force_regenerate
+  set_fact:
+    bacula_ca_force_regenerate: '{{ bacula__default__ca_force_regenerate }}'
+  when: bacula_ca_force_regenerate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_create_database
+  set_fact:
+    bacula_catalog_create_database: '{{ bacula__default__catalog_create_database }}'
+  when: bacula_catalog_create_database is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_create_tables
+  set_fact:
+    bacula_catalog_create_tables: '{{ bacula__default__catalog_create_tables }}'
+  when: bacula_catalog_create_tables is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_dbhost
+  set_fact:
+    bacula_catalog_dbhost: '{{ bacula__default__catalog_dbhost }}'
+  when: bacula_catalog_dbhost is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_dbname
+  set_fact:
+    bacula_catalog_dbname: '{{ bacula__default__catalog_dbname }}'
+  when: bacula_catalog_dbname is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_dbpass
+  set_fact:
+    bacula_catalog_dbpass: '{{ bacula__default__catalog_dbpass }}'
+  when: bacula_catalog_dbpass is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_dbport
+  set_fact:
+    bacula_catalog_dbport: '{{ bacula__default__catalog_dbport }}'
+  when: bacula_catalog_dbport is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_dbuser
+  set_fact:
+    bacula_catalog_dbuser: '{{ bacula__default__catalog_dbuser }}'
+  when: bacula_catalog_dbuser is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_external
+  set_fact:
+    bacula_catalog_external: '{{ bacula__default__catalog_external }}'
+  when: bacula_catalog_external is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_catalog_name
+  set_fact:
+    bacula_catalog_name: '{{ bacula__default__catalog_name }}'
+  when: bacula_catalog_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_auto_prune
+  set_fact:
+    bacula_client_auto_prune: '{{ bacula__default__client_auto_prune }}'
+  when: bacula_client_auto_prune is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_fdport
+  set_fact:
+    bacula_client_fdport: '{{ bacula__default__client_fdport }}'
+  when: bacula_client_fdport is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_file_retention
+  set_fact:
+    bacula_client_file_retention: '{{ bacula__default__client_file_retention }}'
+  when: bacula_client_file_retention is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_force_regenerate_certs
+  set_fact:
+    bacula_client_force_regenerate_certs: '{{ bacula__default__client_force_regenerate_certs }}'
+  when: bacula_client_force_regenerate_certs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_job_retention
+  set_fact:
+    bacula_client_job_retention: '{{ bacula__default__client_job_retention }}'
+  when: bacula_client_job_retention is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_run_before
+  set_fact:
+    bacula_client_run_before: '{{ bacula__default__client_run_before }}'
+  when: bacula_client_run_before is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_run_after
+  set_fact:
+    bacula_client_run_after: '{{ bacula__default__client_run_after }}'
+  when: bacula_client_run_after is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_tls_enabled
+  set_fact:
+    bacula_client_tls_enabled: '{{ bacula__default__client_tls_enabled }}'
+  when: bacula_client_tls_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_tls_require
+  set_fact:
+    bacula_client_tls_require: '{{ bacula__default__client_tls_require }}'
+  when: bacula_client_tls_require is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_client_tls_verify_peer
+  set_fact:
+    bacula_client_tls_verify_peer: '{{ bacula__default__client_tls_verify_peer }}'
+  when: bacula_client_tls_verify_peer is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_clients
+  set_fact:
+    bacula_clients: '{{ bacula__default__clients }}'
+  when: bacula_clients is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_console_package_name
+  set_fact:
+    bacula_console_package_name: '{{ bacula__default__console_package_name }}'
+  when: bacula_console_package_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_always_open
+  set_fact:
+    bacula_device_always_open: '{{ bacula__default__device_always_open }}'
+  when: bacula_device_always_open is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_automatic_mount
+  set_fact:
+    bacula_device_automatic_mount: '{{ bacula__default__device_automatic_mount }}'
+  when: bacula_device_automatic_mount is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_label_media
+  set_fact:
+    bacula_device_label_media: '{{ bacula__default__device_label_media }}'
+  when: bacula_device_label_media is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_maximum_concurrent_jobs
+  set_fact:
+    bacula_device_maximum_concurrent_jobs: '{{ bacula__default__device_maximum_concurrent_jobs }}'
+  when: bacula_device_maximum_concurrent_jobs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_media_type
+  set_fact:
+    bacula_device_media_type: '{{ bacula__default__device_media_type }}'
+  when: bacula_device_media_type is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_random_access
+  set_fact:
+    bacula_device_random_access: '{{ bacula__default__device_random_access }}'
+  when: bacula_device_random_access is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_device_removable_media
+  set_fact:
+    bacula_device_removable_media: '{{ bacula__default__device_removable_media }}'
+  when: bacula_device_removable_media is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_additional_options
+  set_fact:
+    bacula_dir_additional_options: '{{ bacula__default__dir_additional_options }}'
+  when: bacula_dir_additional_options is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_address
+  set_fact:
+    bacula_dir_address: '{{ bacula__default__dir_address }}'
+  when: bacula_dir_address is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_database_connector
+  set_fact:
+    bacula_dir_database_connector: '{{ bacula__default__dir_database_connector }}'
+  when: bacula_dir_database_connector is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_description
+  set_fact:
+    bacula_dir_description: '{{ bacula__default__dir_description }}'
+  when: bacula_dir_description is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_device
+  set_fact:
+    bacula_dir_device: '{{ bacula__default__dir_device }}'
+  when: bacula_dir_device is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_external
+  set_fact:
+    bacula_dir_external: '{{ bacula__default__dir_external }}'
+  when: bacula_dir_external is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_force_regenerate_certs
+  set_fact:
+    bacula_dir_force_regenerate_certs: '{{ bacula__default__dir_force_regenerate_certs }}'
+  when: bacula_dir_force_regenerate_certs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_fqdn
+  set_fact:
+    bacula_dir_fqdn: '{{ bacula__default__dir_fqdn }}'
+  when: bacula_dir_fqdn is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_heartbeat_interval
+  set_fact:
+    bacula_dir_heartbeat_interval: '{{ bacula__default__dir_heartbeat_interval }}'
+  when: bacula_dir_heartbeat_interval is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_maximum_concurrent_jobs
+  set_fact:
+    bacula_dir_maximum_concurrent_jobs: '{{ bacula__default__dir_maximum_concurrent_jobs }}'
+  when: bacula_dir_maximum_concurrent_jobs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_messages
+  set_fact:
+    bacula_dir_messages: '{{ bacula__default__dir_messages }}'
+  when: bacula_dir_messages is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_name
+  set_fact:
+    bacula_dir_name: '{{ bacula__default__dir_name }}'
+  when: bacula_dir_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_package_name
+  set_fact:
+    bacula_dir_package_name: '{{ bacula__default__dir_package_name }}'
+  when: bacula_dir_package_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_pass
+  set_fact:
+    bacula_dir_pass: '{{ bacula__default__dir_pass }}'
+  when: bacula_dir_pass is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_pid_directory
+  set_fact:
+    bacula_dir_pid_directory: '{{ bacula__default__dir_pid_directory }}'
+  when: bacula_dir_pid_directory is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_port
+  set_fact:
+    bacula_dir_port: '{{ bacula__default__dir_port }}'
+  when: bacula_dir_port is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_query_file
+  set_fact:
+    bacula_dir_query_file: '{{ bacula__default__dir_query_file }}'
+  when: bacula_dir_query_file is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_ca_certificate
+  set_fact:
+    bacula_dir_tls_ca_certificate: '{{ bacula__default__ca_certificate }}'
+  when: bacula_dir_tls_ca_certificate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_certificate
+  set_fact:
+    bacula_dir_tls_certificate: '{{ bacula__default__dir_tls_certificate }}'
+  when: bacula_dir_tls_certificate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_enabled
+  set_fact:
+    bacula_dir_tls_enabled: '{{ bacula__default__dir_tls_enabled }}'
+  when: bacula_dir_tls_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_key
+  set_fact:
+    bacula_dir_tls_key: '{{ bacula__default__dir_tls_key }}'
+  when: bacula_dir_tls_key is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_require
+  set_fact:
+    bacula_dir_tls_require: '{{ bacula__default__dir_tls_require }}'
+  when: bacula_dir_tls_require is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_tls_verify_peer
+  set_fact:
+    bacula_dir_tls_verify_peer: '{{ bacula__default__dir_tls_verify_peer }}'
+  when: bacula_dir_tls_verify_peer is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_dir_working_directory
+  set_fact:
+    bacula_dir_working_directory: '{{ bacula__default__dir_working_directory }}'
+  when: bacula_dir_working_directory is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_logrotate_enabled
+  set_fact:
+    bacula_logrotate_enabled: '{{ bacula__default__logrotate_enabled }}'
+  when: bacula_logrotate_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_mail
+  set_fact:
+    bacula_messages_mail: '{{ bacula__default__messages_mail }}'
+  when: bacula_messages_mail is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_mail_command
+  set_fact:
+    bacula_messages_mail_command: '{{ bacula__default__messages_mail_command }}'
+  when: bacula_messages_mail_command is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_name
+  set_fact:
+    bacula_messages_name: '{{ bacula__default__messages_name }}'
+  when: bacula_messages_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_operator_command
+  set_fact:
+    bacula_messages_operator_command: '{{ bacula__default__messages_operator_command }}'
+  when: bacula_messages_operator_command is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_policies_template_folder
+  set_fact:
+    bacula_policies_template_folder: '{{ bacula__default__policies_template_folder }}'
+  when: bacula_policies_template_folder is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_additional_options
+  set_fact:
+    bacula_sd_additional_options: '{{ bacula__default__sd_additional_options }}'
+  when: bacula_sd_additional_options is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_address
+  set_fact:
+    bacula_sd_address: '{{ bacula__default__sd_address }}'
+  when: bacula_sd_address is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_device
+  set_fact:
+    bacula_sd_device: '{{ bacula__default__sd_device }}'
+  when: bacula_sd_device is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_external
+  set_fact:
+    bacula_sd_external: '{{ bacula__default__sd_external }}'
+  when: bacula_sd_external is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_force_regenerate_certs
+  set_fact:
+    bacula_sd_force_regenerate_certs: '{{ bacula__default__sd_force_regenerate_certs }}'
+  when: bacula_sd_force_regenerate_certs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_fqdn
+  set_fact:
+    bacula_sd_fqdn: '{{ bacula__default__sd_fqdn }}'
+  when: bacula_sd_fqdn is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_heartbeat_interval
+  set_fact:
+    bacula_sd_heartbeat_interval: '{{ bacula__default__sd_heartbeat_interval }}'
+  when: bacula_sd_heartbeat_interval is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_maximum_concurrent_jobs
+  set_fact:
+    bacula_sd_maximum_concurrent_jobs: '{{ bacula__default__sd_maximum_concurrent_jobs }}'
+  when: bacula_sd_maximum_concurrent_jobs is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_messages
+  set_fact:
+    bacula_sd_messages: '{{ bacula__default__sd_messages }}'
+  when: bacula_sd_messages is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_name
+  set_fact:
+    bacula_sd_name: '{{ bacula__default__sd_name }}'
+  when: bacula_sd_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_package_name
+  set_fact:
+    bacula_sd_package_name: '{{ bacula__default__sd_package_name }}'
+  when: bacula_sd_package_name is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_pass
+  set_fact:
+    bacula_sd_pass: '{{ bacula__default__sd_pass }}'
+  when: bacula_sd_pass is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_pid_directory
+  set_fact:
+    bacula_sd_pid_directory: '{{ bacula__default__sd_pid_directory }}'
+  when: bacula_sd_pid_directory is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_port
+  set_fact:
+    bacula_sd_port: '{{ bacula__default__sd_port }}'
+  when: bacula_sd_port is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_query_file
+  set_fact:
+    bacula_sd_query_file: '{{ bacula__default__sd_query_file }}'
+  when: bacula_sd_query_file is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_enabled
+  set_fact:
+    bacula_sd_tls_enabled: '{{ bacula__default__sd_tls_enabled }}'
+  when: bacula_sd_tls_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_certificate
+  set_fact:
+    bacula_sd_tls_certificate: '{{ bacula__default__sd_tls_certificate }}'
+  when: bacula_sd_tls_certificate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_ca_certificate
+  set_fact:
+    bacula_sd_tls_ca_certificate: '{{ bacula__default__ca_certificate }}'
+  when: bacula_sd_tls_ca_certificate is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_key
+  set_fact:
+    bacula_sd_tls_key: '{{ bacula__default__sd_tls_key }}'
+  when: bacula_sd_tls_key is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_require
+  set_fact:
+    bacula_sd_tls_require: '{{ bacula__default__sd_tls_require }}'
+  when: bacula_sd_tls_require is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_tls_verify_peer
+  set_fact:
+    bacula_sd_tls_verify_peer: '{{ bacula__default__sd_tls_verify_peer }}'
+  when: bacula_sd_tls_verify_peer is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_sd_working_directory
+  set_fact:
+    bacula_sd_working_directory: '{{ bacula__default__sd_working_directory }}'
+  when: bacula_sd_working_directory is not defined
+  no_log: '{{ bacula_no_log|bool }}'
