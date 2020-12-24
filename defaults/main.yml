@@ -11,17 +11,26 @@
 ##########                     ##########
 ##########  CA                 ##########
 ##########                     ##########
-#   Defines the Bacula Director's Catalog Resource
-#   Currently, only one is supported.
-#
 
 # bacula_ca_enabled:
 #   if bacula_ca_enabled: Path where the certificate will be stored.
 #   else: Path where CA certificate already must exists.
 
 ##########                     ##########
+##########      Policies       ##########
+##########                     ##########
+#
+# bacula_policies_template_folder: []string
+#   Due it isn't possible to override a template outside the
+#   role in-self, a workaround to do it is to use this list
+#   to add the template folder you want.
+#   Path must be relative to ansible-playbook command.
+
+##########                     ##########
 ##########  Bacula Director    ##########
 ##########                     ##########
+#   Defines the Bacula Director
+#
 
 # bacula_dir_external: (yes | no)
 #   Set it 'yes' if you don't want to let the role manages
@@ -63,6 +72,13 @@
 #   value: string
 #   comment: string
 #   enabled: (yes | no)
+
+
+##########                     ##########
+##########  Bacula Clients     ##########
+##########                     ##########
+#   Defines clients and its policies
+#
 
 # bacula_clients:
 #    List of Bacula's Clients []BaculaClient
@@ -183,7 +199,7 @@
 ##########      Messages       ##########
 ##########                     ##########
 #
-#   Defines the Bacula Director's Message Resource
+#   Defines the Bacula Message Resource
 #   to let it notice you about events.
 #   Currently, only one is supported.
 #
@@ -201,16 +217,6 @@
 
 # bacula_messages_operator_command: string
 #   Defines the command to execute when send mail is required.
-
-##########                     ##########
-##########      Policies       ##########
-##########                     ##########
-#
-# bacula_policies_template_folder: []string
-#   Due it isn't possible to override a template outside the
-#   role in-self, a workaround to do it is to use this list
-#   to add the template folder you want.
-#   Path must be relative to ansible-playbook command.
 
 ##########                     ##########
 ##########      Logrotate      ##########
