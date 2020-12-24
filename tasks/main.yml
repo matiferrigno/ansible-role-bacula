@@ -22,6 +22,7 @@
     - not (bacula_catalog_external|bool)
   tags:
     - catalog
+    - molecule-idempotence-notest
 
 - include_tasks: director.yml
   tags:

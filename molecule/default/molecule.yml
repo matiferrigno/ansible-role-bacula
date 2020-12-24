@@ -7,9 +7,9 @@ driver:
   name: podman
 platforms:
   - name: debian10
-    image: matiferrigno/docker-debian10-ansible:latest
+    image: geerlingguy/docker-debian10-ansible:latest
     command: /lib/systemd/systemd
-    pre_build_image: true
+    pre_build_image: false
     privileged: true
     tmpfs:
       - /run
@@ -17,9 +17,9 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: ubuntu2004
-    image: matiferrigno/docker-ubuntu2004-ansible:latest
+    image: geerlingguy/docker-ubuntu2004-ansible:latest
     command: /lib/systemd/systemd
-    pre_build_image: true
+    pre_build_image: false
     privileged: true
     tmpfs:
       - /run

@@ -75,7 +75,6 @@
     path: /var/lib/bacula
     owner: bacula
     group: tape
-    recurse: true
     state: directory
     mode: 0744
   no_log: "{{ bacula_no_log|bool }}"

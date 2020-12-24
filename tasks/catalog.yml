@@ -33,6 +33,8 @@
       - "{{ bacula_catalog_dbname }}"
   environment:
     - dbname: "{{ bacula_catalog_dbname }}"
+  tags:
+    - molecule-idempotence-notest
   when:
     - bacula_catalog_create_tables|bool
   no_log: "{{ bacula_no_log|bool }}"
