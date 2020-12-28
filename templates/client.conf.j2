@@ -30,6 +30,8 @@ Client {
 
 {% if item.policies|d() %}
 {% for policy in item.policies %}
+{% if policy.enabled %}
 @/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf
+{% endif %}
 {% endfor %}
 {% endif %}
