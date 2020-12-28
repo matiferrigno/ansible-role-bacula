@@ -244,6 +244,7 @@
 #
 
 bacula_mysql_root_password: toor
+bacula_mysql_root_password_update: false
 bacula__default__no_log: true
 bacula__default__ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
 bacula__default__ca_enabled: true
