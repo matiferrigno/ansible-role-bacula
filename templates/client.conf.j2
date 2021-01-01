@@ -19,7 +19,7 @@ Client {
   #########
   ## TLS ##
   #########
-{% if item.tls_enabled|bool %}
+{% if item.tls_enabled|d() and item.tls_enabled|bool %}
   TLS Enable = {{ item.tls_enabled }}
   TLS Require = {{ item.tls_require | default(bacula_client_tls_require) }}
   TLS CA Certificate File = {{ item.tls_ca_certificate | default(bacula__default__ca_certificate) }}
@@ -30,6 +30,8 @@ Client {
 
 {% if item.policies|d() %}
 {% for policy in item.policies %}
+{% if policy.enabled %}
 @/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf
+{% endif %}
 {% endfor %}
 {% endif %}
