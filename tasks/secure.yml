@@ -114,3 +114,53 @@
     owner: bacula
     group: tape
   no_log: "{{ bacula_no_log|bool }}"
+
+- name: Generate private key certificate for external Storages
+  community.crypto.openssl_privatekey:
+    path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
+    size: 4096
+    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    owner: bacula
+    group: tape
+  loop: "{{ bacula_sd_externals }}"
+  loop_control:
+    loop_var: external_storage
+  notify:
+    - Bacula-storage restarted
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Generate certificate signing request for external Storages
+  community.crypto.openssl_csr:
+    path: /etc/bacula/certs/csr/{{ external_storage.name }}.csr
+    privatekey_path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
+    common_name: "{{ external_storage.fqdn }}"
+    basic_constraints:
+      - CA:FALSE
+    basic_constraints_critical: true
+    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    owner: bacula
+    group: tape
+  loop: "{{ bacula_sd_externals }}"
+  loop_control:
+    loop_var: external_storage
+  notify:
+    - Bacula-storage restarted
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Generate self-signed public certificate for external Storages
+  community.crypto.x509_certificate:
+    path: /etc/bacula/certs/crt/{{ external_storage.name }}.crt
+    csr_path: /etc/bacula/certs/csr/{{ external_storage.name }}.csr
+    privatekey_path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
+    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
+    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    provider: ownca
+    owner: bacula
+    group: tape
+  loop: "{{ bacula_sd_externals }}"
+  loop_control:
+    loop_var: external_storage
+  notify:
+    - Bacula-storage restarted
+  no_log: "{{ bacula_no_log|bool }}"
