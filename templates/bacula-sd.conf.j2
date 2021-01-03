@@ -49,7 +49,7 @@ Storage {
 
 Director {
   name = {{ bacula_dir_name }}
-  password = "{{ bacula_dir_pass }}"
+  password = "{{ bacula_sd_pass }}"
 
   #########
   ## TLS ##
@@ -58,9 +58,9 @@ Director {
   TLS Enable = yes
   TLS Require = {{ bacula_dir_tls_require }}
   TLS Verify Peer = {{ bacula_dir_tls_verify_peer }}
-  TLS Certificate = {{ bacula_dir_tls_certificate }}
-  TLS Key = {{ bacula_dir_tls_key }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
+  TLS Certificate = {{ bacula_sd_tls_certificate }}
+  TLS Key = {{ bacula_sd_tls_key }}
+  TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
 {% else %}
   TLS Enabled = no
 {% endif %}
