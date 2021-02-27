@@ -1,6 +1,6 @@
-env/
-lib/
 .vscode/
+.env/
+.direnv/
 *.retry
 */__pycache__
 *.pyc
