@@ -10,6 +10,7 @@ ignore: |
   .env/
   .direnv/
   .cache/
+  env/
 
 rules:
   line-length:

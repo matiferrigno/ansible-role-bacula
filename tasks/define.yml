@@ -395,6 +395,12 @@
   when: bacula_sd_external is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
+- name: Set default value to bacula_sd_externals
+  set_fact:
+    bacula_sd_externals: '{{ bacula__default__sd_externals }}'
+  when: bacula_sd_externals is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
 - name: Set default value to bacula_sd_force_regenerate_certs
   set_fact:
     bacula_sd_force_regenerate_certs: '{{ bacula__default__sd_force_regenerate_certs }}'

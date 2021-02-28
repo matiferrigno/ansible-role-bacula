@@ -1,7 +1,8 @@
-.vscode/
-.env/
-.direnv/
 *.retry
 */__pycache__
 *.pyc
+.vscode/
+.env/
+.direnv/
 .cache/
+env/

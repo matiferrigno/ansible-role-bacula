@@ -1,7 +1,6 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: Instalando matiferrigno.bacula
-      include_role:
-        name: matiferrigno.bacula
+  become: true
+  roles:
+    - role: ansible-role-bacula

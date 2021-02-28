@@ -178,6 +178,9 @@
 #   parameters. If bacula_sd_external is 'yes', so it will be used
 #   only to connect to Storage Daemon, but if it is 'no' also to
 #   install it.
+
+# bacula_sd_externals: []
+# 
 #
 # bacula_sd_additional_options: []
 # bacula_sd_name: string
@@ -309,11 +312,12 @@ bacula__default__messages_mail: 'test@mailtrap.io'
 bacula__default__messages_mail_command: ''
 bacula__default__messages_name: bacula-msg
 bacula__default__messages_operator_command: ''
-bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d'}}"
+bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
 bacula__default__sd_address: 0.0.0.0
 bacula__default__sd_additional_options: []
 bacula__default__sd_device: /bacula/backups
 bacula__default__sd_external: false
+bacula__default__sd_externals: []
 bacula__default__sd_force_regenerate_certs: false
 bacula__default__sd_fqdn: localhost
 bacula__default__sd_heartbeat_interval: 3
