@@ -119,7 +119,7 @@
   community.crypto.openssl_privatekey:
     path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
     size: 4096
-    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    force: "{{ external_storage.force_regenerate_certs|bool | default(false) }}"
     owner: bacula
     group: tape
   loop: "{{ bacula_sd_externals }}"
@@ -137,7 +137,7 @@
     basic_constraints:
       - CA:FALSE
     basic_constraints_critical: true
-    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    force: "{{ external_storage.force_regenerate_certs|bool | default(false) }}"
     owner: bacula
     group: tape
   loop: "{{ bacula_sd_externals }}"
@@ -154,7 +154,7 @@
     privatekey_path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
     ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
     ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
-    force: "{{ external_storage.force_regenerate_certs|bool }}"
+    force: "{{ external_storage.force_regenerate_certs|bool | default(false) }}"
     provider: ownca
     owner: bacula
     group: tape
