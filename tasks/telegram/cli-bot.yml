@@ -1,0 +1,12 @@
+---
+
+- name: Create directory for scripts if not exists
+  file:
+    path: /etc/bacula/scripts
+    state: directory
+
+- name: Create script for telegram messages
+  template:
+    mode: u=rx,g=rx,o=rx
+    src: _send_telegram.sh.j2
+    dest: /etc/bacula/scripts/_send_telegram.sh 
