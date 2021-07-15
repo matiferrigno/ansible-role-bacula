@@ -84,8 +84,8 @@
 
 - name: Configure jobdef.conf
   template:
-    src: jobdef.conf.j2
-    dest: /etc/bacula/jobdef.conf
+    src: jobdefs.conf.j2
+    dest: /etc/bacula/conf.d/jobdefs.conf
     owner: bacula
     group: tape
     mode: 0640
