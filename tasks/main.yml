@@ -3,6 +3,8 @@
 
 - include_tasks: define.yml
 
+- include_tasks: telegram/build-cli.yml
+
 - name: Install database
   include_role:
     name: geerlingguy.mysql

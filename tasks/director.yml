@@ -70,6 +70,24 @@
     mode: 0640
   no_log: "{{ bacula_no_log|bool }}"
 
+- name: Ensure directory /etc/bacula/jobdef.d exists and privileges
+  file:
+    path: /etc/bacula/jobdef.d
+    owner: bacula
+    group: tape
+    state: directory
+    mode: 0744
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Configure jobdef.conf
+  template:
+    src: jobdef.conf.j2
+    dest: /etc/bacula/jobdef.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+
 - name: Ensure directory /var/lib/bacula exists and privileges
   file:
     path: /var/lib/bacula

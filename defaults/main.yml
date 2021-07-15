@@ -221,6 +221,15 @@
 # bacula_messages_operator_command: string
 #   Defines the command to execute when send mail is required.
 
+# bacula_messages_telegram_enabled: bool
+#
+
+# bacula_messages_telegram_install: bool
+#
+
+# bacula_messages_telegram_create_config: bool
+#
+
 ##########                     ##########
 ##########      Logrotate      ##########
 ##########                     ##########
@@ -314,6 +323,9 @@ bacula__default__messages_mail: 'test@mailtrap.io'
 bacula__default__messages_mail_command: ''
 bacula__default__messages_name: bacula-msg
 bacula__default__messages_operator_command: ''
+bacula__default__messages_telegram_enabled: true
+bacula__default__messages_telegram_install: true
+bacula__default__messages_telegram_create_config: true
 bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
 bacula__default__sd_address: 0.0.0.0
 bacula__default__sd_additional_options: []

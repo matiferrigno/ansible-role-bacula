@@ -88,6 +88,8 @@ dependencies:
 $ molecule check
 ```
 
+Also there is a scenary for vagrant/vbox.
+
 ## TODO
 
 Split:

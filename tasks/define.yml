@@ -365,6 +365,24 @@
   when: bacula_messages_operator_command is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
+- name: Set default value to bacula_messages_telegram_enabled
+  set_fact:
+    bacula_messages_telegram_enabled: '{{ bacula__default__messages_telegram_enabled }}'
+  when: bacula_messages_telegram_enabled is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_telegram_install
+  set_fact:
+    bacula_messages_telegram_install: '{{ bacula__default__messages_telegram_install }}'
+  when: bacula_messages_telegram_install is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_telegram_create_config
+  set_fact:
+    bacula_messages_telegram_create_config: '{{ bacula__default__messages_telegram_create_config }}'
+  when: bacula_messages_telegram_create_config is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
 - name: Set default value to bacula_policies_template_folder
   set_fact:
     bacula_policies_template_folder: '{{ bacula__default__policies_template_folder }}'
