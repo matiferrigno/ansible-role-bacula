@@ -101,7 +101,7 @@ Job {
   FileSet = {{ item.name }}-{{ policy.name }}-fs
   Write Bootstrap = /var/lib/bacula/{{ item.name }}-{{ policy.name }}.bsr
   Pool = {{ item.name }}-{{ policy.name }}-daily
-  Type = Backup
+  JobDefs = GenericBackupDef
   Storage =  stg-{{ item.name }}-{{ policy.name }}
   Messages = {{ bacula_messages_name }}
   {% if policy.run_before|d() %}
@@ -110,18 +110,15 @@ Job {
   {% if policy.run_after|d() %}
   Client Run after job = {{ policy.run_after }}
   {% endif %}
-  Max Wait Time = 3600
-  Priority = 20
 }
 
 Job{
   Name = restore_{{ item.name }}-{{ policy.name }}
-  Type = restore
+  JobDefs = GenericRestoreDef
   Client = {{ item.name }}-fd
   File Set = {{ item.name }}-{{ policy.name }}-fs
   Messages = {{ bacula_messages_name }}
   Pool = {{ item.name }}-{{ policy.name }}-daily
   Storage = stg-{{ item.name }}-{{ policy.name }}
-  Where = /tmp
 }
 

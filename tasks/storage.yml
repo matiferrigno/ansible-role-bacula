@@ -50,7 +50,7 @@
     - /etc/bacula/certs/csr
   no_log: "{{ bacula_no_log|bool }}"
 
-- include_tasks: secure.yml
+- include_tasks: secure.yml  
 
 - name: Configure storage
   template:
@@ -59,6 +59,8 @@
     owner: bacula
     group: tape
     mode: 0640
+  notify:
+    - Bacula-storage restarted
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: Ensure clients device directories exists
@@ -72,6 +74,8 @@
     - item.enabled|bool
   with_items:
     - "{{ bacula_clients }}"
+  notify:
+    - Bacula-storage restarted
   no_log: "{{ bacula_no_log|bool }}"
 
 - include_tasks: client-storage-delete.yml
