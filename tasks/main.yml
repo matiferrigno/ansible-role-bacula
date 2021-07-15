@@ -16,7 +16,6 @@
     - not (bacula_catalog_external|bool)
   tags:
     - catalog
-  notify: Mysqld restarted
 
 - include_tasks: director.yml
   tags:
