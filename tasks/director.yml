@@ -61,6 +61,9 @@
     mode: 0640
   no_log: "{{ bacula_no_log|bool }}"
 
+- include_tasks: telegram/build-cli.yml
+  when: bacula_messages_telegram_enabled|bool
+
 - name: Configure bconsole.conf
   template:
     src: bconsole.conf.j2
