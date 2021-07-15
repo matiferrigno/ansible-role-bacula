@@ -12,9 +12,9 @@ JobDefs {
   RunScript {
      Command = "/etc/bacula/scripts/_send_telegram.sh %i"
      RunsWhen = After
-     RunsOnFailure = "{{ bacula__default__messages_telegram_onfailure }}"
+     RunsOnFailure = {{ bacula__default__messages_telegram_onfailure }}
      RunsOnClient = no
-     RunsOnSuccess ="{{ bacula__default__messages_telegram_onsuccess }}"
+     RunsOnSuccess ={{ bacula__default__messages_telegram_onsuccess }}
   }
   {% endif %}
   Max Wait Time = 3600
@@ -28,9 +28,9 @@ JobDefs {
   RunScript {
      Command = "/etc/bacula/scripts/_send_telegram.sh %i"
      RunsWhen = After
-     RunsOnFailure = "{{ bacula__default__messages_telegram_onfailure }}"
+     RunsOnFailure = {{ bacula__default__messages_telegram_onfailure }}
      RunsOnClient = no
-     RunsOnSuccess ="{{ bacula__default__messages_telegram_onsuccess }}"
+     RunsOnSuccess = {{ bacula__default__messages_telegram_onsuccess }}
   }
   {% endif %}
   Where = /tmp

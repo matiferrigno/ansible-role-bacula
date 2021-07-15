@@ -16,22 +16,14 @@
     - not (bacula_catalog_external|bool)
   tags:
     - catalog
-
-- name: Mysql restarted
-  systemd:
-    name: mysql
-    state: restarted
-  when:
-    - not (bacula_catalog_external|bool)
-  tags:
-    - catalog
-    - molecule-idempotence-notest
+  notify: Mysqld restarted
 
 - include_tasks: director.yml
   tags:
     - director
   when:
     - not (bacula_dir_external|bool)
+  notify: Bacula-director restarted
 
 - include_tasks: catalog.yml
   tags:
@@ -40,12 +32,14 @@
     - not (bacula_catalog_external|bool)
     - bacula_catalog_create_database|bool
     - bacula_catalog_create_tables|bool
+  notify: Bacula-director restarted
 
 - include_tasks: storage.yml
   tags:
     - storage
   when:
     - not (bacula_sd_external|bool)
+  notify: Bacula-storage restarted
 
 - include_tasks: logging.yml
   tags:
