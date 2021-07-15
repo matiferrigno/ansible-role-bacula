@@ -385,8 +385,8 @@
 
 - name: Set default value to bacula_messages_telegram_id
   set_fact:
-    bacula_messages_telegram_log: '{{ bacula__default__messages_telegram_log }}'
-  when: bacula_messages_telegram_log is not defined
+    bacula_messages_telegram_logfile: '{{ bacula__default__messages_telegram_logfile }}'
+  when: bacula_messages_telegram_logfile is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
 - name: Set default value to bacula_messages_telegram_onfailure
