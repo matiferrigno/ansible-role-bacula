@@ -371,16 +371,34 @@
   when: bacula_messages_telegram_enabled is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
-- name: Set default value to bacula_messages_telegram_install
+- name: Set default value to bacula_messages_telegram_apitoken
   set_fact:
-    bacula_messages_telegram_install: '{{ bacula__default__messages_telegram_install }}'
-  when: bacula_messages_telegram_install is not defined
+    bacula_messages_telegram_apitoken: '{{ bacula__default__messages_telegram_apitoken }}'
+  when: bacula_messages_telegram_apitoken is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
-- name: Set default value to bacula_messages_telegram_create_config
+- name: Set default value to bacula_messages_telegram_id
   set_fact:
-    bacula_messages_telegram_create_config: '{{ bacula__default__messages_telegram_create_config }}'
-  when: bacula_messages_telegram_create_config is not defined
+    bacula_messages_telegram_id: '{{ bacula__default__messages_telegram_id }}'
+  when: bacula_messages_telegram_id is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_telegram_id
+  set_fact:
+    bacula_messages_telegram_log: '{{ bacula__default__messages_telegram_log }}'
+  when: bacula_messages_telegram_log is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_telegram_onfailure
+  set_fact:
+    bacula_messages_telegram_onfailure: '{{ bacula__default__messages_telegram_onfailure }}'
+  when: bacula_messages_telegram_onfailure is not defined
+  no_log: '{{ bacula_no_log|bool }}'
+
+- name: Set default value to bacula_messages_telegram_onsuccess
+  set_fact:
+    bacula_messages_telegram_onsuccess: '{{ bacula__default__messages_telegram_onsuccess }}'
+  when: bacula_messages_telegram_onsuccess is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
 - name: Set default value to bacula_policies_template_folder
