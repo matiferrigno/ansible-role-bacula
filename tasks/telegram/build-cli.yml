@@ -48,6 +48,7 @@
     - /usr/local/telegram-cli/keys
     - /usr/local/telegram-cli/profiles
     - /usr/local/telegram-cli/log
+    - /etc/bacula/scripts/
 
 - name: Move telegram-cli to bin
   copy:
@@ -57,13 +58,13 @@
 
 - name: Move keys
   copy:
-    src: /usr/src/tg/server.pub
+    src: /usr/local/src/telegram-cli/server.pub
     dest: /usr/local/telegram-cli/keys/server.pub
     remote_src: true
 
 - name: Move keys
   copy:
-    src: /usr/src/tg/tg-server.pub
+    src: /usr/local/src/telegram-cli/tg-server.pub
     dest: /usr/local/telegram-cli/keys/tg-server.pub
     remote_src: true
 
