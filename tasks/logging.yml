@@ -7,4 +7,6 @@
     owner: root
     group: root
     mode: 0640
+  notify:
+    - Bacula-storage restarted
   no_log: "{{ bacula_no_log|bool }}"

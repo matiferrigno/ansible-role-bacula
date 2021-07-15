@@ -4,4 +4,6 @@
   file:
     path: "/etc/bacula/clients.d/{{ item.name }}.conf"
     state: absent
+  notify:
+    - Bacula-director restarted
   no_log: "{{ bacula_no_log|bool }}"
