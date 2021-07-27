@@ -2,6 +2,7 @@
 */__pycache__
 *.pyc
 .vscode/
+.idea/
 .env/
 .direnv/
 .cache/

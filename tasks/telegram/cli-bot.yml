@@ -1,5 +1,10 @@
 ---
 
+- name: install curl
+  apt:
+    name: curl
+    update_cache: true
+
 - name: Create directory for scripts if not exists
   file:
     path: /etc/bacula/scripts
