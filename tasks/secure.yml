@@ -45,6 +45,13 @@
     group: tape
   no_log: "{{ bacula_no_log|bool }}"
 
+- name: "Fetch CA cert"
+  ansible.builtin.fetch:
+    src: /etc/bacula/certs/crt/ca-bacula.crt
+    dest: files/bacula/certs/crt/ca-bacula.crt
+    flat: yes
+
+
 - name: Generate private key certificate for Director
   community.crypto.openssl_privatekey:
     path: /etc/bacula/certs/private/bacula.pem
