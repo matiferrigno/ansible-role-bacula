@@ -296,6 +296,7 @@ bacula__default__client_tls_enabled: true
 bacula__default__client_tls_require: true
 bacula__default__client_tls_verify_peer: false
 bacula__default__clients: []
+bacula_client: []
 bacula__default__console_package_name: bacula-console
 bacula__default__device_always_open: false
 bacula__default__device_automatic_mount: true
