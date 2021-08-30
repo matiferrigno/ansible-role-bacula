@@ -89,9 +89,12 @@ Storage {
   Media Type = File
   Maximum Concurrent Jobs =  500
 
+{% if bacula_sd_tls_enabled|bool %}
   TLS Require = {{ bacula_sd_tls_require }}
   TLS Certificate = {{ bacula_sd_tls_certificate }}
   TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
+{% endif %}
+
 }
 
 Job {

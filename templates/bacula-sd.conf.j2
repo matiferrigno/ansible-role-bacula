@@ -28,7 +28,7 @@ Storage {
   TLS Key = {{ bacula_sd_tls_key }}
   TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
 {% else %}
-  TLS Enabled = no
+  TLS Enable = no
 {% endif %}
 
   ###################
@@ -62,7 +62,7 @@ Director {
   TLS Key = {{ bacula_sd_tls_key }}
   TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
 {% else %}
-  TLS Enabled = no
+  TLS Enable = no
 {% endif %}
 }
 
