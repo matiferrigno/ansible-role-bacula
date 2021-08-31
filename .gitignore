@@ -8,3 +8,6 @@
 .cache/
 files/
 env/
+.env
+.envrc
+.direnv
