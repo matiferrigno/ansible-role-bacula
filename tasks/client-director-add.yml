@@ -20,7 +20,7 @@
     force: "{{ bacula_client_force_regenerate_certs }}"
     owner: bacula
     group: tape
-  no_log: "{{ bacula_no_log|bool }}"  
+  no_log: "{{ bacula_no_log|bool }}"
 
 - name: "Generate self-signed public certificate for client {{ item.name }}"
   community.crypto.x509_certificate:
@@ -36,6 +36,18 @@
   notify:
     - Bacula-director restarted
   no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Fetch client keys"
+  ansible.builtin.fetch:
+    src: /etc/bacula/certs/private/{{ item.name }}.pem
+    dest: files/bacula/certs/private/{{ item.name }}.pem
+    flat: yes
+
+- name: "Fetch client keys"
+  ansible.builtin.fetch:
+    src: /etc/bacula/certs/crt/{{ item.name }}.crt
+    dest: files/bacula/certs/crt/{{ item.name }}.crt
+    flat: yes
 
 - name: "Configure client {{ item.name }}"
   template:

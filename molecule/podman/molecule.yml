@@ -1,11 +1,19 @@
 ---
 dependency:
   name: galaxy
-  options:
-    role-file: requirements.yml
 driver:
   name: podman
 platforms:
+  - name: debian11
+    image: docker.io/geerlingguy/docker-debian11-ansible:latest
+    command: /lib/systemd/systemd
+    pre_build_image: false
+    privileged: true
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: debian10
     image: docker.io/geerlingguy/docker-debian10-ansible:latest
     command: /lib/systemd/systemd

@@ -58,6 +58,20 @@ bacula_clients:
 
 * an example is included on templates/policies.d/example.conf.j2
 
+*Install Bacula client (FD)*
+
+```yaml
+# bacula_only_client is for hosts where only client is # installed
+bacula_only_client: yes 
+
+bacula_client:
+  - name: "client"
+    enabled: yes
+    host: "ip"
+    fqdn: "client.example.com"
+    pass: "...."
+    tls_enabled: yes
+```
 
 ## Dependencies
 

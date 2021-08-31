@@ -180,7 +180,7 @@
 #   install it.
 
 # bacula_sd_externals: []
-# 
+#
 #
 # bacula_sd_additional_options: []
 # bacula_sd_name: string
@@ -296,6 +296,7 @@ bacula__default__client_tls_enabled: true
 bacula__default__client_tls_require: true
 bacula__default__client_tls_verify_peer: false
 bacula__default__clients: []
+bacula_client: []
 bacula__default__console_package_name: bacula-console
 bacula__default__device_always_open: false
 bacula__default__device_automatic_mount: true
@@ -342,6 +343,13 @@ bacula__default__messages_telegram_apitoken: ''
 bacula__default__messages_telegram_id: ''
 bacula__default__messages_telegram_logfile: '/var/log/bacula/telegram.log'
 bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
+bacula_fd_name: bacula-fd
+bacula_fd_package_name: bacula-client
+bacula_fd_tls_enabled: true
+bacula_fd_tls_require: true
+bacula_fd_tls_verify_peer: false
+bacula_fd_tls_certificate: /etc/bacula/certs/crt/client.crt
+bacula_fd_tls_key: /etc/bacula/certs/private/client.pem
 bacula__default__sd_address: 0.0.0.0
 bacula__default__sd_additional_options: []
 bacula__default__sd_device: /bacula/backups
@@ -361,6 +369,7 @@ bacula__default__sd_query_file: /etc/bacula/scripts/query.sql
 bacula__default__sd_tls_certificate: /etc/bacula/certs/crt/bacula-sd.crt
 bacula__default__sd_tls_enabled: true
 bacula__default__sd_tls_key: /etc/bacula/certs/private/bacula-sd.pem
-bacula__default__sd_tls_require: true
+bacula__default__sd_tls_require: yes
 bacula__default__sd_tls_verify_peer: false
 bacula__default__sd_working_directory: /var/lib/bacula/
+bacula_only_client: false

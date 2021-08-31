@@ -14,3 +14,19 @@ bacula_clients:
       - name: example-classic
         enabled: true
         files: []
+
+bacula_only_client: false
+
+bacula_client:
+  - name: "TestClient"
+    fqdn: testclient.lan
+    host: "127.0.0.1"
+    pass: '123456'
+    enabled: true
+    tls_enabled: true
+    tls_require: true
+    tls_verify_peer: false
+    policies:
+      - name: example-classic
+        enabled: true
+        files: []

@@ -83,12 +83,6 @@
   when: bacula_client_auto_prune is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
-- name: Set default value to bacula_client_fdport
-  set_fact:
-    bacula_client_fdport: '{{ bacula__default__client_fdport }}'
-  when: bacula_client_fdport is not defined
-  no_log: '{{ bacula_no_log|bool }}'
-
 - name: Set default value to bacula_client_file_retention
   set_fact:
     bacula_client_file_retention: '{{ bacula__default__client_file_retention }}'
