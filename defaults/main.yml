@@ -372,4 +372,4 @@ bacula__default__sd_tls_key: /etc/bacula/certs/private/bacula-sd.pem
 bacula__default__sd_tls_require: yes
 bacula__default__sd_tls_verify_peer: false
 bacula__default__sd_working_directory: /var/lib/bacula/
-bacula__default__bacula_only_client: false
+bacula_only_client: false
