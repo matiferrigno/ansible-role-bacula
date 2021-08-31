@@ -56,15 +56,6 @@ Director {
 
 }
 
-# Definition of file storage device
-Storage {
-  Name = {{ bacula_sd_name }}
-  Address = {{ bacula_sd_fqdn }}
-  Password = "{{ bacula_sd_pass }}"
-  Device = FileStorage
-  Media Type = File
-}
-
 @/etc/bacula/conf.d/catalog.conf
 @/etc/bacula/conf.d/messages.conf
 @/etc/bacula/conf.d/jobdefs.conf

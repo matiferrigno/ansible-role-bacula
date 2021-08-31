@@ -51,7 +51,6 @@
     dest: files/bacula/certs/crt/ca-bacula.crt
     flat: yes
 
-
 - name: Generate private key certificate for Director
   community.crypto.openssl_privatekey:
     path: /etc/bacula/certs/private/bacula.pem
