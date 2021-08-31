@@ -4,8 +4,3 @@
   become: true
   roles:
     - role: ansible-role-bacula
-
-- hosts: all
-  become: true
-  tasks:
-    - fail: msg=""
