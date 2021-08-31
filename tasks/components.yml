@@ -65,5 +65,3 @@
   tags:
     - storage
   no_log: "{{ bacula_no_log|bool }}"
-when:
-- not (bacula_only_client|bool)
