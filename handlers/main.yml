@@ -6,6 +6,11 @@
     name: bacula-director
     state: restarted
 
+- name: Bacula-client restarted
+  systemd:
+    name: bacula-fd
+    state: restarted
+
 - name: Bacula-director reloaded
   systemd:
     name: bacula-director

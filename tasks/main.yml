@@ -3,68 +3,16 @@
 
 - include_tasks: define.yml
 
-- name: Install database
-  include_role:
-    name: geerlingguy.mysql
-  vars:
-    mysql_root_password: "{{ bacula_mysql_root_password }}"
-    mysql_user_password: "{{ bacula_mysql_user_password }}"
-    mysql_enabled_on_startup: true
-    mysql_root_password_update: "{{ bacula_mysql_root_password_update }}"
-    mysql_user_password_update: "{{ bacula_mysql_user_password_update }}"
-  when:
-    - not (bacula_catalog_external|bool)
+- name: Install server components
+  include_tasks: components.yml
   tags:
-    - catalog
+    - server
 
-- include_tasks: director.yml
+- name: Install client component
+  include_tasks: client.yml
   tags:
-    - director
+    - client
   when:
-    - not (bacula_dir_external|bool)
-
-- include_tasks: catalog.yml
-  tags:
-    - catalog
-  when:
-    - not (bacula_catalog_external|bool)
-    - bacula_catalog_create_database|bool
-    - bacula_catalog_create_tables|bool
-
-- include_tasks: storage.yml
-  tags:
-    - storage
-  when:
-    - not (bacula_sd_external|bool)
-
-- include_tasks: logging.yml
-  tags:
-    - director
-    - storage
-  when: bacula_logrotate_enabled|bool
-
-- name: Ensure service bacula director enabled
-  systemd:
-    name: bacula-director
-    state: started
-    enabled: true
-  tags:
-    - director
-    - catalog
-  when:
-    - not (bacula_dir_external|bool)
-    - not (bacula_catalog_external|bool)
-    - bacula_catalog_create_database|bool
-    - bacula_catalog_create_tables|bool
-  no_log: "{{ bacula_no_log|bool }}"
-
-- name: Ensure service bacula storage enabled
-  systemd:
-    name: bacula-sd
-    state: started
-    enabled: true
-  when:
-    - not (bacula_sd_external|bool)
-  tags:
-    - storage
-  no_log: "{{ bacula_no_log|bool }}"
+    - item.enabled|bool
+  with_items:
+    - "{{ bacula_clients | default([]) }}"

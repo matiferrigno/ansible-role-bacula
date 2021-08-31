@@ -1,0 +1,69 @@
+---
+
+- name: Install bacula-fd
+  apt:
+    name:
+      - "{{ bacula_fd_package_name }}"
+    state: present
+    install_recommends: false
+    update_cache: true
+  environment:
+    - DEBIAN_FRONTEND: noninteractive
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Configure bacula-fd.conf
+  template:
+    src: bacula-fd.conf.j2
+    dest: /etc/bacula/bacula-fd.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-client restarted
+
+- name: Ensure directories exists
+  file:
+    path: "{{ directory }}"
+    state: directory
+    owner: bacula
+    group: tape
+    mode: 0740
+  loop:
+    - /etc/bacula/conf.d
+    - /etc/bacula/certs/crt
+    - /etc/bacula/certs/private
+    - /etc/bacula/certs/csr
+    - /var/lib/bacula
+  loop_control:
+    loop_var: directory
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Copy client key
+  ansible.builtin.copy:
+    src: files/bacula/certs/private/{{ item.name }}.pem
+    dest: /etc/bacula/certs/private/client.pem
+    owner: bacula
+    group: tape
+    mode: '0644'
+  when: bacula_fd_tls_enabled|bool
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Copy client cert
+  ansible.builtin.copy:
+    src: files/bacula/certs/crt/{{ item.name }}.crt
+    dest: /etc/bacula/certs/crt/client.crt
+    owner: bacula
+    group: tape
+    mode: '0644'
+  when: bacula_fd_tls_enabled|bool
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Copy CA certificate
+  ansible.builtin.copy:
+    src: files/bacula/certs/crt/ca-bacula.crt
+    dest: /etc/bacula/certs/crt/ca-bacula.crt
+    owner: bacula
+    group: tape
+    mode: '0644'
+  when: bacula_fd_tls_enabled|bool
+  no_log: "{{ bacula_no_log|bool }}"
