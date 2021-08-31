@@ -343,13 +343,13 @@ bacula__default__messages_telegram_apitoken: ''
 bacula__default__messages_telegram_id: ''
 bacula__default__messages_telegram_logfile: '/var/log/bacula/telegram.log'
 bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
-bacula__default__fd_name: bacula-fd
-bacula__default__fd_package_name: bacula-client
-bacula__default__fd_tls_enabled: true
-bacula__default__fd_tls_require: true
-bacula__default__fd_tls_verify_peer: false
-bacula__default__fd_tls_certificate: /etc/bacula/certs/crt/client.crt
-bacula__default__fd_tls_key: /etc/bacula/certs/private/client.pem
+bacula_fd_name: bacula-fd
+bacula_fd_package_name: bacula-client
+bacula_fd_tls_enabled: true
+bacula_fd_tls_require: true
+bacula_fd_tls_verify_peer: false
+bacula_fd_tls_certificate: /etc/bacula/certs/crt/client.crt
+bacula_fd_tls_key: /etc/bacula/certs/private/client.pem
 bacula__default__sd_address: 0.0.0.0
 bacula__default__sd_additional_options: []
 bacula__default__sd_device: /bacula/backups

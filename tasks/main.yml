@@ -5,6 +5,7 @@
 
 - name: Install server components
   include_tasks: components.yml
+  when: not bacula_only_client|bool
   tags:
     - server
 
@@ -12,7 +13,6 @@
   include_tasks: client.yml
   tags:
     - client
-  when:
-    - item.enabled|bool
+  when: bacula_only_client|bool and item.enabled|bool
   with_items:
-    - "{{ bacula_clients | default([]) }}"
+    - "{{ bacula_client | default([]) }}"

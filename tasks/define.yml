@@ -83,12 +83,6 @@
   when: bacula_client_auto_prune is not defined
   no_log: '{{ bacula_no_log|bool }}'
 
-- name: Set default value to bacula_client_fdport
-  set_fact:
-    bacula_client_fdport: '{{ bacula__default__client_fdport }}'
-  when: bacula_client_fdport is not defined
-  no_log: '{{ bacula_no_log|bool }}'
-
 - name: Set default value to bacula_client_file_retention
   set_fact:
     bacula_client_file_retention: '{{ bacula__default__client_file_retention }}'
@@ -543,16 +537,4 @@
   set_fact:
     bacula_sd_working_directory: '{{ bacula__default__sd_working_directory }}'
   when: bacula_sd_working_directory is not defined
-  no_log: '{{ bacula_no_log|bool }}'
-
-- name: Set default value to bacula_fd_name
-  set_fact:
-    bacula_fd_name: '{{ bacula__default__fd_name }}'
-  when: bacula_fd_name is not defined
-  no_log: '{{ bacula_no_log|bool }}'
-
-- name: Set default value to bacula_only_client
-  set_fact:
-    bacula_only_client: '{{ bacula__default__bacula_only_client }}'
-  when: bacula_only_client is not defined
   no_log: '{{ bacula_no_log|bool }}'
