@@ -22,7 +22,7 @@
 # List Directors who are permitted to contact this File daemon
 #
 Director {
-  Name = {{ bacula_dir_fqdn }}
+  Name = {{ bacula_dir_name }}-mon
   Password = "{{ item.pass | default(bacula__default__client_pass) }}"
 {% if bacula_fd_tls_enabled|bool %}
   TLS Enable = yes
@@ -42,7 +42,7 @@ Director {
 #   status of the file daemon
 #
 Director {
-  Name = {{ bacula_dir_fqdn }}
+  Name = {{ bacula_dir_name }}-mon
   Password = "{{ item.pass | default(bacula__default__client_pass) }}"
   Monitor = yes
 }
