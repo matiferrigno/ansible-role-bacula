@@ -12,7 +12,7 @@
 - name: Fix bullseye
   set_fact:
     distribution_version: "buster"
-  when: ansible_distribution|lower == "debian" and ansible_distribution_release|lower == "bullseye"
+  when: ansible_distribution|lower == "debian" and ansible_distribution_release|lower is match("bullseye.*")
 
 - name: Add specified repository into sources list
   ansible.builtin.apt_repository:
