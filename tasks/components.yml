@@ -40,6 +40,12 @@
     - storage
   when: bacula_logrotate_enabled|bool
 
+- include_tasks: gui.yml
+  tags:
+    - director
+    - storage
+  when: (bacula_gui_enabled|default(false))|bool
+
 - name: Ensure service bacula director enabled
   systemd:
     name: bacula-director

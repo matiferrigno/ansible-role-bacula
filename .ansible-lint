@@ -3,4 +3,10 @@ exclude_paths:
   - .env/
   - .direnv/
   - .cache/
+  - .ansible/
   - env/
+
+warn_list:  # or 'skip_list' to silence them completely
+  - experimental  # all rules tagged as experimental
+  - no-changed-when  # Commands should not change things if nothing needs doing
+  - risky-octal  # Octal file permissions must contain leading zero or be a string
