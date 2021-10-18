@@ -11,7 +11,7 @@
 
 - name: Fix bullseye
   set_fact:
-    distribution_version: "buster"
+    distribution_release: "buster"
   when: ansible_distribution|lower == "debian" and ansible_distribution_release|lower == "bullseye"
 
 - name: Add specified repository into sources list
