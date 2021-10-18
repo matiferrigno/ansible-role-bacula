@@ -22,7 +22,7 @@
 # List Directors who are permitted to contact this File daemon
 #
 Director {
-  Name = {{ bacula_dir_name }}-mon
+  Name = {{ bacula_dir_name }}
   Password = "{{ item.pass | default(bacula__default__client_pass) }}"
 {% if bacula_fd_tls_enabled|bool %}
   TLS Enable = yes
