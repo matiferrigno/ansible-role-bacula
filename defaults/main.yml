@@ -369,7 +369,7 @@ bacula__default__sd_query_file: /etc/bacula/scripts/query.sql
 bacula__default__sd_tls_certificate: /etc/bacula/certs/crt/bacula-sd.crt
 bacula__default__sd_tls_enabled: true
 bacula__default__sd_tls_key: /etc/bacula/certs/private/bacula-sd.pem
-bacula__default__sd_tls_require: yes
+bacula__default__sd_tls_require: true
 bacula__default__sd_tls_verify_peer: false
 bacula__default__sd_working_directory: /var/lib/bacula/
 bacula_only_client: false

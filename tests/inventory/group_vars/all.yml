@@ -1,7 +1,7 @@
 ---
 
 bacula_no_log: false
-
+bacula_gui_enabled: true
 bacula_clients:
   - name: "TestClient"
     fqdn: testclient.lan

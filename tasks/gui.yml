@@ -1,0 +1,87 @@
+---
+
+- name: Add an Apt signing key
+  ansible.builtin.apt_key:
+    url: https://www.bacula.org/downloads/baculum/baculum.pub
+    state: present
+
+- name: Fix bullseye
+  set_fact:
+    distribution_release: "{{ ansible_distribution_release }}"
+
+- name: Fix bullseye
+  set_fact:
+    distribution_release: "buster"
+  when: ansible_distribution|lower == "debian" and ansible_distribution_release|lower == "bullseye"
+
+- name: Add specified repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    state: present
+    filename: baculum
+  loop:
+    - "deb [ arch=amd64 ] https://www.bacula.org/downloads/baculum/stable-11/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
+    - "deb-src https://www.bacula.org/downloads/baculum/stable-11/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
+
+- name: Install dependencies
+  apt:
+    pkg:
+      - php-bcmath
+      - php-mbstring
+      - baculum-api
+      - baculum-api-apache2
+      - baculum-common
+      - bacula-console
+      - baculum-web
+      - baculum-web-apache2
+
+- name: Add baculum to sudoers
+  ansible.builtin.copy:
+    content: |
+      www-data ALL=NOPASSWD: /usr/sbin/bconsole
+      www-data ALL=NOPASSWD: /usr/sbin/bdirjson
+      www-data ALL=NOPASSWD: /usr/sbin/bsdjson
+      www-data ALL=NOPASSWD: /usr/sbin/bfdjson
+      www-data ALL=NOPASSWD: /usr/sbin/bbconsjson
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl start bacula-dir
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl stop bacula-dir
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl restart bacula-dir
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl start bacula-sd
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl stop bacula-sd
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl restart bacula-sd
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl start bacula-fd
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl stop bacula-fd
+      www-data ALL=(root) NOPASSWD: /usr/bin/systemctl restart bacula-fd
+      www-data ALL=(root) NOPASSWD: /opt/bacula/bin/mtx-changer
+    dest: /etc/sudoers.d/baculum
+    mode: 440
+
+- name: Add the user baculum to www-data
+  ansible.builtin.user:
+    name: bacula
+    group: www-data
+
+- name: Change ownership of a directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0770
+    recurse: true
+    owner: www-data
+    group: bacula
+  loop:
+    - /opt/bacula/working
+    - /opt/bacula/etc
+
+- name: Enable the Apache2 module rewrite
+  community.general.apache2_module:
+    state: present
+    name: rewrite
+
+- name: Enable site baculum-web and baculum-api
+  command: "a2ensite baculum-web baculum-api"
+
+- name: Restarting apache
+  systemd:
+    name: apache2
+    state: restarted

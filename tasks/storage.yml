@@ -50,7 +50,7 @@
     - /etc/bacula/certs/csr
   no_log: "{{ bacula_no_log|bool }}"
 
-- include_tasks: secure.yml  
+- include_tasks: secure.yml
 
 - name: Configure storage
   template:
