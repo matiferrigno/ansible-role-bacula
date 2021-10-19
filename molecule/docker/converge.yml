@@ -1,4 +1,15 @@
 ---
+
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - apt:
+        update_cache: true
+        pkg:
+          - gpg
+          - gpg-agent
+
 - name: Converge
   hosts: all
   become: true

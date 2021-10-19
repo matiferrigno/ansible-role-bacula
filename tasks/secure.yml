@@ -49,7 +49,7 @@
   ansible.builtin.fetch:
     src: /etc/bacula/certs/crt/ca-bacula.crt
     dest: files/bacula/certs/crt/ca-bacula.crt
-    flat: yes
+    flat: true
 
 - name: Generate private key certificate for Director
   community.crypto.openssl_privatekey:
