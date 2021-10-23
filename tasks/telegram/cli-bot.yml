@@ -9,10 +9,14 @@
   file:
     path: /etc/bacula/scripts
     state: directory
-    mode: 550
+    mode: u=rx,g=rx,o=rx
+    owner: bacula
+    group: tape
 
 - name: Create script for telegram messages
   template:
     mode: u=rx,g=rx,o=rx
+    owner: bacula
+    group: tape
     src: _send_telegram.sh.j2
     dest: /etc/bacula/scripts/_send_telegram.sh
