@@ -78,15 +78,6 @@
     - Bacula-storage restarted
   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Copy ca cert
-  ansible.builtin.copy:
-    src: files/bacula/certs/crt/ca-bacula.crt
-    dest: /etc/bacula/certs/crt/ca-bacula.crt
-    owner: bacula
-    group: tape
-    mode: '0644'
-  no_log: "{{ bacula_no_log|bool }}"
-
 - include_tasks: client-storage-delete.yml
   when:
     - not (item.enabled|bool)
