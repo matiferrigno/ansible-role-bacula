@@ -13,6 +13,14 @@
     owner: bacula
     group: tape
 
+- name: Create file for logs
+  file:
+    path: "{{ bacula_messages_telegram_logfile }}"
+    state: touch
+    mode: u=rw,g=rw,o=r
+    owner: bacula
+    group: tape
+
 - name: Create script for telegram messages
   template:
     mode: u=rx,g=rx,o=rx
