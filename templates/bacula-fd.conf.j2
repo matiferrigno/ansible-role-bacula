@@ -57,7 +57,7 @@ FileDaemon {
   Pid Directory = /run/bacula
   Maximum Concurrent Jobs = 20
   Plugin Directory = /usr/lib/bacula
-  FDAddress = {{ item.host | default(ansible_default_ipv4) }}
+  FDAddress = {{ item.host | default(ansible_default_ipv4.address) }}
 {% if bacula_fd_tls_enabled|bool %}
   TLS Enable = yes
   TLS Require = {{ bacula_fd_tls_require }}
