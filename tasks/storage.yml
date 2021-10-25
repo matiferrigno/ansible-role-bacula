@@ -80,8 +80,8 @@
 
 - name: Copy ca cert
   ansible.builtin.copy:
-    src: files/bacula/certs/public/ca-bacula.crt
-    dest: /etc/bacula/certs/public/ca-bacula.crt
+    src: files/bacula/certs/crt/ca-bacula.crt
+    dest: /etc/bacula/certs/crt/ca-bacula.crt
     owner: bacula
     group: tape
     mode: '0644'
