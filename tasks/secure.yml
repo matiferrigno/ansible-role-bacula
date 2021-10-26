@@ -125,7 +125,7 @@
   community.crypto.openssl_privatekey:
     path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
     size: 4096
-    force: "{{ external_storage.force_regenerate_certs|bool | default(false) }}"
+    force: "{{ external_storage.force_regenerate_certs | default(false) | bool }}"
     owner: bacula
     group: tape
   loop: "{{ bacula_sd_externals }}"
