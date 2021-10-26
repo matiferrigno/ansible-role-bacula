@@ -43,8 +43,7 @@
 - include_tasks: gui.yml
   tags:
     - director
-    - storage
-  when: (bacula_gui_enabled|default(false))|bool
+  when: (bacula_gui_enabled|default(false))|bool and not (bacula_dir_external|bool)
 
 - name: Ensure service bacula director enabled
   systemd:
