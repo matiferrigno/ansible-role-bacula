@@ -5,7 +5,7 @@
     path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name }}.conf"
     state: absent
   when: not (policy.enabled|bool)
-  loop: "{{ item.policies }}"
+  loop: "{{ item.policies | default([]) }}"
   loop_control:
     loop_var: policy
   notify:
@@ -21,7 +21,7 @@
     mode: 0740
   when:
     - policy.enabled|bool
-  loop: "{{ item.policies }}"
+  loop: "{{ item.policies | default([]) }}"
   loop_control:
     loop_var: policy
   notify:
@@ -36,7 +36,7 @@
     group: tape
     mode: 0640
   when: policy.enabled|bool
-  loop: "{{ item.policies }}"
+  loop: "{{ item.policies | default([]) }}"
   loop_control:
     loop_var: policy
   notify:

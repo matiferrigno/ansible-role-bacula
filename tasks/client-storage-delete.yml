@@ -4,7 +4,7 @@
   file:
     path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name }}.conf"
     state: absent
-  loop: "{{ item.policies }}"
+  loop: "{{ item.policies | default([]) }}"
   loop_control:
     loop_var: policy
   no_log: "{{ bacula_no_log|bool }}"
@@ -13,7 +13,7 @@
   file:
     path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name }}.conf"
     state: absent
-  loop: "{{ item.policies }}"
+  loop: "{{ item.policies | default([]) }}"
   loop_control:
     loop_var: policy
   notify:
