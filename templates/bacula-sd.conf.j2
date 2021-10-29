@@ -35,7 +35,7 @@ Storage {
   ## Other options ##
   ###################
 {% for element in bacula_sd_additional_options %}
-{% if element.enabled|bool %}
+{% if element.enabled|default(true)|bool %}
   {% if element.comment|d() %}
   {%   for line in element.comment.split('\n') | list %}
   # {{ line }}
