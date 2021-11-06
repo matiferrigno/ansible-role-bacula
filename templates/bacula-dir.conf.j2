@@ -44,7 +44,7 @@ Director {
   ## Other options ##
   ###################
 {% for element in bacula_dir_additional_options %}
-{% if element.enabled|bool %}
+{% if element.enabled|default(true)|bool %}
   {% if element.comment is defined %}
   {%   for line in element.comment.split('\n') | list %}
   # {{ line }}
