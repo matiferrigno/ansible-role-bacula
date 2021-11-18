@@ -8,6 +8,7 @@
 JobDefs {
   Name = GenericBackupDef
   Type = Backup
+  Pool = Default
   {% if bacula_messages_telegram_enabled|bool %}
   RunScript {
      Command = "/etc/bacula/scripts/_send_telegram.sh %i"
@@ -18,7 +19,12 @@ JobDefs {
   }
   {% endif %}
   Max Wait Time = 3600
-  Priority = 20
+  Prefer Mounted Volumes = no
+  Maximum Concurrent Jobs = 8
+  Prune Files = yes
+  Prune Jobs = yes
+  Prune Volumes = yes
+  Priority = 10
 }
 
 JobDefs {
