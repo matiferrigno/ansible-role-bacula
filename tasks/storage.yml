@@ -33,24 +33,8 @@
     update_cache: false
   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Ensure directories exists
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: bacula
-    group: tape
-    mode: 0740
-  with_items:
-    - /etc/bacula/conf.d
-    - /etc/bacula/clients.d
-    - /etc/bacula/policies.d
-    - /etc/bacula/devs.d
-    - /etc/bacula/certs/crt
-    - /etc/bacula/certs/private
-    - /etc/bacula/certs/csr
-  no_log: "{{ bacula_no_log|bool }}"
-
 - include_tasks: secure.yml
+  loop: "{{ bacula_storages }}"
 
 - name: Configure storage
   template:
@@ -80,12 +64,12 @@
 
 - include_tasks: client-storage-delete.yml
   when:
-    - not (item.enabled|bool)
+    - not (item.enabled|default(true)|bool)
   with_items:
     - "{{ bacula_clients }}"
 
 - include_tasks: client-storage-add.yml
   when:
-    - item.enabled|bool
+    - item.enabled|default(true)|bool
   with_items:
     - "{{ bacula_clients }}"

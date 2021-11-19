@@ -4,18 +4,11 @@
   apt:
     name: curl
     update_cache: true
-
-- name: Create directory for scripts if not exists
-  file:
-    path: /etc/bacula/scripts
-    state: directory
-    mode: u=rx,g=rx,o=rx
-    owner: bacula
-    group: tape
+  when: bacula_telegram_install_curl | default(true) | bool
 
 - name: Create file for logs
   file:
-    path: "{{ bacula_messages_telegram_logfile }}"
+    path: "{{ bacula_telegram_logfile }}"
     state: touch
     mode: u=rw,g=rw,o=r
     owner: bacula
@@ -27,4 +20,4 @@
     owner: bacula
     group: tape
     src: _send_telegram.sh.j2
-    dest: /etc/bacula/scripts/_send_telegram.sh
+    dest: /etc/bacula/scripts.d/_send_telegram.sh

@@ -23,7 +23,7 @@
 #
 Director {
   Name = {{ bacula_dir_name }}
-  Password = "{{ item.pass | default(bacula__default__client_pass) }}"
+  Password = "{{ item.pass | default('changeme!') }}"
 {% if bacula_fd_tls_enabled|bool %}
   TLS Enable = yes
   TLS Require = {{ bacula_fd_tls_require }}
@@ -43,7 +43,7 @@ Director {
 #
 Director {
   Name = {{ bacula_dir_name }}-mon
-  Password = "{{ item.pass | default(bacula__default__client_pass) }}"
+  Password = "{{ item.pass | default('changeme!') }}"
   Monitor = yes
 }
 
@@ -52,7 +52,7 @@ Director {
 #
 FileDaemon {
   Name = {{ item.name }}-fd
-  FDPort = {{ item.fdport | default(bacula__default__client_fdport) }}
+  FDPort = {{ item.fdport | default(9102) }}
   WorkingDirectory = /var/lib/bacula
   Pid Directory = /run/bacula
   Maximum Concurrent Jobs = 20

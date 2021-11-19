@@ -7,6 +7,7 @@
     state: present
     install_recommends: false
     update_cache: true
+  when: bacula_only_client and bacula_only_configure_client | default(false) | bool
   environment:
     - DEBIAN_FRONTEND: noninteractive
   no_log: "{{ bacula_no_log|bool }}"

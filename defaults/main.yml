@@ -8,6 +8,8 @@
 # bacula_no_log: (yes | no)
 #   Set no_log on all tasks
 
+bacula_no_log: yes
+
 ##########                     ##########
 ##########  CA                 ##########
 ##########                     ##########
@@ -35,6 +37,8 @@
 # bacula_dir_external: (yes | no)
 #   Set it 'yes' if you don't want to let the role manages
 #   the Director.
+
+bacula_dir_external: no
 
 # bacula_dir_package_name: string
 #   Name of package on repository
@@ -65,6 +69,8 @@
 #   The first time the role is applied, self-signed certs for Bacula.
 #   If you set it 'yes' will force regeneration next time the role is applied.
 #   (It only works when the role manages Director)
+bacula_ca_force_regenerate: no
+bacula_dir_force_regenerate_certs: no
 
 # bacula_dir_additional_options: []Option
 # Element Option
@@ -140,7 +146,6 @@
 # bacula_catalog_external:
 #   Set it 'yes' if you don't want to let the role manages
 #   the database.
-
 #   Regardless bacula_catalog_external value, you must provide connection
 #   parameters. If bacula_catalog_external is 'yes', so it will be used
 #   only to connect to Database, but if it is 'no' also to
@@ -156,7 +161,9 @@
 #   Set yes if database is needed.
 #   Also works if database engine is external.
 #   Set mysql_root_username and mysql_root_password is needed.
-
+bacula_catalog_external: no
+bacula_catalog_create_database: yes
+bacula_catalog_create_tables: yes
 # bacula_catalog_create_tables: (yes | no)
 #   Set yes if create tables is needed.
 #   Also works if database engine is external.
@@ -173,7 +180,7 @@
 # bacula_sd_external: (yes | no)
 #   Set it 'yes' if you don't want to let the role manages
 #   the Storage Daemon.
-
+bacula_sd_external: no
 #   Regardless bacula_sd_external value, you must provide connection
 #   parameters. If bacula_sd_external is 'yes', so it will be used
 #   only to connect to Storage Daemon, but if it is 'no' also to
@@ -197,6 +204,7 @@
 #   The first time the role is applied, self-signed certs for Bacula.
 #   If you set it 'yes' will force regeneration next time the role is applied.
 #   (It only works when the role manages Bacula Storage)
+bacula_sd_force_regenerate_certs: no
 
 ##########                     ##########
 ##########      Messages       ##########
@@ -248,7 +256,7 @@
 #
 
 # bacula_logrotate_enabled: (yes | no)
-
+bacula_logrotate_enabled: yes
 ##########                     ##########
 ##########      Console        ##########
 ##########                     ##########
@@ -267,82 +275,73 @@
 #   If you override them, do it carefully.
 #
 
+bacula_gui_enabled: yes
+
 bacula_mysql_root_password: toor
 bacula_mysql_user_password: toor
 bacula_mysql_root_password_update: false
 bacula_mysql_user_password_update: false
-bacula__default__no_log: true
-bacula__default__ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
-bacula__default__ca_enabled: true
-bacula__default__ca_force_regenerate: false
-bacula__default__catalog_create_database: true
-bacula__default__catalog_create_tables: true
-bacula__default__catalog_dbhost: 127.0.0.1
-bacula__default__catalog_dbname: bacula-catalog
-bacula__default__catalog_dbpass: toor
-bacula__default__catalog_dbport: 3306
-bacula__default__catalog_dbuser: baculausr
-bacula__default__catalog_external: false
-bacula__default__catalog_name: bacula-catalog
-bacula__default__client_auto_prune: true
-bacula__default__client_fdport: 9102
-bacula__default__client_file_retention: '3 months'
-bacula__default__client_force_regenerate_certs: false
-bacula__default__client_job_retention: '3 months'
-bacula__default__client_maximum_concurrent_jobs: 10
-bacula__default__client_run_before: undefined
-bacula__default__client_run_after: undefined
-bacula__default__client_tls_enabled: true
-bacula__default__client_tls_require: true
-bacula__default__client_tls_verify_peer: false
-bacula__default__clients: []
+
+bacula_ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
+bacula_ca_key: /etc/bacula/certs/crt/ca-bacula.pem
+
+
+bacula_catalog_dbhost: 127.0.0.1
+bacula_catalog_dbname: bacula-catalog
+bacula_catalog_dbpass: toor
+bacula_catalog_dbport: 3306
+bacula_catalog_dbuser: baculausr
+bacula_catalog_name: bacula-catalog
+
 bacula_client: []
-bacula__default__console_package_name: bacula-console
-bacula__default__device_always_open: false
-bacula__default__device_automatic_mount: true
-bacula__default__device_label_media: true
-bacula__default__device_maximum_concurrent_jobs: 50
-bacula__default__device_media_type: File
-bacula__default__device_random_access: true
-bacula__default__device_removable_media: false
-bacula__default__dir_additional_options: []
-bacula__default__dir_address: 0.0.0.0
-bacula__default__dir_database_connector: mysql
-bacula__default__dir_description: ''
-bacula__default__dir_device: /bacula/backups
-bacula__default__dir_external: false
-bacula__default__dir_force_regenerate_certs: false
-bacula__default__dir_fqdn: localhost
-bacula__default__dir_heartbeat_interval: 5
-bacula__default__dir_maximum_concurrent_jobs: 2000
-bacula__default__dir_messages: '{{ bacula__default__messages_name }}'
-bacula__default__dir_mysql_connector_package: bacula-director-mysql
-bacula__default__dir_name: bacula-dir
-bacula__default__dir_package_name: bacula-director
-bacula__default__dir_pass: 123456
-bacula__default__dir_pid_directory: /var/run/bacula/
-bacula__default__dir_port: 9101
-bacula__default__dir_psql_connector_package: bacula-director-pgsql
-bacula__default__dir_query_file: /etc/bacula/scripts/query.sql
-bacula__default__dir_tls_ca: /etc/bacula/certs/private/bacula.pem
-bacula__default__dir_tls_certificate: /etc/bacula/certs/crt/bacula.crt
-bacula__default__dir_tls_enabled: true
-bacula__default__dir_tls_key: /etc/bacula/certs/private/bacula.pem
-bacula__default__dir_tls_require: true
-bacula__default__dir_tls_verify_peer: false
-bacula__default__dir_working_directory: /var/lib/bacula/
-bacula__default__logrotate_enabled: true
-bacula__default__messages_mail: 'test@mailtrap.io'
-bacula__default__messages_mail_command: ''
-bacula__default__messages_name: bacula-msg
-bacula__default__messages_operator_command: ''
-bacula__default__messages_telegram_enabled: true
-bacula__default__messages_telegram_onsuccess: true
-bacula__default__messages_telegram_onfailure: true
-bacula__default__messages_telegram_apitoken: ''
-bacula__default__messages_telegram_id: ''
-bacula__default__messages_telegram_logfile: '/var/log/bacula/telegram.log'
-bacula__default__policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
+bacula_storages: []
+bacula_console_package_name: bacula-console
+bacula_device_always_open: false
+bacula_device_automatic_mount: true
+bacula_device_label_media: true
+bacula_device_maximum_concurrent_jobs: 50
+bacula_device_media_type: File
+bacula_device_random_access: true
+bacula_device_removable_media: false
+bacula_dir_additional_options: []
+bacula_dir_address: 0.0.0.0
+bacula_dir_database_connector: mysql
+bacula_dir_description: ''
+bacula_dir_device: /bacula/backups
+
+bacula_dir_fqdn: localhost
+bacula_dir_heartbeat_interval: 5
+bacula_dir_maximum_concurrent_jobs: 2000
+bacula_dir_messages: '{{ bacula_messages_name }}'
+bacula_dir_mysql_connector_package: bacula-director-mysql
+bacula_dir_name: bacula-dir
+bacula_dir_package_name: bacula-director
+bacula_dir_pass: 123456
+bacula_dir_pid_directory: /var/run/bacula/
+bacula_dir_port: 9101
+bacula_dir_psql_connector_package: bacula-director-pgsql
+bacula_dir_query_file: /etc/bacula/scripts/query.sql
+bacula_dir_tls_ca: /etc/bacula/certs/private/bacula.pem
+bacula_dir_tls_certificate: /etc/bacula/certs/crt/bacula.crt
+bacula_dir_tls_enabled: true
+bacula_dir_tls_key: /etc/bacula/certs/private/bacula.pem
+bacula_dir_tls_require: true
+bacula_dir_tls_verify_peer: false
+bacula_dir_working_directory: /var/lib/bacula/
+
+bacula_messages_mail: 'test@mailtrap.io'
+bacula_messages_mail_command: ''
+bacula_messages_name: bacula-msg
+bacula_messages_operator_command: ''
+bacula_telegram_enabled: true
+bacula_telegram_onsuccess: true
+bacula_telegram_onfailure: true
+bacula_telegram_apitoken: ''
+bacula_telegram_id: ''
+bacula_telegram_logfile: '/var/log/bacula/telegram.log'
+bacula_policies_template_folder: "{{ role_path + '/templates/policies.d' }}"
+bacula_policy_name: default
+
 bacula_fd_name: bacula-fd
 bacula_fd_package_name: bacula-client
 bacula_fd_tls_enabled: true
@@ -350,26 +349,6 @@ bacula_fd_tls_require: true
 bacula_fd_tls_verify_peer: false
 bacula_fd_tls_certificate: /etc/bacula/certs/crt/client.crt
 bacula_fd_tls_key: /etc/bacula/certs/private/client.pem
-bacula__default__sd_address: 0.0.0.0
-bacula__default__sd_additional_options: []
-bacula__default__sd_device: /bacula/backups
-bacula__default__sd_external: false
-bacula__default__sd_externals: []
-bacula__default__sd_force_regenerate_certs: false
-bacula__default__sd_fqdn: localhost
-bacula__default__sd_heartbeat_interval: 3
-bacula__default__sd_maximum_concurrent_jobs: 200
-bacula__default__sd_messages: '{{ bacula__default__messages_name }}'
-bacula__default__sd_name: bacula-sd
-bacula__default__sd_package_name: bacula-sd
-bacula__default__sd_pass: '{{ bacula_dir_pass }}'
-bacula__default__sd_pid_directory: /var/run/bacula/
-bacula__default__sd_port: 9103
-bacula__default__sd_query_file: /etc/bacula/scripts/query.sql
-bacula__default__sd_tls_certificate: /etc/bacula/certs/crt/bacula-sd.crt
-bacula__default__sd_tls_enabled: true
-bacula__default__sd_tls_key: /etc/bacula/certs/private/bacula-sd.pem
-bacula__default__sd_tls_require: true
-bacula__default__sd_tls_verify_peer: false
-bacula__default__sd_working_directory: /var/lib/bacula/
+
+
 bacula_only_client: false

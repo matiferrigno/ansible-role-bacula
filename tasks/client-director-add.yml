@@ -7,6 +7,7 @@
     force: "{{ bacula_client_force_regenerate_certs }}"
     owner: bacula
     group: tape
+  when: not (item.generate_certs | default(true) | bool)
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: "Generate certificate signing request for client {{ item.name }}"
@@ -20,6 +21,7 @@
     force: "{{ bacula_client_force_regenerate_certs }}"
     owner: bacula
     group: tape
+  when: not (item.generate_certs | default(true) | bool)
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: "Generate self-signed public certificate for client {{ item.name }}"
@@ -33,6 +35,7 @@
     provider: ownca
     owner: bacula
     group: tape
+  when: not (item.generate_certs | default(true) | bool)
   notify:
     - Bacula-director restarted
   no_log: "{{ bacula_no_log|bool }}"
@@ -62,7 +65,7 @@
 
 - name: "Clean client {{ item.name }} policies (enabled: false)"
   file:
-    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf"
+    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default('default') }}.conf"
     state: absent
   when: not (policy.enabled|bool)
   loop: "{{ item.policies }}"

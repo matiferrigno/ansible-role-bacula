@@ -1,11 +1,9 @@
 ---
 # tasks file for matiferrigno.ansible-bacula
 
-- include_tasks: define.yml
-
 - name: Install server components
   include_tasks: components.yml
-  when: not bacula_only_client|bool
+  when: not (bacula_only_client|default(false)|bool)
   tags:
     - server
 
@@ -13,6 +11,6 @@
   include_tasks: client.yml
   tags:
     - client
-  when: bacula_only_client|bool and item.enabled|bool
+  when: bacula_only_client|default(false)|bool and item.enabled|default(true)|bool
   with_items:
     - "{{ bacula_client | default([]) }}"

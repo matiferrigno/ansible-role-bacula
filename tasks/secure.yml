@@ -4,15 +4,15 @@
   apt:
     name: python3-cryptography
     state: present
-    install_recommends: false
-    update_cache: false
+    install_recommends: no
+    update_cache: yes
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: Generate CA private key certificate
   community.crypto.openssl_privatekey:
-    path: /etc/bacula/certs/private/ca-bacula.pem
+    path: "{{ bacula_ca_key }}"
     size: 4096
-    force: "{{  bacula_dir_force_regenerate_certs|bool }}"
+    force: "{{ bacula_dir_force_regenerate_certs|bool }}"
     owner: bacula
     group: tape
   no_log: "{{ bacula_no_log|bool }}"
@@ -20,15 +20,15 @@
 - name: Generate CA certificate signing request
   community.crypto.openssl_csr:
     path: /etc/bacula/certs/csr/ca-bacula.csr
-    privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    privatekey_path: "{{ bacula_ca_key }}"
     common_name: CA Bacula
     basic_constraints:
       - CA:TRUE
-    basic_constraints_critical: true
+    basic_constraints_critical: yes
     key_usage:
       - keyCertSign
       - digitalSignature
-    key_usage_critical: true
+    key_usage_critical: yes
     force: "{{ bacula_ca_force_regenerate|bool }}"
     owner: bacula
     group: tape
@@ -36,8 +36,8 @@
 
 - name: Generate CA self-signed public certificate
   community.crypto.x509_certificate:
-    path: /etc/bacula/certs/crt/ca-bacula.crt
-    privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    path: "{{ bacula_ca_certificate }}"
+    privatekey_path: "{{ bacula_ca_key }}"
     csr_path: /etc/bacula/certs/csr/ca-bacula.csr
     force: "{{ bacula_ca_force_regenerate|bool }}"
     provider: selfsigned
@@ -47,9 +47,9 @@
 
 - name: "Fetch CA cert"
   ansible.builtin.fetch:
-    src: /etc/bacula/certs/crt/ca-bacula.crt
+    src: "{{ bacula_ca_certificate }}"
     dest: files/bacula/certs/crt/ca-bacula.crt
-    flat: true
+    flat: yes
 
 - name: Generate private key certificate for Director
   community.crypto.openssl_privatekey:
@@ -67,7 +67,7 @@
     common_name: "{{ bacula_dir_fqdn }}"
     basic_constraints:
       - CA:FALSE
-    basic_constraints_critical: true
+    basic_constraints_critical: yes
     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
     owner: bacula
     group: tape
@@ -78,8 +78,8 @@
     path: /etc/bacula/certs/crt/bacula.crt
     csr_path: /etc/bacula/certs/csr/bacula.csr
     privatekey_path: /etc/bacula/certs/private/bacula.pem
-    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
-    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    ownca_path: "{{ bacula_ca_certificate }}"
+    ownca_privatekey_path: "{{ bacula_ca_key }}"
     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
     provider: ownca
     owner: bacula
@@ -88,85 +88,41 @@
 
 - name: Generate private key certificate for Storage
   community.crypto.openssl_privatekey:
-    path: /etc/bacula/certs/private/bacula-sd.pem
+    path: /etc/bacula/certs/private/{{ item.name }}.pem
     size: 4096
-    force: "{{ bacula_sd_force_regenerate_certs|bool }}"
+    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
     owner: bacula
     group: tape
+  when: not (item.generate_certs | default(true) | bool)
+  loop: "{{ bacula_storages }}"
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: Generate certificate signing request for Storage
   community.crypto.openssl_csr:
-    path: /etc/bacula/certs/csr/bacula-sd.csr
-    privatekey_path: /etc/bacula/certs/private/bacula-sd.pem
+    path: /etc/bacula/certs/csr/{{ item.name }}.csr
+    privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
     common_name: "{{ bacula_sd_fqdn }}"
     basic_constraints:
       - CA:FALSE
-    basic_constraints_critical: true
-    force: "{{ bacula_sd_force_regenerate_certs|bool }}"
+    basic_constraints_critical: yes
+    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
     owner: bacula
     group: tape
+  when: not (item.generate_certs | default(true) | bool)
+  loop: "{{ bacula_storages }}"
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: Generate self-signed public certificate for Storage
   community.crypto.x509_certificate:
-    path: /etc/bacula/certs/crt/bacula-sd.crt
-    csr_path: /etc/bacula/certs/csr/bacula-sd.csr
-    privatekey_path: /etc/bacula/certs/private/bacula-sd.pem
-    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
-    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
-    force: "{{ bacula_sd_force_regenerate_certs|bool }}"
+    path: /etc/bacula/certs/crt/{{ item.name }}.crt
+    csr_path: /etc/bacula/certs/csr/{{ item.name }}.csr
+    privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
+    ownca_path: "{{ bacula_ca_certificate }}"
+    ownca_privatekey_path: "{{ bacula_ca_key }}"
+    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
     provider: ownca
     owner: bacula
     group: tape
-  no_log: "{{ bacula_no_log|bool }}"
-
-- name: Generate private key certificate for external Storages
-  community.crypto.openssl_privatekey:
-    path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
-    size: 4096
-    force: "{{ external_storage.force_regenerate_certs | default(false) | bool }}"
-    owner: bacula
-    group: tape
-  loop: "{{ bacula_sd_externals }}"
-  loop_control:
-    loop_var: external_storage
-  notify:
-    - Bacula-storage restarted
-  no_log: "{{ bacula_no_log|bool }}"
-
-- name: Generate certificate signing request for external Storages
-  community.crypto.openssl_csr:
-    path: /etc/bacula/certs/csr/{{ external_storage.name }}.csr
-    privatekey_path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
-    common_name: "{{ external_storage.fqdn }}"
-    basic_constraints:
-      - CA:FALSE
-    basic_constraints_critical: true
-    force: "{{ external_storage.force_regenerate_certs | default(false) |bool  }}"
-    owner: bacula
-    group: tape
-  loop: "{{ bacula_sd_externals }}"
-  loop_control:
-    loop_var: external_storage
-  notify:
-    - Bacula-storage restarted
-  no_log: "{{ bacula_no_log|bool }}"
-
-- name: Generate self-signed public certificate for external Storages
-  community.crypto.x509_certificate:
-    path: /etc/bacula/certs/crt/{{ external_storage.name }}.crt
-    csr_path: /etc/bacula/certs/csr/{{ external_storage.name }}.csr
-    privatekey_path: /etc/bacula/certs/private/{{ external_storage.name }}.pem
-    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
-    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
-    force: "{{ external_storage.force_regenerate_certs | default(false) |bool  }}"
-    provider: ownca
-    owner: bacula
-    group: tape
-  loop: "{{ bacula_sd_externals }}"
-  loop_control:
-    loop_var: external_storage
-  notify:
-    - Bacula-storage restarted
+  when: not (item.generate_certs | default(true) | bool)
+  loop: "{{ bacula_storages }}"
   no_log: "{{ bacula_no_log|bool }}"

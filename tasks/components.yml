@@ -6,13 +6,37 @@
   vars:
     mysql_root_password: "{{ bacula_mysql_root_password }}"
     mysql_user_password: "{{ bacula_mysql_user_password }}"
-    mysql_enabled_on_startup: true
+    mysql_enabled_on_startup: yes
     mysql_root_password_update: "{{ bacula_mysql_root_password_update }}"
     mysql_user_password_update: "{{ bacula_mysql_user_password_update }}"
   when:
     - not (bacula_catalog_external|bool)
   tags:
     - catalog
+
+- name: Ensure directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: bacula
+    group: tape
+    mode: 0740
+  with_items:
+    - /etc/bacula/conf.d
+    - /etc/bacula/scripts.d
+    - /etc/bacula/clients.d
+    - /etc/bacula/policies.d
+    - /etc/bacula/pools.d
+    - /etc/bacula/schedules.d
+    - /etc/bacula/jobdef.d
+    - /etc/bacula/certs/crt
+    - /etc/bacula/certs/private
+    - /etc/bacula/certs/csr
+    - /var/lib/bacula
+  no_log: "{{ bacula_no_log|bool }}"
+  tags:
+    - director
+    - storage
 
 - include_tasks: director.yml
   tags:
@@ -43,7 +67,7 @@
 - include_tasks: gui.yml
   tags:
     - director
-  when: (bacula_gui_enabled|bool|default(false)) and not (bacula_dir_external|bool|default(false))
+  when: bacula_gui_enabled|bool and not bacula_dir_external|bool
 
 - name: Ensure service bacula director enabled
   systemd:
