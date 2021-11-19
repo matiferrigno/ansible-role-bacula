@@ -52,13 +52,12 @@
     - bacula_catalog_create_database|bool
     - bacula_catalog_create_tables|bool
 
-- include_tasks: storage.yml
-  delegate_to: "{{ item.host }}"
-  loop: "{{ bacula_storages }}"
-  loop_control:
-    loop_var: stg
-  tags:
-    - storage
+# - include_tasks: storage.yml
+#   loop: "{{ bacula_storages }}"
+#   loop_control:
+#     loop_var: stg
+#   tags:
+#     - storage
 
 - include_tasks: logging.yml
   tags:
@@ -86,13 +85,13 @@
     - bacula_catalog_create_tables|bool
   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Ensure service bacula storage enabled
-  systemd:
-    name: bacula-sd
-    state: started
-    enabled: true
-  when:
-    - not (bacula_sd_external|bool)
-  tags:
-    - storage
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Ensure service bacula storage enabled
+#   systemd:
+#     name: bacula-sd
+#     state: started
+#     enabled: true
+#   when:
+#     - not (bacula_sd_external|bool)
+#   tags:
+#     - storage
+#   no_log: "{{ bacula_no_log|bool }}"
