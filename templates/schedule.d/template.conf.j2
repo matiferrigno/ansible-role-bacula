@@ -8,20 +8,20 @@
 
 Schedule {
   Name = "{{ client }}-{{ policy }}-DailyFI-Weekly"
-  Run = Full sun at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
-  Run = Incremental mon-sat at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Full sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
 }
 
 Schedule{
   Name = "{{ client }}-{{ policy }}-DailyFDI-Biweekly"
-  Run = Level=Full 1st,3rd sun at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
-  Run = Level=Differential 2nd,4th,5th sun at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
-  Run = Level=Incremental mon-sat at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Full 1st,3rd sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Differential 2nd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
 }
 
 Schedule{
   Name = "{{ client }}-{{ policy }}-DailyFDI-Monthly"
-  Run = Level=Full 1st sun at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
-  Run = Level=Differential 2nd,3rd,4th,5th sun at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
-  Run = Level=Incremental mon-sat at {% if p.hour|d() %} {{ p.hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Full 1st sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Differential 2nd,3rd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
+  Run = Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}
 }
