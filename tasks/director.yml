@@ -6,9 +6,9 @@
       - "{{ bacula_console_package_name }}"
       - "{{ bacula_dir_package_name }}"
       - >-
-        {{ bacula__default__dir_psql_connector_package
+        {{ bacula_dir_psql_connector_package
         if bacula_dir_database_connector == 'psql'
-        else bacula__default__dir_mysql_connector_package }}
+        else bacula_dir_mysql_connector_package }}
     state: present
     install_recommends: yes
     update_cache: yes
