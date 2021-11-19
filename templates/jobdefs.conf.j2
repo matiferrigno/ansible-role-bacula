@@ -8,7 +8,7 @@
 JobDefs {
     Name = GenericBackupDef
     Type = Backup
-    Storage = stg-{{ storage.name }}
+    Storage = stg-{{ bacula_storage_default | default((bacula_storages | first).name) }}
     Level = Incremental
     Max Wait Time = 3600
     Prefer Mounted Volumes = no
