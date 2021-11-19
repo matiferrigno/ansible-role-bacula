@@ -30,7 +30,7 @@ Director {
   TLS Verify Peer = {{ bacula_fd_tls_verify_peer }}
   TLS Certificate = {{ bacula_fd_tls_certificate }}
   TLS Key = {{ bacula_fd_tls_key }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
+  TLS CA Certificate File = {{ bacula_ca_certificate }}
 {% else %}
   TLS Enable = no
 {% endif %}
@@ -63,7 +63,7 @@ FileDaemon {
   TLS Require = {{ bacula_fd_tls_require }}
   TLS Certificate = {{ bacula_fd_tls_certificate }}
   TLS Key = {{ bacula_fd_tls_key }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
+  TLS CA Certificate File = {{ bacula_ca_certificate }}
 {% endif %}
 
 }

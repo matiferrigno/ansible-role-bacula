@@ -17,7 +17,7 @@ Director {
 {% if bacula_dir_tls_enabled|bool %}
   TLS Enable = yes
   TLS Require = {{ bacula_dir_tls_require }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
+  TLS CA Certificate File = {{ bacula_ca_certificate }}
 {% else %}
   TLS Enable = no
 {% endif %}

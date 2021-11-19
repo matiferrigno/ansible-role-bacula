@@ -8,7 +8,7 @@
     TLS Verify Peer = {{ item.tls_verify_peer | default(false) }}
     TLS Certificate = {{ item.tls_certificate | default('/etc/bacula/certs/crt/'item.name'.crt') }}
     TLS Key = {{ item.tls_key | default('/etc/bacula/certs/crt/'item.name'.pem') }}
-    TLS CA Certificate File = {{ item.ca_certificate | default('/etc/bacula/certs/crt/bacula-ca.crt') }}
+    TLS CA Certificate File = {{ item.ca_certificate | default(bacula_ca_certificate) }}
 {% endif %}
 {% endblock %}
 {% endset %}

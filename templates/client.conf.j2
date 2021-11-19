@@ -8,13 +8,13 @@
 Client {
   Name = {{ item.name }}-fd
   Address = {{ item.fqdn }}
-  FDPort = {{ item.fdport | default(bacula__default__client_fdport) }}
+  FDPort = {{ item.fdport | default(9102) }}
   Catalog = {{ bacula_catalog_name }}
-  Password = "{{ item.pass | default(bacula__default__client_pass) }}"
-  File Retention = {{ item.file_retention | default(bacula__default__client_file_retention) }}
+  Password = "{{ item.pass | default(bacula_client_pass) }}"
+  File Retention = {{ item.file_retention | default(bacula_client_file_retention) }}
   Job Retention = {{ item.job_retention | default(bacula_client_job_retention) }}
-  AutoPrune = {{ item.auto_prune | default(bacula__default__client_auto_prune) }}
-  Maximum Concurrent Jobs = {{ item.maximum_concurrent_jobs | default(bacula__default__client_maximum_concurrent_jobs) }}
+  AutoPrune = {{ item.auto_prune | default(bacula_client_auto_prune) }}
+  Maximum Concurrent Jobs = {{ item.maximum_concurrent_jobs | default(bacula_client_maximum_concurrent_jobs) }}
 
   #########
   ## TLS ##
@@ -22,7 +22,7 @@ Client {
 {% if item.tls_enabled|d() and item.tls_enabled|bool %}
   TLS Enable = {{ item.tls_enabled }}
   TLS Require = {{ item.tls_require | default(bacula_client_tls_require) }}
-  TLS CA Certificate File = {{ item.tls_ca_certificate | default(bacula__default__ca_certificate) }}
+  TLS CA Certificate File = {{ item.tls_ca_certificate | default(bacula_ca_certificate) }}
 {% else %}
   TLS Enable = no
 {% endif %}
