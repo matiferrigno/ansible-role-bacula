@@ -279,8 +279,8 @@ bacula_gui_enabled: yes
 
 bacula_mysql_root_password: toor
 bacula_mysql_user_password: toor
-bacula_mysql_root_password_update: false
-bacula_mysql_user_password_update: false
+bacula_mysql_root_password_update: no
+bacula_mysql_user_password_update: no
 
 bacula_ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
 bacula_ca_key: /etc/bacula/certs/crt/ca-bacula.pem
@@ -294,15 +294,21 @@ bacula_catalog_dbuser: baculausr
 bacula_catalog_name: bacula-catalog
 
 bacula_client: []
+bacula_client_file_retention: "1 year"
+bacula_client_job_retention: "1 year"
+bacula_client_auto_prune: yes
+bacula_client_maximum_concurrent_jobs:
+bacula_client_tls_require: true
+
 bacula_storages: []
 bacula_console_package_name: bacula-console
-bacula_device_always_open: false
-bacula_device_automatic_mount: true
-bacula_device_label_media: true
+bacula_device_always_open: no
+bacula_device_automatic_mount: yes
+bacula_device_label_media: yes
 bacula_device_maximum_concurrent_jobs: 50
 bacula_device_media_type: File
-bacula_device_random_access: true
-bacula_device_removable_media: false
+bacula_device_random_access: yes
+bacula_device_removable_media: no
 bacula_dir_additional_options: []
 bacula_dir_address: 0.0.0.0
 bacula_dir_database_connector: mysql
