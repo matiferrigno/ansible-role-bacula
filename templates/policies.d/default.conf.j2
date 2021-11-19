@@ -8,7 +8,7 @@
 {% if enabled | default(true) | bool %}
 
 FileSet {
-    Name = {{ policy.name }}-{{ schedule }}-fs
+    Name = {{ policy.name | default(bacula_policy_name_default) }}-{{ schedule }}-fs
     Include {
         Options {
           signature = MD5
@@ -51,9 +51,9 @@ JobDefs {
 Job {
     Name = Backup_{{ client }}
     JobDefs ={{ client }}BackupDef
-    FileSet = {{ client }}-{{ policy.name }}-fs
+    FileSet = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-fs
     Storage = stg-{{ storage }}
-    Schedule = {{ client }}-{{ policy.name }}-{{ schedule | default(policy.name+"-"+bacula_job_schedule_default) }}
+    Schedule = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-{{ schedule | default(policy.name+"-"+bacula_job_schedule_default) }}
     {% if run_before|d() %}
     Client Run before job = {{ run_before }}
     {% endif %}
@@ -66,7 +66,7 @@ Job{
     Name = Restore_{{ client }}
     Type = restore
     Client = {{ client }}-fd
-    File Set = {{ client }}-{{ policy.name }}-fs
+    File Set = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-fs
     Messages = {{ bacula_messages_name }}
     Pool = {{ client }}-Inc-Pool
     Storage = {{ storage }}

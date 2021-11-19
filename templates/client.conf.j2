@@ -31,7 +31,7 @@ Client {
 {% if item.policies|d() %}
 {% for policy in item.policies %}
 {% if policy.enabled %}
-@/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf
+@/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf
 {% endif %}
 {% endfor %}
 {% endif %}
