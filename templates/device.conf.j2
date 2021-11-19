@@ -8,7 +8,7 @@
 Device {
   Name = FileStorage-{{ item.name | default('default') }}
   Media Type = {{ item.media_type | default('File') }}
-  Archive Device = "{{ item.archive_device | default('/var/backups/'{{ item.name }}) }}
+  Archive Device = "{{ item.archive_device | default('/var/backups/'+item.name) }}
   LabelMedia = {{ item.label_media | default(true) }}
   Random Access = {{ item.random_access | default(true) }}
   AutomaticMount = {{ item.automatic_mount | default(true) }}
