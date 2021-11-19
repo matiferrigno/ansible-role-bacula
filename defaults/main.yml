@@ -285,7 +285,7 @@ bacula_mysql_user_password_update: no
 bacula_ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
 bacula_ca_key: /etc/bacula/certs/crt/ca-bacula.pem
 bacula_job_schedule_default: DailyFDI-Monthly
-
+bacula_policy_name_default: default
 bacula_catalog_dbhost: 127.0.0.1
 bacula_catalog_dbname: bacula-catalog
 bacula_catalog_dbpass: toor

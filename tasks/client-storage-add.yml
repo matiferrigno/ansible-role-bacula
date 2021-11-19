@@ -2,7 +2,7 @@
 
 - name: "Clean {{ item.name }}'s devices (only config)"
   file:
-    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name }}.conf"
+    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     state: absent
   when: not (policy.enabled|bool)
   loop: "{{ item.policies | default([]) }}"
@@ -14,7 +14,7 @@
 
 - name: "Ensure client {{ item.name }}'s devices directory exists"
   file:
-    path: "{{ bacula_sd_device }}/{{ item.name }}/{{ policy.name }}"
+    path: "{{ bacula_sd_device }}/{{ item.name }}/{{ policy.name | default(bacula_policy_name_default) }}"
     state: directory
     owner: bacula
     group: bacula
@@ -31,7 +31,7 @@
 - name: "Add bacula client {{ item.name }}'s devices config on storage"
   template:
     src: device.conf.j2
-    dest: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name }}.conf"
+    dest: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     owner: bacula
     group: tape
     mode: 0640

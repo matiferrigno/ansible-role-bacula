@@ -65,7 +65,7 @@
 
 - name: "Clean client {{ item.name }} policies (enabled: false)"
   file:
-    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default('default') }}.conf"
+    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     state: absent
   when: not (policy.enabled|bool)
   loop: "{{ item.policies }}"

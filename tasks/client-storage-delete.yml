@@ -2,7 +2,7 @@
 
 - name: "Remove client {{ item.name }}'s devices (only config)"
   file:
-    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default('default') }}.conf"
+    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     state: absent
   loop: "{{ item.policies | default([]) }}"
   loop_control:
@@ -11,7 +11,7 @@
 
 - name: "Remove client {{ item.name }}'s configuration"
   file:
-    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default('default') }}.conf"
+    path: "/etc/bacula/devs.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     state: absent
   loop: "{{ item.policies | default([]) }}"
   loop_control:

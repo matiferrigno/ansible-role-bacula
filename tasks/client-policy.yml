@@ -9,7 +9,7 @@
     mode: 0640
   vars:
     enabled: "{{ policy.enabled | default(true) }}"
-    policy: "{{ policy.name | default(bacula__default__policy_name) }}"
+    policy: "{{ policy.name | default(bacula_policy_name_default) }}"
     client: "{{ item.name | default('bacula') }}"
   tags:
     - molecule-idempotence-notest
@@ -33,13 +33,13 @@
 - name: "Create client {{ item.name }} policies (enabled: yes)"
   template:
     src: "{{ bacula_policies_template_folder }}/{{ policy.name }}.conf.j2"
-    dest: "/etc/bacula/policy.d/{{ item.name }}-{{ policy.name }}.conf"
+    dest: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf"
     owner: bacula
     group: tape
     mode: 0640
   vars:
     enabled: "{{ policy.enabled | default(true) }}"
-    policy: "{{ policy.name | default(bacula__default__policy_name) }}"
+    policy: "{{ policy.name | default(bacula_policy_name_default) }}"
     schedule: "{{ policy.schedule | default(bacula__default__schedule) }}"
     files_include: "{{ policy.files_include | default([]) }}"
     files_exclude: "{{ policy.files_exclude | default([]) }}"
