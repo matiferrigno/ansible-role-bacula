@@ -53,7 +53,7 @@ Job {
     JobDefs ={{ client }}BackupDef
     FileSet = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-fs
     Storage = stg-{{ storage }}
-    Schedule = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-{{ schedule | default(policy.name+"-"+bacula_job_schedule_default) }}
+    Schedule = {{ client }}-{{ policy.name | default(bacula_policy_name_default) }}-{{ schedule | default((policy.name | default(bacula_policy_name_default))+"-"+bacula_job_schedule_default) }}
     {% if run_before|d() %}
     Client Run before job = {{ run_before }}
     {% endif %}
