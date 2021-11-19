@@ -18,7 +18,7 @@ Storage {
     {% if item.tls_enabled | default(true) | bool %}
     TLS Require = {{ item.tls_require | default(true) | bool }}
     TLS Certificate = {{ item.tls_certificate | default("/etc/bacula/certs/crt/"item.name".crt") }}
-    TLS CA Certificate File = {{ item.tls_ca_certificate | default("/etc/bacula/certs/crt/bacula-ca.crt") }}
+    TLS CA Certificate File = {{ item.tls_ca_certificate | default(bacula_ca_certificate) }}
     {% endif %}
     {% for opt in item.extra_options | default([]) %}
     {% if opt.enabled|default(true)|bool %}
