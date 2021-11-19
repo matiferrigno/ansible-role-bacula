@@ -53,10 +53,12 @@
     - bacula_catalog_create_tables|bool
 
 - include_tasks: storage.yml
+  delegate_to: "{{ item.host }}"
+  loop: "{{ bacula_storages }}"
+  loop_control:
+    loop_var: stg
   tags:
     - storage
-  when:
-    - not (bacula_sd_external|bool)
 
 - include_tasks: logging.yml
   tags:
