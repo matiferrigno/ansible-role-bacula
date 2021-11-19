@@ -32,8 +32,8 @@
 
 - name: "Create client {{ item.name }} policies (enabled: yes)"
   template:
-    src: "{{ bacula_policies_template_folder }}/{{ policy.name }}.conf.j2"
-    dest: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name }}.conf"
+    src: "{{ bacula_policies_template_folder }}/{{ policy.name | default(bacula_policy_name_default) }}.conf.j2"
+    dest: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
     owner: bacula
     group: tape
     mode: 0640
