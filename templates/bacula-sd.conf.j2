@@ -1,4 +1,5 @@
-{% set b_tls %}{% block tls %}
+{% set b_tls %}
+{% block tls %}
 {% if item.tls_enabled|default(true)|bool %}
     #########
     ## TLS ##
@@ -34,7 +35,7 @@ Storage {
 
 {{ b_tls }}
 
-{% if item.extra_options|default([]]) %}
+{% if item.extra_options|default([]) %}
     ###################
     ## Other options ##
     ###################
