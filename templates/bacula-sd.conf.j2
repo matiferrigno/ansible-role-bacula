@@ -7,68 +7,68 @@
 
 Storage {
 
-  ###########
-  ## Basic ##
-  ###########
-  Name = {{ bacula_sd_name }}
-  SDPort = {{ bacula_sd_port }}
-  SDAddress = {{ bacula_sd_address }}
-  WorkingDirectory = {{ bacula_sd_working_directory }}
-  PidDirectory = {{ bacula_sd_pid_directory }}
-  Maximum Concurrent Jobs = {{ bacula_sd_maximum_concurrent_jobs }}
+    ###########
+    ## Basic ##
+    ###########
+    Name = {{ bacula_sd_name }}
+    SDPort = {{ bacula_sd_port }}
+    SDAddress = {{ bacula_sd_address }}
+    WorkingDirectory = {{ bacula_sd_working_directory }}
+    PidDirectory = {{ bacula_sd_pid_directory }}
+    Maximum Concurrent Jobs = {{ bacula_sd_maximum_concurrent_jobs }}
 
-  #########
-  ## TLS ##
-  #########
-{% if bacula_sd_tls_enabled|bool %}
-  TLS Enable = yes
-  TLS Require = {{ bacula_sd_tls_require }}
-  TLS Verify Peer = {{ bacula_sd_tls_verify_peer }}
-  TLS Certificate = {{ bacula_sd_tls_certificate }}
-  TLS Key = {{ bacula_sd_tls_key }}
-  TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
-{% else %}
-  TLS Enable = no
-{% endif %}
-
-  ###################
-  ## Other options ##
-  ###################
-{% for element in bacula_sd_additional_options %}
-{% if element.enabled|default(true)|bool %}
-  {% if element.comment|d() %}
-  {%   for line in element.comment.split('\n') | list %}
-  # {{ line }}
-  {%   endfor %}
+    #########
+    ## TLS ##
+    #########
+  {% if bacula_sd_tls_enabled|bool %}
+    TLS Enable = yes
+    TLS Require = {{ bacula_sd_tls_require }}
+    TLS Verify Peer = {{ bacula_sd_tls_verify_peer }}
+    TLS Certificate = {{ bacula_sd_tls_certificate }}
+    TLS Key = {{ bacula_sd_tls_key }}
+    TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
+  {% else %}
+    TLS Enable = no
   {% endif %}
-  {{ element.name }} = {{ element.value }}
-{% endif %}
-{% endfor %}
+
+    ###################
+    ## Other options ##
+    ###################
+  {% for element in bacula_sd_additional_options %}
+  {% if element.enabled|default(true)|bool %}
+    {% if element.comment|d() %}
+    {%   for line in element.comment.split('\n') | list %}
+    # {{ line }}
+    {%   endfor %}
+    {% endif %}
+    {{ element.name }} = {{ element.value }}
+  {% endif %}
+  {% endfor %}
 
 }
 
 Director {
-  name = {{ bacula_dir_name }}
-  password = "{{ bacula_sd_pass }}"
+    name = {{ bacula_dir_name }}
+    password = "{{ bacula_sd_pass }}"
 
-  #########
-  ## TLS ##
-  #########
-{% if bacula_dir_tls_enabled|bool %}
-  TLS Enable = yes
-  TLS Require = {{ bacula_dir_tls_require }}
-  TLS Verify Peer = {{ bacula_dir_tls_verify_peer }}
-  TLS Certificate = {{ bacula_sd_tls_certificate }}
-  TLS Key = {{ bacula_sd_tls_key }}
-  TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
-{% else %}
-  TLS Enable = no
-{% endif %}
+    #########
+    ## TLS ##
+    #########
+  {% if bacula_dir_tls_enabled|bool %}
+    TLS Enable = yes
+    TLS Require = {{ bacula_dir_tls_require }}
+    TLS Verify Peer = {{ bacula_dir_tls_verify_peer }}
+    TLS Certificate = {{ bacula_sd_tls_certificate }}
+    TLS Key = {{ bacula_sd_tls_key }}
+    TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
+  {% else %}
+    TLS Enable = no
+  {% endif %}
 }
 
 Messages {
-  Name = {{ bacula__default__sd_messages }}
-  director = {{ bacula_dir_name }} = all
+    Name = {{ bacula__default__sd_messages }}
+    director = {{ bacula_dir_name }} = all
 }
 
 ########################################

@@ -60,7 +60,7 @@ Director {
 @/etc/bacula/conf.d/messages.conf
 @/etc/bacula/conf.d/jobdefs.conf
 
-########################################
-## Include all clients configuration  ##
-########################################
+@|"find /etc/bacula/storage.d -name '*.conf' -type f -exec echo @{} \;"
+@|"find /etc/bacula/pool.d -name '*.conf' -type f -exec echo @{} \;"
+@|"find /etc/bacula/schedule.d -name '*.conf' -type f -exec echo @{} \;"
 @|"find /etc/bacula/clients.d -name '*.conf' -type f -exec echo @{} \;"

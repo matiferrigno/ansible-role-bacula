@@ -6,40 +6,27 @@
 ###############################
 
 JobDefs {
-  Name = GenericBackupDef
-  Type = Backup
-  Pool = Default
-  {% if bacula_messages_telegram_enabled|bool %}
-  RunScript {
-     Command = "/etc/bacula/scripts/_send_telegram.sh %i"
-     RunsWhen = After
-     RunsOnFailure = {{ bacula__default__messages_telegram_onfailure }}
-     RunsOnClient = no
-     RunsOnSuccess ={{ bacula__default__messages_telegram_onsuccess }}
-  }
-  {% endif %}
-  Max Wait Time = 3600
-  Prefer Mounted Volumes = no
-  Maximum Concurrent Jobs = 8
-  Prune Files = yes
-  Prune Jobs = yes
-  Prune Volumes = yes
-  Priority = 10
+    Name = GenericBackupDef
+    Type = Backup
+    Storage = stg-{{ storage.name }}
+    Level = Incremental
+    Max Wait Time = 3600
+    Prefer Mounted Volumes = no
+    Maximum Concurrent Jobs = 8
+    Prune Files = yes
+    Prune Jobs = yes
+    Prune Volumes = yes
+    Priority = 10
+
+    @/etc/bacula/conf.d/telegram.conf
 }
 
 JobDefs {
   Name = GenericRestoreDef
   Type = Restore
-  {% if bacula_messages_telegram_enabled|bool %}
-  RunScript {
-     Command = "/etc/bacula/scripts/_send_telegram.sh %i"
-     RunsWhen = After
-     RunsOnFailure = {{ bacula__default__messages_telegram_onfailure }}
-     RunsOnClient = no
-     RunsOnSuccess = {{ bacula__default__messages_telegram_onsuccess }}
-  }
-  {% endif %}
   Where = /tmp
+
+  @/etc/bacula/conf.d/telegram.conf
 }
 
 ########################################
