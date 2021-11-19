@@ -281,7 +281,7 @@ bacula_mysql_root_password: toor
 bacula_mysql_user_password: toor
 bacula_mysql_root_password_update: no
 bacula_mysql_user_password_update: no
-
+bacula_sd_package_name: bacula-sd
 bacula_ca_certificate: /etc/bacula/certs/crt/ca-bacula.crt
 bacula_ca_key: /etc/bacula/certs/crt/ca-bacula.pem
 bacula_job_schedule_default: DailyFDI-Monthly
