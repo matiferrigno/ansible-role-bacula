@@ -1,7 +1,7 @@
 ---
 
 - set_fact:
-    base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64/"
+    base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64"
 
 # https://www.bacula.org/bacula-binary-package-download/
 - name: Fetch Packages file
