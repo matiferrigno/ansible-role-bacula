@@ -8,6 +8,7 @@
     state: file
     suffix: temp
   register: tempfile_1
+  delegate_to: localhost
 
 # https://www.bacula.org/bacula-binary-package-download/
 - name: Fetch Packages file
@@ -16,16 +17,20 @@
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
   when: tempfile_1.path is defined
+  delegate_to: localhost
 
 - name: Getting Filenames from Package file
   shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
+  when: tempfile_1.path is defined
+  delegate_to: localhost
 
 - name: Remove the temporary file
   ansible.builtin.file:
     path: "{{ tempfile_1.path }}"
     state: absent
   when: tempfile_1.path is defined
+  delegate_to: localhost
 
 - name: Fetching deb packages
   get_url:
@@ -33,6 +38,7 @@
     mode: u=rx,g=rx,o=
   loop: "{{ filenames.output }}"
   when: filenames.rc == 0
+  delegate_to: localhost
 
 # - include_tasks: secure.yml
 
