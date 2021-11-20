@@ -1,0 +1,7 @@
+
+
+bacula_version: 11.0.5
+bacula_community_registration: changeme! # Registration: https://www.bacula.org/bacula-binary-package-download/
+bacula_download_url: "https://www.bacula.org/packages/{{ bacula_community_registration }}/bacula/debs/{{ bacula_version }}/"
+
+
