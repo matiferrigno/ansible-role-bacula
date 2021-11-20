@@ -49,6 +49,30 @@
   when: filenames.rc == 0
   delegate_to: localhost
 
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: bacula
+  register: tempdir_1
+
+- name: Copy debs to server
+  ansible.builtin.copy:
+    src: "files/debs/{{ item | basename }}"
+    dest: "{{ tempdir_1.path }}/{{ item | basename }}"
+    mode: '0755'
+  loop: "{{ filenames.stdout_lines }}"
+  when: filenames.rc == 0 and tempdir_1.path is defined
+
+- name: Install debs
+  apt:
+    deb: "{{ tempdir_1.path }}/bacula-common*"
+
+- name: Remove the temporary directory
+  ansible.builtin.file:
+    path: "{{ tempdir_1.path }}"
+    state: absent
+  when: tempdir_1.path is defined
+
 # - include_tasks: secure.yml
 
 # - name: Configure bacula-dir.conf
