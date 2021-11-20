@@ -1,42 +1,42 @@
----
+# ---
 
-# - name: "Fetch client keys"
-#   ansible.builtin.fetch:
-#     src: /etc/bacula/certs/private/{{ item.name }}.pem
-#     dest: files/bacula/certs/private/{{ item.name }}.pem
-#     flat: yes
+# # - name: "Fetch client keys"
+# #   ansible.builtin.fetch:
+# #     src: /etc/bacula/certs/private/{{ item.name }}.pem
+# #     dest: files/bacula/certs/private/{{ item.name }}.pem
+# #     flat: yes
 
-# - name: "Fetch client keys"
-#   ansible.builtin.fetch:
-#     src: /etc/bacula/certs/crt/{{ item.name }}.crt
-#     dest: files/bacula/certs/crt/{{ item.name }}.crt
-#     flat: yes
+# # - name: "Fetch client keys"
+# #   ansible.builtin.fetch:
+# #     src: /etc/bacula/certs/crt/{{ item.name }}.crt
+# #     dest: files/bacula/certs/crt/{{ item.name }}.crt
+# #     flat: yes
 
-- name: "Configure client {{ item.name }}"
-  template:
-    src: client.conf.j2
-    dest: "/etc/bacula/clients.d/{{ item.name }}.conf"
-    owner: bacula
-    group: tape
-    mode: 0640
-  notify:
-    - Bacula-director restarted
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: "Configure client {{ item.name }}"
+#   template:
+#     src: client.conf.j2
+#     dest: "/etc/bacula/clients.d/{{ item.name }}.conf"
+#     owner: bacula
+#     group: tape
+#     mode: 0640
+#   notify:
+#     - Bacula-director restarted
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: "Clean client {{ item.name }} policies (enabled: false)"
-  file:
-    path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
-    state: absent
-  when: not (policy.enabled|bool)
-  loop: "{{ item.policies }}"
-  loop_control:
-    loop_var: policy
-  notify:
-    - Bacula-director restarted
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: "Clean client {{ item.name }} policies (enabled: false)"
+#   file:
+#     path: "/etc/bacula/policies.d/{{ item.name }}-{{ policy.name | default(bacula_policy_name_default) }}.conf"
+#     state: absent
+#   when: not (policy.enabled|bool)
+#   loop: "{{ item.policies }}"
+#   loop_control:
+#     loop_var: policy
+#   notify:
+#     - Bacula-director restarted
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- include_tasks: client-policy.yml
-  when: policy.enabled|bool
-  loop: "{{ item.policies }}"
-  loop_control:
-    loop_var: policy
+# - include_tasks: client-policy.yml
+#   when: policy.enabled|bool
+#   loop: "{{ item.policies }}"
+#   loop_control:
+#     loop_var: policy

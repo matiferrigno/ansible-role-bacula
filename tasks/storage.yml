@@ -1,89 +1,89 @@
----
+# ---
 
-- name: Install bacula storage
-  apt:
-    name: "{{ bacula_sd_package_name }}"
-    state: present
-    install_recommends: false
-    update_cache: true
-  ignore_errors: true
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Install bacula storage
+#   apt:
+#     name: "{{ bacula_sd_package_name }}"
+#     state: present
+#     install_recommends: false
+#     update_cache: true
+#   ignore_errors: true
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate private key certificate for Storage
-  community.crypto.openssl_privatekey:
-    path: /etc/bacula/certs/private/{{ item.name }}.pem
-    size: 4096
-    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
-    owner: bacula
-    group: tape
-  when: not (item.generate_certs | default(true) | bool)
-  loop: "{{ bacula_storages }}"
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate private key certificate for Storage
+#   community.crypto.openssl_privatekey:
+#     path: /etc/bacula/certs/private/{{ item.name }}.pem
+#     size: 4096
+#     force: "{{ item.force_regenerate_certs|default(false)|bool }}"
+#     owner: bacula
+#     group: tape
+#   when: not (item.generate_certs | default(true) | bool)
+#   loop: "{{ bacula_storages }}"
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate certificate signing request for Storage
-  community.crypto.openssl_csr:
-    path: /etc/bacula/certs/csr/{{ item.name }}.csr
-    privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
-    common_name: "{{ bacula_sd_fqdn }}"
-    basic_constraints:
-      - CA:FALSE
-    basic_constraints_critical: yes
-    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
-    owner: bacula
-    group: tape
-  when: not (item.generate_certs | default(true) | bool)
-  loop: "{{ bacula_storages }}"
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate certificate signing request for Storage
+#   community.crypto.openssl_csr:
+#     path: /etc/bacula/certs/csr/{{ item.name }}.csr
+#     privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
+#     common_name: "{{ bacula_sd_fqdn }}"
+#     basic_constraints:
+#       - CA:FALSE
+#     basic_constraints_critical: yes
+#     force: "{{ item.force_regenerate_certs|default(false)|bool }}"
+#     owner: bacula
+#     group: tape
+#   when: not (item.generate_certs | default(true) | bool)
+#   loop: "{{ bacula_storages }}"
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate self-signed public certificate for Storage
-  community.crypto.x509_certificate:
-    path: /etc/bacula/certs/crt/{{ item.name }}.crt
-    csr_path: /etc/bacula/certs/csr/{{ item.name }}.csr
-    privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
-    ownca_path: "{{ bacula_ca_certificate }}"
-    ownca_privatekey_path: "{{ bacula_ca_key }}"
-    force: "{{ item.force_regenerate_certs|default(false)|bool }}"
-    provider: ownca
-    owner: bacula
-    group: tape
-  when: not (item.generate_certs | default(true) | bool)
-  loop: "{{ bacula_storages }}"
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate self-signed public certificate for Storage
+#   community.crypto.x509_certificate:
+#     path: /etc/bacula/certs/crt/{{ item.name }}.crt
+#     csr_path: /etc/bacula/certs/csr/{{ item.name }}.csr
+#     privatekey_path: /etc/bacula/certs/private/{{ item.name }}.pem
+#     ownca_path: "{{ bacula_ca_certificate }}"
+#     ownca_privatekey_path: "{{ bacula_ca_key }}"
+#     force: "{{ item.force_regenerate_certs|default(false)|bool }}"
+#     provider: ownca
+#     owner: bacula
+#     group: tape
+#   when: not (item.generate_certs | default(true) | bool)
+#   loop: "{{ bacula_storages }}"
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Configure storage
-  template:
-    src: bacula-sd.conf.j2
-    dest: /etc/bacula/bacula-sd.conf
-    owner: bacula
-    group: tape
-    mode: 0640
-  notify:
-    - Bacula-storage restarted
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Configure storage
+#   template:
+#     src: bacula-sd.conf.j2
+#     dest: /etc/bacula/bacula-sd.conf
+#     owner: bacula
+#     group: tape
+#     mode: 0640
+#   notify:
+#     - Bacula-storage restarted
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Ensure clients device directories exists
-  file:
-    path: "{{ bacula_sd_device }}/{{ item.name }}"
-    state: directory
-    owner: bacula
-    group: bacula
-    mode: 0740
-  when:
-    - item.enabled|default(true)|bool
-  with_items:
-    - "{{ bacula_clients }}"
-  notify:
-    - Bacula-storage restarted
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Ensure clients device directories exists
+#   file:
+#     path: "{{ bacula_sd_device }}/{{ item.name }}"
+#     state: directory
+#     owner: bacula
+#     group: bacula
+#     mode: 0740
+#   when:
+#     - item.enabled|default(true)|bool
+#   with_items:
+#     - "{{ bacula_clients }}"
+#   notify:
+#     - Bacula-storage restarted
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- include_tasks: client-storage-delete.yml
-  when:
-    - not (item.enabled|default(true)|bool)
-  with_items:
-    - "{{ bacula_clients }}"
+# - include_tasks: client-storage-delete.yml
+#   when:
+#     - not (item.enabled|default(true)|bool)
+#   with_items:
+#     - "{{ bacula_clients }}"
 
-- include_tasks: client-storage-add.yml
-  when:
-    - item.enabled|default(true)|bool
-  with_items:
-    - "{{ bacula_clients }}"
+# - include_tasks: client-storage-add.yml
+#   when:
+#     - item.enabled|default(true)|bool
+#   with_items:
+#     - "{{ bacula_clients }}"

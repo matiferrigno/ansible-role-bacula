@@ -1,88 +1,88 @@
----
+# ---
 
-- name: Install python3-cryptography
-  apt:
-    name: python3-cryptography
-    state: present
-    install_recommends: no
-    update_cache: yes
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Install python3-cryptography
+#   apt:
+#     name: python3-cryptography
+#     state: present
+#     install_recommends: no
+#     update_cache: yes
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate CA private key certificate
-  community.crypto.openssl_privatekey:
-    path: "{{ bacula_ca_key }}"
-    size: 4096
-    force: "{{ bacula_dir_force_regenerate_certs|bool }}"
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate CA private key certificate
+#   community.crypto.openssl_privatekey:
+#     path: "{{ bacula_ca_key }}"
+#     size: 4096
+#     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate CA certificate signing request
-  community.crypto.openssl_csr:
-    path: /etc/bacula/certs/csr/ca-bacula.csr
-    privatekey_path: "{{ bacula_ca_key }}"
-    common_name: CA Bacula
-    basic_constraints:
-      - CA:TRUE
-    basic_constraints_critical: yes
-    key_usage:
-      - keyCertSign
-      - digitalSignature
-    key_usage_critical: yes
-    force: "{{ bacula_ca_force_regenerate|bool }}"
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate CA certificate signing request
+#   community.crypto.openssl_csr:
+#     path: /etc/bacula/certs/csr/ca-bacula.csr
+#     privatekey_path: "{{ bacula_ca_key }}"
+#     common_name: CA Bacula
+#     basic_constraints:
+#       - CA:TRUE
+#     basic_constraints_critical: yes
+#     key_usage:
+#       - keyCertSign
+#       - digitalSignature
+#     key_usage_critical: yes
+#     force: "{{ bacula_ca_force_regenerate|bool }}"
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate CA self-signed public certificate
-  community.crypto.x509_certificate:
-    path: "{{ bacula_ca_certificate }}"
-    privatekey_path: "{{ bacula_ca_key }}"
-    csr_path: /etc/bacula/certs/csr/ca-bacula.csr
-    force: "{{ bacula_ca_force_regenerate|bool }}"
-    provider: selfsigned
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate CA self-signed public certificate
+#   community.crypto.x509_certificate:
+#     path: "{{ bacula_ca_certificate }}"
+#     privatekey_path: "{{ bacula_ca_key }}"
+#     csr_path: /etc/bacula/certs/csr/ca-bacula.csr
+#     force: "{{ bacula_ca_force_regenerate|bool }}"
+#     provider: selfsigned
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: "Fetch CA cert"
-  ansible.builtin.fetch:
-    src: "{{ bacula_ca_certificate }}"
-    dest: files/bacula/certs/crt/ca-bacula.crt
-    flat: yes
+# - name: "Fetch CA cert"
+#   ansible.builtin.fetch:
+#     src: "{{ bacula_ca_certificate }}"
+#     dest: files/bacula/certs/crt/ca-bacula.crt
+#     flat: yes
 
-- name: Generate private key certificate for Director
-  community.crypto.openssl_privatekey:
-    path: /etc/bacula/certs/private/bacula.pem
-    size: 4096
-    force: "{{ bacula_dir_force_regenerate_certs|bool }}"
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate private key certificate for Director
+#   community.crypto.openssl_privatekey:
+#     path: /etc/bacula/certs/private/bacula.pem
+#     size: 4096
+#     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate certificate signing request for Director
-  community.crypto.openssl_csr:
-    path: /etc/bacula/certs/csr/bacula.csr
-    privatekey_path: /etc/bacula/certs/private/bacula.pem
-    common_name: "{{ bacula_dir_fqdn }}"
-    basic_constraints:
-      - CA:FALSE
-    basic_constraints_critical: yes
-    force: "{{ bacula_dir_force_regenerate_certs|bool }}"
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate certificate signing request for Director
+#   community.crypto.openssl_csr:
+#     path: /etc/bacula/certs/csr/bacula.csr
+#     privatekey_path: /etc/bacula/certs/private/bacula.pem
+#     common_name: "{{ bacula_dir_fqdn }}"
+#     basic_constraints:
+#       - CA:FALSE
+#     basic_constraints_critical: yes
+#     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 
-- name: Generate self-signed public certificate for Director
-  community.crypto.x509_certificate:
-    path: /etc/bacula/certs/crt/bacula.crt
-    csr_path: /etc/bacula/certs/csr/bacula.csr
-    privatekey_path: /etc/bacula/certs/private/bacula.pem
-    ownca_path: "{{ bacula_ca_certificate }}"
-    ownca_privatekey_path: "{{ bacula_ca_key }}"
-    force: "{{ bacula_dir_force_regenerate_certs|bool }}"
-    provider: ownca
-    owner: bacula
-    group: tape
-  no_log: "{{ bacula_no_log|bool }}"
+# - name: Generate self-signed public certificate for Director
+#   community.crypto.x509_certificate:
+#     path: /etc/bacula/certs/crt/bacula.crt
+#     csr_path: /etc/bacula/certs/csr/bacula.csr
+#     privatekey_path: /etc/bacula/certs/private/bacula.pem
+#     ownca_path: "{{ bacula_ca_certificate }}"
+#     ownca_privatekey_path: "{{ bacula_ca_key }}"
+#     force: "{{ bacula_dir_force_regenerate_certs|bool }}"
+#     provider: ownca
+#     owner: bacula
+#     group: tape
+#   no_log: "{{ bacula_no_log|bool }}"
 

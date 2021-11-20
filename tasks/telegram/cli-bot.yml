@@ -1,23 +1,23 @@
----
+# ---
 
-- name: install curl
-  apt:
-    name: curl
-    update_cache: true
-  when: bacula_telegram_install_curl | default(true) | bool
+# - name: install curl
+#   apt:
+#     name: curl
+#     update_cache: true
+#   when: bacula_telegram_install_curl | default(true) | bool
 
-- name: Create file for logs
-  file:
-    path: "{{ bacula_telegram_logfile }}"
-    state: touch
-    mode: u=rw,g=rw,o=r
-    owner: bacula
-    group: tape
+# - name: Create file for logs
+#   file:
+#     path: "{{ bacula_telegram_logfile }}"
+#     state: touch
+#     mode: u=rw,g=rw,o=r
+#     owner: bacula
+#     group: tape
 
-- name: Create script for telegram messages
-  template:
-    mode: u=rx,g=rx,o=rx
-    owner: bacula
-    group: tape
-    src: _send_telegram.sh.j2
-    dest: /etc/bacula/scripts.d/_send_telegram.sh
+# - name: Create script for telegram messages
+#   template:
+#     mode: u=rx,g=rx,o=rx
+#     owner: bacula
+#     group: tape
+#     src: _send_telegram.sh.j2
+#     dest: /etc/bacula/scripts.d/_send_telegram.sh
