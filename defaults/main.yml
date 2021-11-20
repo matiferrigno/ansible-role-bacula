@@ -297,7 +297,7 @@ bacula_client: []
 bacula_client_file_retention: "1 year"
 bacula_client_job_retention: "1 year"
 bacula_client_auto_prune: yes
-bacula_client_maximum_concurrent_jobs:
+bacula_client_maximum_concurrent_jobs: 8
 bacula_client_tls_require: true
 
 bacula_storages: []

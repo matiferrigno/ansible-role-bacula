@@ -25,14 +25,14 @@ Director {
   Name = {{ bacula_dir_name }}
   Password = "{{ item.pass | default('changeme!') }}"
 {% if bacula_fd_tls_enabled|bool %}
-  TLS Enable = yes
+  TLS Enable = True
   TLS Require = {{ bacula_fd_tls_require }}
   TLS Verify Peer = {{ bacula_fd_tls_verify_peer }}
   TLS Certificate = {{ bacula_fd_tls_certificate }}
   TLS Key = {{ bacula_fd_tls_key }}
   TLS CA Certificate File = {{ bacula_ca_certificate }}
 {% else %}
-  TLS Enable = no
+  TLS Enable = False
 {% endif %}
 
 }
@@ -44,7 +44,7 @@ Director {
 Director {
   Name = {{ bacula_dir_name }}-mon
   Password = "{{ item.pass | default('changeme!') }}"
-  Monitor = yes
+  Monitor = True
 }
 
 #

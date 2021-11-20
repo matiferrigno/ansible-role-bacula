@@ -11,14 +11,14 @@ Director {
   address = {{ bacula_dir_fqdn }}
   Password = "{{ bacula_dir_pass }}"
 
+{% if bacula_dir_tls_enabled|bool %}
   #########
   ## TLS ##
   #########
-{% if bacula_dir_tls_enabled|bool %}
-  TLS Enable = yes
+  TLS Enable = True
   TLS Require = {{ bacula_dir_tls_require }}
   TLS CA Certificate File = {{ bacula_ca_certificate }}
 {% else %}
-  TLS Enable = no
+  TLS Enable = False
 {% endif %}
 }

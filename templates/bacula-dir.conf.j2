@@ -30,7 +30,7 @@ Director {
   ## TLS ##
   #########
 {% if bacula_dir_tls_enabled|bool %}
-  TLS Enable = yes
+  TLS Enable = True
   TLS Require = {{ bacula_dir_tls_require }}
   TLS Verify Peer = {{ bacula_dir_tls_verify_peer }}
   TLS Certificate = {{ bacula_dir_tls_certificate }}
