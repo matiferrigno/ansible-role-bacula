@@ -18,7 +18,7 @@
   when: tempfile_1.path is defined
 
 - name: Getting Filenames from Package file
-  shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\.deb'"
+  shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
 
 - name: Remove the temporary file
