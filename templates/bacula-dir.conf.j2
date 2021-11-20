@@ -40,19 +40,22 @@ Director {
   TLS Enable = no
 {% endif %}
 
+
+{% if bacula_dir_extra_options | d() %}
   ###################
   ## Other options ##
   ###################
-{% for element in bacula_dir_additional_options %}
-{% if element.enabled|default(true)|bool %}
-  {% if element.comment is defined %}
-  {%   for line in element.comment.split('\n') | list %}
+{% for opt in bacula_dir_extra_options %}
+{% if opt.enabled|default(true)|bool %}
+  {% if opt.comment is defined %}
+  {%   for line in opt.comment.split('\n') | list %}
   # {{ line }}
   {%   endfor %}
   {% endif %}
-  {{ element.name }} = {{ element.value }}
+  {{ opt.name }} = {{ opt.value }}
 {% endif %}
 {% endfor %}
+{% endif %}
 
 }
 

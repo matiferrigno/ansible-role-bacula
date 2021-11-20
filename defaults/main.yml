@@ -309,7 +309,7 @@ bacula_device_maximum_concurrent_jobs: 50
 bacula_device_media_type: File
 bacula_device_random_access: yes
 bacula_device_removable_media: no
-bacula_dir_additional_options: []
+bacula_dir_extra_options: []
 bacula_dir_address: 0.0.0.0
 bacula_dir_database_connector: mysql
 bacula_dir_description: ''
