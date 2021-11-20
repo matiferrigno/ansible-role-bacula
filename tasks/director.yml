@@ -12,7 +12,7 @@
 
 # https://www.bacula.org/bacula-binary-package-download/
 - name: Fetch Packages file
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
@@ -21,7 +21,7 @@
   delegate_to: localhost
 
 - name: Getting filenames from Package file
-  shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
+  ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
   when: tempfile_1.path is defined
   delegate_to: localhost
@@ -33,10 +33,18 @@
   when: tempfile_1.path is defined
   delegate_to: localhost
 
+- name: Create directory for debs
+  ansible.builtin.file:
+    path: "files/debs/"
+    state: directory
+  when: tempfile_1.path is defined
+  delegate_to: localhost
+
 - name: Fetching deb packages
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
+    dest: "files/debs/{{ item }}"
   loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0
   delegate_to: localhost
