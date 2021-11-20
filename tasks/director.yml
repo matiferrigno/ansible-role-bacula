@@ -37,7 +37,7 @@
   get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
-  loop: "{{ filenames.output }}"
+  loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0
   delegate_to: localhost
 
