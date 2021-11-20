@@ -44,7 +44,7 @@
   ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
-    dest: "files/debs/{{ item }}"
+    dest: "files/debs/{{ item | basename }}"
   loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0
   delegate_to: localhost
