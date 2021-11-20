@@ -19,8 +19,6 @@
     owner: bacula
     group: tape
     mode: 0640
-  notify:
-    - Bacula-director restarted
   no_log: "{{ bacula_no_log|bool }}"
 
 - name: "Clean client {{ item.name }} policies (enabled: false)"
@@ -31,8 +29,6 @@
   loop: "{{ item.policies }}"
   loop_control:
     loop_var: policy
-  notify:
-    - Bacula-director restarted
   no_log: "{{ bacula_no_log|bool }}"
 
 - include_tasks: client-policy.yml
