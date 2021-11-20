@@ -1,42 +1,42 @@
 ---
 
-- name: Install database
-  include_role:
-    name: mysql
-  vars:
-    mysql_root_password: "{{ bacula_mysql_root_password }}"
-    mysql_user_password: "{{ bacula_mysql_user_password }}"
-    mysql_enabled_on_startup: yes
-    mysql_root_password_update: "{{ bacula_mysql_root_password_update }}"
-    mysql_user_password_update: "{{ bacula_mysql_user_password_update }}"
-  when:
-    - not (bacula_catalog_external|bool)
-  tags:
-    - catalog
+# - name: Install database
+#   include_role:
+#     name: mysql
+#   vars:
+#     mysql_root_password: "{{ bacula_mysql_root_password }}"
+#     mysql_user_password: "{{ bacula_mysql_user_password }}"
+#     mysql_enabled_on_startup: yes
+#     mysql_root_password_update: "{{ bacula_mysql_root_password_update }}"
+#     mysql_user_password_update: "{{ bacula_mysql_user_password_update }}"
+#   when:
+#     - not (bacula_catalog_external|bool)
+#   tags:
+#     - catalog
 
-- name: Ensure directories exists
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: bacula
-    group: tape
-    mode: 0740
-  with_items:
-    - /etc/bacula/conf.d
-    - /etc/bacula/scripts.d
-    - /etc/bacula/clients.d
-    - /etc/bacula/policies.d
-    - /etc/bacula/pools.d
-    - /etc/bacula/schedules.d
-    - /etc/bacula/jobdef.d
-    - /etc/bacula/certs/crt
-    - /etc/bacula/certs/private
-    - /etc/bacula/certs/csr
-    - /var/lib/bacula
-  no_log: "{{ bacula_no_log|bool }}"
-  tags:
-    - director
-    - storage
+# - name: Ensure directories exists
+#   file:
+#     path: "{{ item }}"
+#     state: directory
+#     owner: bacula
+#     group: tape
+#     mode: 0740
+#   with_items:
+#     - /etc/bacula/conf.d
+#     - /etc/bacula/scripts.d
+#     - /etc/bacula/clients.d
+#     - /etc/bacula/policies.d
+#     - /etc/bacula/pools.d
+#     - /etc/bacula/schedules.d
+#     - /etc/bacula/jobdef.d
+#     - /etc/bacula/certs/crt
+#     - /etc/bacula/certs/private
+#     - /etc/bacula/certs/csr
+#     - /var/lib/bacula
+#   no_log: "{{ bacula_no_log|bool }}"
+#   tags:
+#     - director
+#     - storage
 
 - include_tasks: director.yml
   tags:
@@ -44,54 +44,54 @@
   when:
     - not (bacula_dir_external|bool)
 
-- include_tasks: catalog.yml
-  tags:
-    - catalog
-  when:
-    - not (bacula_catalog_external|bool)
-    - bacula_catalog_create_database|bool
-    - bacula_catalog_create_tables|bool
-
-# - include_tasks: storage.yml
-#   loop: "{{ bacula_storages }}"
-#   loop_control:
-#     loop_var: stg
+# - include_tasks: catalog.yml
 #   tags:
+#     - catalog
+#   when:
+#     - not (bacula_catalog_external|bool)
+#     - bacula_catalog_create_database|bool
+#     - bacula_catalog_create_tables|bool
+
+# # - include_tasks: storage.yml
+# #   loop: "{{ bacula_storages }}"
+# #   loop_control:
+# #     loop_var: stg
+# #   tags:
+# #     - storage
+
+# - include_tasks: logging.yml
+#   tags:
+#     - director
 #     - storage
+#   when: bacula_logrotate_enabled|bool
 
-- include_tasks: logging.yml
-  tags:
-    - director
-    - storage
-  when: bacula_logrotate_enabled|bool
+# - include_tasks: gui.yml
+#   tags:
+#     - director
+#   when: bacula_gui_enabled|bool and not bacula_dir_external|bool
 
-- include_tasks: gui.yml
-  tags:
-    - director
-  when: bacula_gui_enabled|bool and not bacula_dir_external|bool
-
-- name: Ensure service bacula director enabled
-  systemd:
-    name: bacula-director
-    state: started
-    enabled: true
-  tags:
-    - director
-    - catalog
-  when:
-    - not (bacula_dir_external|bool)
-    - not (bacula_catalog_external|bool)
-    - bacula_catalog_create_database|bool
-    - bacula_catalog_create_tables|bool
-  no_log: "{{ bacula_no_log|bool }}"
-
-# - name: Ensure service bacula storage enabled
+# - name: Ensure service bacula director enabled
 #   systemd:
-#     name: bacula-sd
+#     name: bacula-director
 #     state: started
 #     enabled: true
-#   when:
-#     - not (bacula_sd_external|bool)
 #   tags:
-#     - storage
+#     - director
+#     - catalog
+#   when:
+#     - not (bacula_dir_external|bool)
+#     - not (bacula_catalog_external|bool)
+#     - bacula_catalog_create_database|bool
+#     - bacula_catalog_create_tables|bool
 #   no_log: "{{ bacula_no_log|bool }}"
+
+# # - name: Ensure service bacula storage enabled
+# #   systemd:
+# #     name: bacula-sd
+# #     state: started
+# #     enabled: true
+# #   when:
+# #     - not (bacula_sd_external|bool)
+# #   tags:
+# #     - storage
+# #   no_log: "{{ bacula_no_log|bool }}"
