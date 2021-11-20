@@ -41,8 +41,7 @@
 - include_tasks: director.yml
   tags:
     - director
-  when:
-    - not (bacula_dir_external|bool)
+
 
 # - include_tasks: catalog.yml
 #   tags:

@@ -3,9 +3,7 @@
 
 - name: Install server components
   include_tasks: components.yml
-  when: not (bacula_only_client|default(false)|bool)
-  tags:
-    - server
+
 
 # - name: Install client component
 #   include_tasks: client.yml
