@@ -1,16 +1,103 @@
 ---
 # tasks file for matiferrigno.ansible-bacula
 
-- name: Install server components
-  include_tasks: components.yml
-  when: not (bacula_only_client|default(false)|bool)
-  tags:
-    - server
+- name: Install bacula-dir, bacula-dir database connector and bconsole
+  apt:
+    name:
+      - "{{ bacula_console_package_name }}"
+      - "{{ bacula_dir_package_name }}"
+      - >-
+        {{ bacula_dir_psql_connector_package
+        if bacula_dir_database_connector == 'psql'
+        else bacula_dir_mysql_connector_package }}
+    state: present
+    install_recommends: yes
+    update_cache: yes
+  environment:
+    - DEBIAN_FRONTEND: noninteractive
+  no_log: "{{ bacula_no_log|bool }}"
 
-- name: Install client component
-  include_tasks: client.yml
-  tags:
-    - client
-  when: bacula_only_client|default(false)|bool and item.enabled|default(true)|bool
+- include_tasks: secure.yml
+
+- name: Configure bacula-dir.conf
+  template:
+    src: bacula-dir.conf.j2
+    dest: /etc/bacula/bacula-dir.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-director restarted
+
+- name: Configure catalog.conf
+  template:
+    src: catalog.conf.j2
+    dest: /etc/bacula/conf.d/catalog.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-director restarted
+
+- name: Configure messages.conf
+  template:
+    src: messages.conf.j2
+    dest: /etc/bacula/conf.d/messages.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-director restarted
+
+- name: Configure storages.conf
+  template:
+    src: storages.conf.j2
+    dest: /etc/bacula/conf.d/storages.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-director restarted
+
+- include_tasks: telegram/cli-bot.yml
+  when: bacula_messages_telegram_enabled|bool
+
+- name: Configure bconsole.conf
+  template:
+    src: bconsole.conf.j2
+    dest: /etc/bacula/bconsole.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: Configure jobdef.conf
+  template:
+    src: jobdefs.conf.j2
+    dest: /etc/bacula/conf.d/jobdefs.conf
+    owner: bacula
+    group: tape
+    mode: 0640
+  no_log: "{{ bacula_no_log|bool }}"
+  notify: Bacula-director restarted
+
+- include_tasks: client-director-delete.yml
+  when:
+    - not (item.enabled|default(true)|bool)
   with_items:
-    - "{{ bacula_client | default([]) }}"
+    - "{{ bacula_clients }}"
+
+- include_tasks: client-director-add.yml
+  when:
+    - item.enabled|default(true)|bool
+  with_items:
+    - "{{ bacula_clients }}"
+
+
+# - name: Install client component
+#   include_tasks: client.yml
+#   tags:
+#     - client
+#   when: bacula_only_client|default(false)|bool and item.enabled|default(true)|bool
+#   with_items:
+#     - "{{ bacula_client | default([]) }}"

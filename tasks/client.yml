@@ -12,6 +12,44 @@
     - DEBIAN_FRONTEND: noninteractive
   no_log: "{{ bacula_no_log|bool }}"
 
+- name: "Generate private key certificate for client {{ item.name }}"
+  community.crypto.openssl_privatekey:
+    path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    size: 4096
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    owner: bacula
+    group: tape
+  when: not (item.generate_certs | default(true) | bool)
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Generate certificate signing request for client {{ item.name }}"
+  community.crypto.openssl_csr:
+    path: "/etc/bacula/certs/csr/{{ item.name }}.csr"
+    privatekey_path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    common_name: "{{ item.fqdn }}"
+    basic_constraints:
+      - CA:FALSE
+    basic_constraints_critical: true
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    owner: bacula
+    group: tape
+  when: not (item.generate_certs | default(true) | bool)
+  no_log: "{{ bacula_no_log|bool }}"
+
+- name: "Generate self-signed public certificate for client {{ item.name }}"
+  community.crypto.x509_certificate:
+    path: "/etc/bacula/certs/crt/{{ item.name }}.crt"
+    csr_path: "/etc/bacula/certs/csr/{{ item.name }}.csr"
+    privatekey_path: "/etc/bacula/certs/private/{{ item.name }}.pem"
+    ownca_path: /etc/bacula/certs/crt/ca-bacula.crt
+    ownca_privatekey_path: /etc/bacula/certs/private/ca-bacula.pem
+    force: "{{ bacula_client_force_regenerate_certs }}"
+    provider: ownca
+    owner: bacula
+    group: tape
+  when: not (item.generate_certs | default(true) | bool)
+  no_log: "{{ bacula_no_log|bool }}"
+
 - name: Configure bacula-fd.conf
   template:
     src: bacula-fd.conf.j2
