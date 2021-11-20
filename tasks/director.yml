@@ -16,10 +16,11 @@
     url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
+    force: yes
   when: tempfile_1.path is defined
   delegate_to: localhost
 
-- name: Getting Filenames from Package file
+- name: Getting filenames from Package file
   shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
   when: tempfile_1.path is defined
