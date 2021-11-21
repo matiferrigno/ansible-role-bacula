@@ -65,12 +65,12 @@
 
 - name: Install bacula-common
   apt:
-    deb: "{{ tempdir_1.path }}/ {{ filenames.stdout_lines | select('match', '.*/bacula-common.*\\.deb') | first | basename }}"
+    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-common.*\\.deb') | first | basename }}"
   when: bacula_common and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Install bacula-console
   apt:
-    deb: "{{ tempdir_1.path }}/ {{ filenames.stdout_lines | select('match', '^bacula-console.*\\.deb') | first | basename }}"
+    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '^bacula-console.*\\.deb') | first | basename }}"
   when: bacula_console and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Remove the temporary directory
