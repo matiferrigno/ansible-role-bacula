@@ -10,7 +10,7 @@
 {% if resource_options | d() %}
 {% for item in resource_options | dict2items %}
   {% if item.value is mapping %}
-  {% for v in value %}
+  {% for v in item.value %}
   {{ item.key | replace('_',' ') }} = {{ v if v is number else '"'+v+'"' }}
   {% endfor %}
   {% else %}
