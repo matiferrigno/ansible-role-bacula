@@ -31,12 +31,10 @@ bacula_dir__default__options:
   Maximum_Concurrent_Jobs: 50
   QueryFile: "{{ bacula_dir_query_file | default(bacula_root + '/scripts/query.sql') }}"
 
-bacula_dir_custom_options: {}
-
 bacula_dir_options: |
-  "{{ bacula_dir__default__options.update(
-    bacula_dir_custom_options
-  )}}"
+  {{ bacula_dir__default__options | combine(
+    bacula_dir_custom_options | default({})
+  )}}
 
 bacula_messages_name: bacula-msg
 
