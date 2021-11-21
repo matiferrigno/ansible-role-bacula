@@ -85,8 +85,8 @@ bacula_jobdefs: |
 # Messages
 ###
 bacula_messages_default: bacula-msg
-bacula_messages_from: "root@{{ ansible_host }}"
-bacula_messages_rcpt: "root@{{ ansible_host }}"
+bacula_messages_from: "root@{{ ansible_fqdn }}"
+bacula_messages_rcpt: "root@{{ ansible_fqdn }}"
 bacula_message_mail_subject: "Bacula: %t %e of %c %l"
 bacula_message_operator_subject: "Bacula: Intervention needed for %j"
 bacula_messages_relay: 127.0.0.1
