@@ -5,30 +5,31 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% macro print_opt(opt) -%}
-{{ opt.key | replace('_',' ') }} = {{ opt.value }}
+{% macro print_opt(o) -%}
+{{ o.key | replace('_',' ') }} = {{ o.value }}
 {%- endmacro %}
 
 
-{% macro proccess_opt(opt) -%}
-{% if opt.value | type_debug == "list" %}
-{% for ele in opt.value %}
+{% macro proccess_opt(o) -%}
+{% if o.value | type_debug == "list" %}
+{% for ele in o.value %}
 {{ print_opt(ele) }}
 {% endfor %}
-{% elif opt.value | type_debug == "dict" %}
-  {{ (opt.value | dict2items).key | replace('_',' ') }} {
-{{ proccess_opt((opt | dict2items).value) }}
+{% elif o.value | type_debug == "dict" %}
+{% set o2item = o.value | dict2items %}
+  {{ (o2item.key | replace('_',' ') }} {
+{{ proccess_opt(o2item.value) }}
   }
-{% elif opt.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
-print_opt(opt)
+{% elif o.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
+{{ print_opt(o) }}
 {% endif %}
 {%- endmacro %}
 
 {{ resource }} {
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
-{% for item in resource_options | dict2items %}
-{{ proccess_opt(item) }}
+{% for ro in resource_options | dict2items %}
+{{ proccess_opt(ro) }}
 {% endfor %}
 {% endif %}
 {% for f in include_files | default([]) %}
