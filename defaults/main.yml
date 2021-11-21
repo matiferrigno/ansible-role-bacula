@@ -37,20 +37,24 @@ bacula_dir_options: |
   )}}
 
 
-bacula_messages_default: bacula-msg
+
 bacula_console_password: changeme!
 
 bacula_storage_default: default
 
+
+###
+# JobDefs
+###
 bacula__default__jobdefs:
   - Name: DefaultWindowsJob
     Type: Backup
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: "default-windows-fs"
-    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) | int }}"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) | int }}"
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
@@ -62,9 +66,9 @@ bacula__default__jobdefs:
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: "default-linux-fs"
-    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) | int }}"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) | int }}"
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
@@ -75,4 +79,75 @@ bacula__default__jobdefs:
 bacula_jobdefs: |
   {{ bacula__default__jobdefs | combine(
     bacula_jobdefs_custom | default({})
+  )}}
+
+###
+# Messages
+###
+bacula_messages_default: bacula-msg
+bacula_messages_from: "root@{{ ansible_host }}"
+bacula_messages_rcpt: "root@{{ ansible_host }}"
+bacula_message_mail_subject: "Bacula: %t %e of %c %l"
+bacula_message_operator_subject: "Bacula: Intervention needed for %j"
+bacula_messages_relay: 127.0.0.1
+bacula__default__messages:
+  - Name: bacula-msg
+    MailCommand: "/usr/sbin/bsmtp -h {{ bacula_messages_relay }} -f {{ bacula_messages_from }} -s '{{ bacula_message_mail_subject }}' %r"
+    Operatorcommand: "/usr/sbin/bsmtp -h {{ bacula_messages_relay }} -f {{ bacula_messages_from }} -s '{{ bacula_message_operator_subject }}' %r"
+    Mail: "{{ bacula_messages_rcpt }} = error, warning, !skipped, !terminate, !restored"
+    Append:
+      - "'/var/log/bacula/info.log' = info, terminate"
+      - "'/var/log/bacula/error_warning.log' = error, warning, !terminate, notsaved"
+      - "'/var/log/bacula/all.log' = all"
+    Operator: "{{ bacula_messages_rcpt }} = mount"
+    Console: "error, warning, !terminate"
+    Syslog: all
+
+
+bacula_messages: |
+  {{ bacula__default__messages | combine(
+    bacula_messages_custom | default({})
+  )}}
+
+
+###
+# Schedules
+###
+bacula__default__schedules:
+  - name: DailyFI-Weekly
+    runs:
+      - level: Full
+        on: sun
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - level: Incremental
+        on: mon-sat
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+  - name: DailyFDI-Biweekly
+    runs:
+      - level: Full
+        on: "1st,3rd sun"
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - level: Differential
+        on: "2nd,4th,5th sun"
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - level: Incremental
+        on: mon-sat
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+  - name: DailyFDI-Monthly
+    runs:
+      - level: Full
+        on: "1st sun"
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - level: Differential
+        on: "2nd,3rd,4th,5th"
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - level: Incremental
+        on: mon-sat
+        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+
+
+
+bacula_schedules: |
+  {{ bacula__default__schedules | combine(
+    bacula_schedules_custom | default({})
   )}}

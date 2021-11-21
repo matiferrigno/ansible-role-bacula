@@ -114,7 +114,17 @@
   vars:
     resource: JobDefs
     resource_options: "{{ bacula_jobdefs }}"
-  notify: Bacula-dir restarted
+
+- name: Configure config.d/messages.conf
+  template:
+    src: resource.conf.j2
+    dest: "{{ bacula_root }}/etc/config.d/messages.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  vars:
+    resource: Messages
+    resource_options: "{{ bacula_messages }}"
 
 - name: Configure bacula-dir.conf
   template:
@@ -126,8 +136,8 @@
   vars:
     resource: Director
     resource_options: "{{ bacula_dir_options }}"
-  notify: Bacula-dir restarted
-
+    include_files:
+      - etc/config.d/jobdefs.conf
 
 # - name: Configure messages.conf
 #   template:

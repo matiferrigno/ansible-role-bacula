@@ -9,12 +9,20 @@
 
 {% if resource_options | d() %}
 {% for item in resource_options | dict2items %}
+  {% if item.value is mapping %}
+  {% for v in value %}
+  {{ item.key | replace('_',' ') }} = {{ v if v is number else '"'+v+'"' }}
+  {% elseif %}
   {{ item.key | replace('_',' ') }} = {{ item.value if item.value is number else '"'+item.value+'"' }}
+  {% endif %}
 {% endfor %}
 {% endif %}
 
 }
 
-{% for i in includes | default([]) %}
-  {{ i }}
+{% for i in include_files | default([]) %}
+  @{{ bacula_root }}/{{ i }}
+{% endfor %}
+{% for l in include_line | default([]) %}
+  {{ l }}
 {% endfor %}
