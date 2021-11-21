@@ -23,7 +23,7 @@ bacula_dir__default__options:
   Name: "{{ bacula_dir_name }}"
   Description: "Some description here"
   DIRAddress: "0.0.0.0"
-  DIRport: "9101"
+  DIRport: 9101
   Messages: "{{ bacula_messages_default }}"
   WorkingDirectory: "{{ bacula_root }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
@@ -48,9 +48,9 @@ bacula__default__jobdefs:
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: "default-windows-fs"
-    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) | int }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) | int }}"
     Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
@@ -62,9 +62,9 @@ bacula__default__jobdefs:
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: "default-linux-fs"
-    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) | int }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) | int }}"
     Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
