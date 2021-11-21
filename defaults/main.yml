@@ -20,7 +20,7 @@ bacula_dir_name: bacula-dir
 bacula_dir_password: changeme!
 
 bacula_dir_options: |
-  "{{ bacula_dir__default__options | combine(
+  "{{ bacula_dir__default__options.update(
     bacula_dir_custom_options
   )}}"
 
