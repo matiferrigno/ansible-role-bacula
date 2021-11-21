@@ -8,7 +8,7 @@ bacula_database_engine: mysql # postgresql, mysql , sqlite3
 bacula_console: yes
 bacula_aligned: no
 bacula_common: yes
-
+bacula_client: yes
 # # defaults file for matiferrigno.ansible-bacula
 
 # ##########                     ##########
