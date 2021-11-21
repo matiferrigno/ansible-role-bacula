@@ -13,16 +13,11 @@ bacula_client: yes
 bacula_root: /opt/bacula
 
 bacula_owner: bacula
-bacula_group: tale
+bacula_group: tape
 
 bacula_dir_name: bacula-dir
 
 bacula_dir_password: changeme!
-
-bacula_dir_options: |
-  "{{ bacula_dir__default__options.update(
-    bacula_dir_custom_options
-  )}}"
 
 bacula_dir__default__options:
   Name: "{{ bacula_dir_name }}"
@@ -38,12 +33,15 @@ bacula_dir__default__options:
 
 bacula_dir_custom_options: {}
 
+bacula_dir_options: |
+  "{{ bacula_dir__default__options.update(
+    bacula_dir_custom_options
+  )}}"
+
 bacula_messages_name: bacula-msg
 
 bacula_console_password: changeme!
 
-bacula_owner: bacula
-bacula_group: tape
 
 bacula_jobdefs:
   - Name: DefaultWindowsJob

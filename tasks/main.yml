@@ -4,7 +4,7 @@
     base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64"
 
 - debug:
-    msg: {{ bacula_dir_options }}
+    msg: "{{ bacula_dir_options }}"
 
 - fail:
     msg: 'test'
