@@ -16,7 +16,7 @@
 {{ option(itm) }}
 {% endfor %}
   }
-{% elseif opt.value | type_debug in [AnsibleUnicode, bool, int, AnsibleUnsafeText] %}
+{% elif opt.value | type_debug in [AnsibleUnicode, bool, int, AnsibleUnsafeText] %}
   {{ item.key | replace('_',' ') }} = {{ item.value }}
 {% endif %}
 {%- endmacro %}
