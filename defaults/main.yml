@@ -19,7 +19,7 @@ bacula_storage_default: bacula-sd
 ###
 # Director
 ###
-bacula_default__directors:
+bacula__default__directors:
   Name: "{{ bacula_dir_name }}"
   Description: "Some description here"
   DIRAddress: "0.0.0.0"
