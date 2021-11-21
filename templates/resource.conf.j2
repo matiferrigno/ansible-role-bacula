@@ -9,18 +9,21 @@
 {{ o.key | replace('_',' ') }} = {{ o.value }}
 {%- endmacro %}
 
-
-{% macro proccess_opt(o) -%}
-{% if o.value | type_debug == "list" %}
-{% for elem in o.value %}
-{{ print_opt({ o.key: elem }) }}
+{% macro print_list(o) -%}
+{% for i in l %}
+{{ print_opt({ o: i }) }}
 {% endfor %}
-{% elif o.value | type_debug == "dict" %}
-{% if o.key | d() %} {{ o.key | replace('_',' ') }} {% endif %}
-{% for o2i in o.value | dict2items %}
+{%- endmacro %}
+
+{% macro proccess_opt(opt) -%}
+{% if opt.value | type_debug == "dict" %}
+{{ opt.key | replace('_',' ') }} {
+{% for o2i in opt.value | dict2items %}
 {{ proccess_opt(o2i) }}
 {% endfor %}
-{% if o.key | d() %} } {% endif %}
+}
+{% elif opt.value | type_debug == "list" %}
+{% print_list(opt) %}
 {% else %}
 {{ print_opt(o) }}
 {% endif %}
