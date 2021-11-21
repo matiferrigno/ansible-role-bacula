@@ -7,17 +7,17 @@
 
 {{ resource }} {
 
-{%- if resource_options is defined and resource_options | type_debug == "dict" -%}
-  {% for item in resource_options | dict2items %}
-  {%- if item.value | type_debug == "list" -%}
-  {% for val in item.value %}
+{% if resource_options is defined and resource_options | type_debug == "dict" %}
+{% for item in resource_options | dict2items %}
+{% if item.value | type_debug == "list" %}
+{% for val in item.value %}
   {{ item.key | replace('_',' ') }} = {{ val }}
-  {% endfor %}
-  {%- else -%}
+{% endfor %}
+{% else %}
   {{ item.key | replace('_',' ') }} = {{ item.value }}
-  {%- endif -%}
-  {% endfor %}
-{%- endif -%}
+{% endif %}
+{% endfor %}
+{% endif %}
 
 }
 
