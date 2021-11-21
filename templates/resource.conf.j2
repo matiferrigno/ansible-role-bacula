@@ -18,7 +18,7 @@
 {% elif o.value | type_debug == "dict" %}
 {{ o.key | replace('_',' ') }} {
 {% for o2i in o.value | dict2items %}
-{{ proccess_opt(o2i) }}
+{{ o2i }}
 {% endfor %}
 }
 {% else %}
