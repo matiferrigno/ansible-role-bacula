@@ -20,7 +20,7 @@
   {{ o2item.key | replace('_',' ') }} {
 {{ proccess_opt(o2item.value) }}
   }
-{% elif o.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
+{% else %}
 {{ print_opt(o) }}
 {% endif %}
 {%- endmacro %}
