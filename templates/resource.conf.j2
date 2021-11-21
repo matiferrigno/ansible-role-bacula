@@ -5,17 +5,22 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% macro option(opt) -%}
+{% macro print_opt(opt) -%}
+{{ opt.key | replace('_',' ') }} = {{ opt.value }}
+{%- endmacro %}
+
+
+{% macro proccess_opt(opt) -%}
 {% if opt.value | type_debug == "list" %}
 {% for ele in opt.value %}
-{{ option(ele) }}
+{{ print_opt(ele) }}
 {% endfor %}
 {% elif opt.value | type_debug == "dict" %}
   {{ (opt.value | dict2items).key | replace('_',' ') }} {
 {{ option((opt | dict2items).value) }}
   }
 {% elif opt.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
-  {{ opt.key | replace('_',' ') }} = {{ opt.value }}
+print_opt(opt)
 {% endif %}
 {%- endmacro %}
 
