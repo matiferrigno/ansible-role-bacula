@@ -5,27 +5,29 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
+{% macro option(opt) -%}
+{% if opt.value | type_debug == "list" %}
+{% for ele in opt.value %}
+{{ option(ele) }}
+{% endfor %}
+{% elif opt.value | type_debug == "dict" %}
+  {{ opt.key | replace('_',' ') }} {
+{% for itm in opt.value | dict2items %}
+{{ option(itm) }}
+{% endfor %}
+  }
+{% elseif opt.value | type_debug in [AnsibleUnicode, bool, int, AnsibleUnsafeText] %}
+  {{ item.key | replace('_',' ') }} = {{ item.value }}
+{% endif %}
+{%- endmacro %}
+
 {{ resource }} {
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
 {% for item in resource_options | dict2items %}
-{% if item.value | type_debug == "list" %}
-{% for val in item.value %}
-  {{ item.key | replace('_',' ') }} = {{ val }}
-{% endfor %}
-{% elif item.value | type_debug == "dict" %}
-  {{ item.key | replace('_',' ') }} {
-    {{ item.value.keys() |
-      zip(item.value.values())|
-      map('join', ' = \n')
-    }}
-  }
-{% else %}
-  {{ item.key | replace('_',' ') }} = {{ item.value }}
-{% endif %}
-{% endfor %}
-{% endif %}
 
+{% endfor %}
+{% endif %}
 {% for f in include_files | default([]) %}
 @{{ f }}
 {% endfor %}
@@ -34,7 +36,6 @@
 {% endfor %}
 
 }
-
 {% for e in include_endline | default([]) %}
 {{ e }}
 {% endfor %}
