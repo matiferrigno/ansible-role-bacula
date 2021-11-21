@@ -11,8 +11,8 @@
 {{ option(ele) }}
 {% endfor %}
 {% elif opt.value | type_debug == "dict" %}
-  {{ opt.key | replace('_',' ') }} {
-{{ option(itm) }}
+  {{ opt.value.key | replace('_',' ') }} {
+{{ option(opt.value) }}
   }
 {% elif opt.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
   {{ opt.key | replace('_',' ') }} = {{ opt.value }}
