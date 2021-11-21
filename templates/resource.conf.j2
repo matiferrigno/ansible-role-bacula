@@ -17,7 +17,7 @@
 {% endfor %}
 {% elif o.value | type_debug == "dict" %}
 {% set o2item = o.value | dict2items %}
-  {{ (o2item.key | replace('_',' ') }} {
+  {{ o2item.key | replace('_',' ') }} {
 {{ proccess_opt(o2item.value) }}
   }
 {% elif o.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
