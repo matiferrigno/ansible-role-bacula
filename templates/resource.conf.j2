@@ -8,22 +8,22 @@
 {{ resource }} {
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
-{% for item in resource_options | dict2items %}
+  {% for item in resource_options | dict2items %}
   {% if item.value | type_debug == "list" %}
-  {% for v in item.value %}
-  {{ item.key | replace('_',' ') }} = {{ v if v is number else '"'+v+'"' }}
+  {% for val in item.value %}
+  {{ item.key | replace('_',' ') }} = {{ val }}
   {% endfor %}
   {% else %}
-  {{ item.key | replace('_',' ') }} = {{ item.value if item.value is number else '"'+item.value+'"' }}
+  {{ item.key | replace('_',' ') }} = {{ item.value }}
   {% endif %}
-{% endfor %}
+  {% endfor %}
 {% endif %}
 
 }
 
 {% for i in include_files | default([]) %}
-  @{{ bacula_root }}/{{ i }}
+@{{ bacula_root }}/{{ i }}
 {% endfor %}
 {% for l in include_line | default([]) %}
-  {{ l }}
+{{ l }}
 {% endfor %}
