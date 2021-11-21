@@ -16,11 +16,11 @@
 {{ print_opt({ o.key: elem }) }}
 {% endfor %}
 {% elif o.value | type_debug == "dict" %}
-{{ o.key | replace('_',' ') }} {
+{% if o.key | d() %} {{ o.key | replace('_',' ') }} {% endif %}
 {% for o2i in o.value | dict2items %}
 {{ proccess_opt(o2i) }}
 {% endfor %}
-}
+{% if o.key | d() %} } {% endif %}
 {% else %}
 {{ print_opt(o) }}
 {% endif %}
