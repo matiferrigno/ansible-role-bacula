@@ -24,7 +24,7 @@ bacula_dir__default__options:
   Description: "Some description here"
   DIRAddress: "0.0.0.0"
   DIRport: "9101"
-  Messages: "{{ bacula_messages_name }}"
+  Messages: "{{ bacula_messages_default }}"
   WorkingDirectory: "{{ bacula_root }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
   Heartbeat_Interval: 60
@@ -36,21 +36,22 @@ bacula_dir_options: |
     bacula_dir_custom_options | default({})
   )}}
 
-bacula_messages_name: bacula-msg
 
+bacula_messages_default: bacula-msg
 bacula_console_password: changeme!
 
+bacula_storage_default: default
 
-bacula_jobdefs:
+bacula__default__jobdefs:
   - Name: DefaultWindowsJob
     Type: Backup
-    Storage: ""
-    FileSet: "default-windows-fs"
     Level: Incremental
-    Max_Wait_Time: 3600
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: "default-windows-fs"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: 8
-    Messages: ""
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
     Prune_Jobs: yes
@@ -58,17 +59,20 @@ bacula_jobdefs:
     Priority: 10
   - Name: DefaultLinuxJob
     Type: Backup
-    Storage: ""
-    FileSet: "default-windows-fs"
     Level: Incremental
-    Max_Wait_Time: 3600
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: "default-linux-fs"
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
-    Maximum_Concurrent_Jobs: 8
-    Messages: ""
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Messages: "{{ bacula_messages_default }}"
     SpoolAttributes: Yes
     Prune_Files: Yes
     Prune_Jobs: yes
     Prune_Volumes: Yes
     Priority: 10
 
-
+bacula_jobdefs: |
+  {{ bacula__default__jobdefs | combine(
+    bacula_jobdefs_custom | default({})
+  )}}

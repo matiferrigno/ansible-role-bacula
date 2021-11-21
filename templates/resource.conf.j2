@@ -7,8 +7,8 @@
 
 {{ resource }} {
 
-{% if bacula_dir_options | d() %}
-{% for item in bacula_dir_options | dict2items %}
+{% if resource_options | d() %}
+{% for item in resource_options | dict2items %}
   {{ item.key | replace('_',' ') }} = {{ item.value if item.value is number else '"'+item.value+'"' }}
 {% endfor %}
 {% endif %}

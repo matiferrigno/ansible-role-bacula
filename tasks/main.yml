@@ -104,6 +104,18 @@
     group: "{{ bacula_group }}"
     state: directory
 
+- name: Configure config.d/jobdefs.conf
+  template:
+    src: resource.conf.j2
+    dest: "{{ bacula_root }}/etc/config.d/jobdefs.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  vars:
+    resource: JobDefs
+    resource_options: "{{ bacula_jobdefs }}"
+  notify: Bacula-dir restarted
+
 - name: Configure bacula-dir.conf
   template:
     src: resource.conf.j2
@@ -113,6 +125,7 @@
     mode: 0640
   vars:
     resource: Director
+    resource_options: "{{ bacula_dir_options }}"
   notify: Bacula-dir restarted
 
 
