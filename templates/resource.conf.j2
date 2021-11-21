@@ -17,7 +17,7 @@
 {% endfor %}
 {% elif opt.value | type_debug == "dict" %}
   {{ (opt.value | dict2items).key | replace('_',' ') }} {
-{{ option((opt | dict2items).value) }}
+{{ proccess_opt((opt | dict2items).value) }}
   }
 {% elif opt.value | type_debug in ["AnsibleUnicode", "bool", "int"] %}
 print_opt(opt)
@@ -28,7 +28,7 @@ print_opt(opt)
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
 {% for item in resource_options | dict2items %}
-{{ option(item) }}
+{{ proccess_opt(item) }}
 {% endfor %}
 {% endif %}
 {% for f in include_files | default([]) %}
