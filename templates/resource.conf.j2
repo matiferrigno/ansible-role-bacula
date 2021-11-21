@@ -9,9 +9,9 @@
 {{ o.key | replace('_',' ') }} = {{ o.value }}
 {%- endmacro %}
 
-{% macro print_list(l) -%}
-{% for i in l %}
-{{ print_opt({ o: i }) }}
+{% macro print_list(o) -%}
+{% for i in o.value %}
+{{ print_opt({ o.key: i }) }}
 {% endfor %}
 {%- endmacro %}
 
