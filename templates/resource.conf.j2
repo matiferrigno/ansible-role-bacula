@@ -12,6 +12,7 @@
   {% if item.value is mapping %}
   {% for v in value %}
   {{ item.key | replace('_',' ') }} = {{ v if v is number else '"'+v+'"' }}
+  {% endfor %}
   {% else %}
   {{ item.key | replace('_',' ') }} = {{ item.value if item.value is number else '"'+item.value+'"' }}
   {% endif %}
