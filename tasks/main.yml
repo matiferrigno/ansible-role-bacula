@@ -66,17 +66,22 @@
 - name: Install bacula-common
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-common.*\\.deb') | first | basename }}"
-  when: bacula_common and filenames.rc == 0 and tempdir_1.path is defined
+  when: bacula_install_common and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Install bacula-console
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-console.*\\.deb') | first | basename }}"
-  when: bacula_console and filenames.rc == 0 and tempdir_1.path is defined
+  when: bacula_install_console and filenames.rc == 0 and tempdir_1.path is defined
+
+- name: Install bacula-aligned
+  apt:
+    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-aligned.*\\.deb') | first | basename }}"
+  when: bacula_install_aligned and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Install bacula-client
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
-  when: bacula_client and filenames.rc == 0 and tempdir_1.path is defined
+  when: bacula_install_client and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Install bacula
   apt:
@@ -104,83 +109,38 @@
     group: "{{ bacula_group }}"
     state: directory
 
-- name: Configure config.d/jobdefs.conf
+- name: Update configs
   template:
     src: resource.conf.j2
-    dest: "{{ bacula_root }}/etc/config.d/jobdefs.conf"
+    dest: "{{ bacula_root }}/etc/{{ item.dest }}"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     mode: 0640
   vars:
-    resource: JobDefs
-    resource_options: "{{ bacula_jobdefs }}"
+    resource: "{{ item.resource }}"
+    resource_options: "{{ item.resource_options }}"
+  loop:
+    - resource: JobDef,
+      resource_options: "{{ bacula_jobdefs }}"
+      dest: "config.d/jobdefs.conf"
+    - resource: Messages
+      resource_options: "{{ bacula_messages }}"
+      dest: "config.d/messages.conf"
+    - resource: Schedule
+      resource_options: "{{ bacula_schedules }}"
+      dest: "config.d/schedules.conf"
+    - resource: Console
+      resource_options: "{{ bacula_consoles }}"
+      dest: "config.d/console.conf"
+    - resource: FileSet
+      resource_options: "{{ bacula_filesets }}"
+      dest: "config.d/filesets.conf"
+    - resource: Director,
+      resource_options: "{{ bacula_directors }}"
+      include_endline:
+        - "@{{ bacula_root }}/etc/config.d/console.conf"
+        - "@{{ bacula_root }}/etc/config.d/messages.conf"
+        - "@{{ bacula_root }}/etc/config.d/schedules.conf"
+        - "@{{ bacula_root }}/etc/config.d/jobdefs.conf"
+      dest: "bacula-dir.conf"
 
-- name: Configure config.d/messages.conf
-  template:
-    src: resource.conf.j2
-    dest: "{{ bacula_root }}/etc/config.d/messages.conf"
-    owner: "{{ bacula_owner }}"
-    group: "{{ bacula_group }}"
-    mode: 0640
-  vars:
-    resource: Messages
-    resource_options: "{{ bacula_messages }}"
-
-- name: Configure bacula-dir.conf
-  template:
-    src: resource.conf.j2
-    dest: "{{ bacula_root }}/etc/bacula-dir.conf"
-    owner: "{{ bacula_owner }}"
-    group: "{{ bacula_group }}"
-    mode: 0640
-  vars:
-    resource: Director
-    resource_options: "{{ bacula_dir_options }}"
-    include_files:
-      - etc/config.d/jobdefs.conf
-
-# - name: Configure messages.conf
-#   template:
-#     src: messages.conf.j2
-#     dest: /etc/bacula/conf.d/messages.conf
-#     owner: bacula
-#     group: tape
-#     mode: 0640
-#   no_log: "{{ bacula_no_log|bool }}"
-#   notify: Bacula-director restarted
-
-# - name: Configure storages.conf
-#   template:
-#     src: storages.conf.j2
-#     dest: /etc/bacula/conf.d/storages.conf
-#     owner: bacula
-#     group: tape
-#     mode: 0640
-#   no_log: "{{ bacula_no_log|bool }}"
-#   notify: Bacula-director restarted
-
-# - include_tasks: telegram/cli-bot.yml
-#   when: bacula_messages_telegram_enabled|bool
-
-# - name: Configure bconsole.conf
-#   template:
-#     src: bconsole.conf.j2
-#     dest: /etc/bacula/bconsole.conf
-#     owner: bacula
-#     group: tape
-#     mode: 0640
-#   no_log: "{{ bacula_no_log|bool }}"
-
-
-
-# - include_tasks: client-director-delete.yml
-#   when:
-#     - not (item.enabled|default(true)|bool)
-#   with_items:
-#     - "{{ bacula_clients }}"
-
-# - include_tasks: client-director-add.yml
-#   when:
-#     - item.enabled|default(true)|bool
-#   with_items:
-#     - "{{ bacula_clients }}"

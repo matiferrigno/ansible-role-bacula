@@ -1,25 +1,24 @@
 ---
 
-
+##
+# Installation
+##
 bacula_version: 11.0.5
 bacula_community_registration: changeme! # Registration: https://www.bacula.org/bacula-binary-package-download/
 bacula_download_url: "https://www.bacula.org/packages/{{ bacula_community_registration }}/bacula/debs/{{ bacula_version }}"
 bacula_database_engine: mysql # postgresql, mysql , sqlite3
-bacula_console: yes
-bacula_aligned: no
-bacula_common: yes
-bacula_client: yes
-
+bacula_install_console: yes
+bacula_install_aligned: no
+bacula_install_common: yes
+bacula_install_client: yes
 bacula_root: /opt/bacula
-
 bacula_owner: bacula
 bacula_group: tape
 
-bacula_dir_name: bacula-dir
-
-bacula_dir_password: changeme!
-
-bacula_dir__default__options:
+###
+# Director
+###
+bacula_default__directors:
   Name: "{{ bacula_dir_name }}"
   Description: "Some description here"
   DIRAddress: "0.0.0.0"
@@ -29,19 +28,24 @@ bacula_dir__default__options:
   PidDirectory: "{{ bacula_root + '/working/' }}"
   Heartbeat_Interval: 60
   Maximum_Concurrent_Jobs: 50
-  QueryFile: "{{ bacula_dir_query_file | default(bacula_root + '/scripts/query.sql') }}"
+  QueryFile: "{{ bacula_root + '/scripts/query.sql' }}"
 
-bacula_dir_options: |
-  {{ bacula_dir__default__options | combine(
-    bacula_dir_custom_options | default({})
+bacula_directors: |
+  {{ bacula__default__directors | combine(
+    bacula_custom_directors | default({})
   )}}
 
+###
+# Console
+###
+bacula__default__consoles:
+  - Name: default
+    Password: changeme!
 
-
-bacula_console_password: changeme!
-
-bacula_storage_default: default
-
+bacula_consoles: |
+  {{ bacula__default__consoles | combine(
+    bacula_custom_consoles | default({})
+  )}}
 
 ###
 # JobDefs
@@ -115,39 +119,47 @@ bacula_messages: |
 ###
 bacula__default__schedules:
   - name: DailyFI-Weekly
-    runs:
-      - level: Full
-        on: sun
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - level: Incremental
-        on: mon-sat
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+    run:
+      - "Level=Full sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
   - name: DailyFDI-Biweekly
-    runs:
-      - level: Full
-        on: "1st,3rd sun"
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - level: Differential
-        on: "2nd,4th,5th sun"
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - level: Incremental
-        on: mon-sat
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+    run:
+      - "Level=Full 1st,3rd sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Differential 2nd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
   - name: DailyFDI-Monthly
-    runs:
-      - level: Full
-        on: "1st sun"
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - level: Differential
-        on: "2nd,3rd,4th,5th"
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - level: Incremental
-        on: mon-sat
-        at: "{% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-
-
+    run:
+      - "Level=Full 1st sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Differential 2nd,3rd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
 
 bacula_schedules: |
   {{ bacula__default__schedules | combine(
     bacula_schedules_custom | default({})
+  )}}
+
+###
+# FileSets
+###
+bacula__default__filesets:
+  - Name: default-linux-fs
+    Include:
+      Options:
+        signature: MD5
+        compression: GZIP6
+      File:
+        - /etc
+        - /home
+        - /root
+        - /var/backups
+    Exclude:
+      File:
+        - /proc
+        - /tmp
+        - /.journal
+        - /.fsck
+
+bacula_filesets: |
+  {{ bacula__default__filesets | combine(
+    bacula_filesets_custom | default({})
   )}}

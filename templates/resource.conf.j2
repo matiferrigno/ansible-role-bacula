@@ -13,17 +13,28 @@
 {% for val in item.value %}
   {{ item.key | replace('_',' ') }} = {{ val }}
 {% endfor %}
+{% elif item.value | type_debug == "dict" %}
+  {{ item.key | replace('_',' ') }} {
+    {{ item.value.keys() |
+      zip(item.value.values())|
+      map('join', ' = \n')
+    }}
+  }
 {% else %}
   {{ item.key | replace('_',' ') }} = {{ item.value }}
 {% endif %}
 {% endfor %}
 {% endif %}
 
-}
-
-{% for i in include_files | default([]) %}
-@{{ bacula_root }}/{{ i }}
+{% for f in include_files | default([]) %}
+@{{ f }}
 {% endfor %}
 {% for l in include_line | default([]) %}
 {{ l }}
+{% endfor %}
+
+}
+
+{% for e in include_endline | default([]) %}
+{{ e }}
 {% endfor %}
