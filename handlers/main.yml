@@ -1,32 +1,7 @@
 ---
 # handlers file for matiferrigno.ansible-bacula
 
-- name: Bacula-director restarted
+- name: Bacula-dir restarted
   systemd:
-    name: bacula-director
-    state: restarted
-
-- name: Bacula-client restarted
-  systemd:
-    name: bacula-fd
-    state: restarted
-
-- name: Bacula-director reloaded
-  systemd:
-    name: bacula-director
-    state: reloaded
-
-- name: Bacula-storage restarted
-  systemd:
-    name: bacula-sd
-    state: restarted
-
-- name: Bacula-storage reloaded
-  systemd:
-    name: bacula-sd
-    state: reloaded
-
-- name: Mysqld restarted
-  systemd:
-    name: mysql
+    name: bacula-dir
     state: restarted

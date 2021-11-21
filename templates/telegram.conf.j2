@@ -1,9 +1,0 @@
-{% if bacula_telegram_enabled|bool %}
-    RunScript {
-      Command = "/etc/bacula/scripts/_send_telegram.sh %i"
-      RunsWhen = After
-      RunsOnFailure = {{ bacula_telegram_onfailure }}
-      RunsOnClient = no
-      RunsOnSuccess ={{ bacula_telegram_onsuccess }}
-    }
-{% endif %}
