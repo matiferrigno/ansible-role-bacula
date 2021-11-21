@@ -63,9 +63,15 @@
   loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0 and tempdir_1.path is defined
 
-- name: Install debs
+- name: Install bacula-common
   apt:
-    deb: "{{ tempdir_1.path }}/bacula-common*"
+    deb: "{{ tempdir_1.path }}/ {{ filenames.stdout_lines | select('match', '^bacula-common.*\\.deb') | first }}"
+  when: bacula_common
+
+- name: Install bacula-console
+  apt:
+    deb: "{{ tempdir_1.path }}/ {{ filenames.stdout_lines | select('match', '^bacula-nsole.*\\.deb') | first }}"
+  when: bacula_console
 
 - name: Remove the temporary directory
   ansible.builtin.file:
