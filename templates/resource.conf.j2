@@ -9,7 +9,7 @@
 {{ o.key | replace('_',' ') }} = {{ o.value }}
 {%- endmacro %}
 
-{% macro print_list(o) -%}
+{% macro print_list(l) -%}
 {% for i in l %}
 {{ print_opt({ o: i }) }}
 {% endfor %}
