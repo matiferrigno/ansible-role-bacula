@@ -7,9 +7,9 @@
 
 {{ resource }} {
 
-{% if resource_options | d() %}
+{% if resource_options is defined and resource_options | type_debug == "dict" %}
 {% for item in resource_options | dict2items %}
-  {% if item.value is mapping %}
+  {% if item.value | type_debug == "list" %}
   {% for v in item.value %}
   {{ item.key | replace('_',' ') }} = {{ v if v is number else '"'+v+'"' }}
   {% endfor %}
