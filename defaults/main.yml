@@ -12,6 +12,9 @@ bacula_client: yes
 
 bacula_root: /opt/bacula
 
+bacula_owner: bacula
+bacula_group: tale
+
 bacula_dir_name: bacula-dir
 
 bacula_dir_password: changeme!

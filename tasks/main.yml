@@ -94,32 +94,25 @@
     src: "{{ bacula_root }}/etc"
     dest: /etc/bacula
     owner: "{{ bacula_owner }}"
-    group: "{{ bacula_tape }}"
+    group: "{{ bacula_group }}"
     state: link
 
 - name: Create directory config.d/
   ansible.builtin.file:
     dest: "{{ bacula_root }}/etc/config.d/"
     owner: "{{ bacula_owner }}"
-    group: "{{ bacula_tape }}"
+    group: "{{ bacula_group }}"
     state: directory
-
-- name: Configure jobdef.conf
-  template:
-    src: jobdefs.conf.j2
-    dest: "{{ bacula_root }}/conf.d/jobdefs.conf"
-    owner: "{{ bacula_owner }}"
-    group: "{{ bacula_tape }}"
-    mode: 0640
-  notify: Bacula-dir restarted
 
 - name: Configure bacula-dir.conf
   template:
-    src: bacula-dir.conf.j2
+    src: resource.conf.j2
     dest: "{{ bacula_root }}/bacula-dir.conf"
     owner: "{{ bacula_owner }}"
-    group: "{{ bacula_tape }}"
+    group: "{{ bacula_group }}"
     mode: 0640
+  vars:
+    resource: Director
   notify: Bacula-dir restarted
 
 
