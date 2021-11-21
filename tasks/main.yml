@@ -120,7 +120,7 @@
     resource: "{{ item.resource }}"
     resource_options: "{{ item.resource_options }}"
   loop:
-    - resource: JobDef,
+    - resource: JobDef
       resource_options: "{{ bacula_jobdefs }}"
       dest: "config.d/jobdefs.conf"
     - resource: Messages
