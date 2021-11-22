@@ -15,7 +15,7 @@
 {% filter indent(width=n_indent) %}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
-{% endfor %}
+{%- endfor %}
 {% endfilter %}
 {%- endmacro %}
 
