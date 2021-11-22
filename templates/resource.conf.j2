@@ -40,7 +40,9 @@
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
 {% for ro in resource_options | dict2items -%}
+{% filter indent(width=2) %}
 {{ proccess_opt(ro) }}
+{% endfilter %}
 {%- endfor %}
 {% endif %}
 {% for f in include_files | default([]) %}
