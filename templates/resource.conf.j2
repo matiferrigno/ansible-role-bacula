@@ -21,7 +21,7 @@
 {{ opt.key | indent }} {
 {% for o2i in opt_to_items %}
 {{ proccess_opt(o2i) | indent | indent }}
-{%- endfor %}
+{% endfor %}
 {{ '}' | indent }}
 {% elif opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
