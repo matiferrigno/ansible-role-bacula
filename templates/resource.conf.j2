@@ -16,11 +16,7 @@
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
-{% if opt | type_debug == "dict" %}
-{% for o2i in opt | dict2items %}
-{{ o2i.key.key }} - {{ o2i.value.value }}
-{% endfor %}
-{% else %}
+{{ o2i.key }} - {{ o2i.value }}
 {% if opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
 {% else %}
