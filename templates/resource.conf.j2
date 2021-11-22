@@ -12,7 +12,7 @@
 {% macro print_list(o) -%}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
-{% endfor %}
+{%- endfor %}
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
@@ -21,7 +21,7 @@
 {{ opt.key }} {
 {% for o2i in opt_to_items %}
 {{ proccess_opt(o2i) | indent }}
-{% endfor %}
+{%- endfor %}
 }
 {% elif opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
