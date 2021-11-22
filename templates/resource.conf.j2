@@ -5,28 +5,28 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% macro print_opt(o, n_ident) -%}
+{% macro print_opt(o, n_indent) -%}
 {{ o.key | replace('_',' ') }} = {{ o.value }}
 {%- endmacro %}
 
-{% macro print_list(o, n_ident) -%}
+{% macro print_list(o, n_indent) -%}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
 {% endfor %}
 {%- endmacro %}
 
-{% macro proccess_opt(opt,n_ident) -%}
+{% macro proccess_opt(opt,n_indent) -%}
 {% if opt.value | type_debug == "dict" %}
 {% set opt_to_items = opt.value | dict2items %}
-{{ opt.key | ident(n_ident+2) }} {
+{{ opt.key | indent(n_indent+2) }} {
 {% for o2i in opt_to_items %}
-{{ proccess_opt(o2i, n_ident+4) }}
+{{ proccess_opt(o2i, n_indent+4) }}
 {% endfor %}
-{{ '}' | ident(n_ident+2) }}
+{{ '}' | indent(n_indent+2) }}
 {% elif opt.value | type_debug == "list" %}
-{{ print_list(opt,n_ident+2) }}
+{{ print_list(opt,n_indent+2) }}
 {% else %}
-{{ print_opt(opt,n_ident+2) }}
+{{ print_opt(opt,n_indent+2) }}
 {% endif %}
 {%- endmacro %}
 
