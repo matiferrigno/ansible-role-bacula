@@ -16,16 +16,16 @@
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
-{% if opt.value | type_debug == "dict" %}
-{% set opt_to_items = opt.value | dict2items %}
+{% if opt.value | type_debug == "dict" -%}
+{% set opt_to_items = opt.value | dict2items -%}
 {{ opt.key | indent }} {
 {% for o2i in opt_to_items %}
 {{ proccess_opt(o2i) | indent | indent }}
-{% endfor %}
+{%- endfor %}
 {{ '}' | indent }}
-{% elif opt.value | type_debug == "list" %}
+{% elif opt.value | type_debug == "list" -%}
 {{ print_list(opt) }}
-{% else %}
+{% else -%}
 {{ print_opt(opt) }}
 {% endif %}
 {%- endmacro %}
