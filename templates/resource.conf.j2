@@ -5,15 +5,15 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% macro print_opt(o) %}
+{% macro print_opt(o) -%}
 {{ o.key | replace('_',' ') }} = {{ o.value }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro print_list(o) %}
+{% macro print_list(o) -%}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
 {% endfor %}
-{% endmacro %}
+{%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
 {% if opt.value | type_debug == "dict" %}
