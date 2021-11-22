@@ -19,8 +19,10 @@
 {% if opt.value | type_debug == "dict" %}
 {% set opt_to_items = opt.value | dict2items %}
 {% for o2i in opt_to_items %}
+{{ opt.key }} {
 {{ proccess_opt(o2i) }}
 {% endfor %}
+}
 {% elif opt.value | type_debug == "list" %}
 list
 {{ opt }}
