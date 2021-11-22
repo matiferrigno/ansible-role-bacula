@@ -28,7 +28,7 @@
     {% endfor %}
   }
 {% elif opt.value | type_debug == "list" %}
-  {{ print_list(opt, n_indent) }}
+{{ print_list(opt, n_indent) }}
 {% else %}
   {{ print_opt(opt, n_indent) }}
 {% endif %}
