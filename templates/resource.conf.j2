@@ -18,7 +18,7 @@
 {% macro proccess_opt(opt) -%}
 {% if opt | type_debug == "dict" %}
 {% for o2i in opt | dict2items %}
-{{ proccess_opt(o2i) }}
+{{ o2i }}
 {% endfor %}
 {% else %}
 {% if opt.value | type_debug == "list" %}
