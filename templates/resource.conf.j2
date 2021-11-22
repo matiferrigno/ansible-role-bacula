@@ -23,9 +23,9 @@
 {{ proccess_opt(o2i) | indent }}
 {% endfor %}
 {{ '}' | indent }}
-{%- elif opt.value | type_debug == "list" -%}
+{% elif opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
-{%- else -%}
+{% else %}
 {{ print_opt(opt) | indent }}
 {% endif %}
 {%- endmacro %}
