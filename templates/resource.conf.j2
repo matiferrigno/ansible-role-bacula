@@ -21,16 +21,16 @@
 
 {% macro proccess_opt(opt,n_indent) -%}
 {% if opt.value | type_debug == "dict" %}
-  {% set opt_to_items = opt.value | dict2items %}
-  {{ opt.key }} {
-    {% for o2i in opt_to_items %}
-    {{ proccess_opt(o2i, n_indent + 2) }}
-    {% endfor %}
-  }
+{% set opt_to_items = opt.value | dict2items %}
+{{ opt.key }} {
+{% for o2i in opt_to_items %}
+{{ proccess_opt(o2i, n_indent + 2) }}
+{% endfor %}
+}
 {% elif opt.value | type_debug == "list" %}
 {{ print_list(opt, n_indent) }}
 {% else %}
-  {{ print_opt(opt, n_indent) }}
+{{ print_opt(opt, n_indent) }}
 {% endif %}
 {%- endmacro %}
 
