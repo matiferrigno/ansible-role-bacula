@@ -18,14 +18,13 @@
 {% macro proccess_opt(opt) -%}
 {% if opt.value | type_debug == "dict" %}
 {% set opt_to_items = opt.value | dict2items %}
-{% for o2i in opt_to_items %}
 {{ opt.key }} {
+{% for o2i in opt_to_items %}
 {{ proccess_opt(o2i) }}
 {% endfor %}
 }
 {% elif opt.value | type_debug == "list" %}
-list
-{{ opt }}
+{{ print_list(opt) }}
 {% else %}
 {{ print_opt(opt) }}
 {% endif %}
