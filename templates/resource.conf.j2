@@ -11,7 +11,7 @@
 
 {% macro print_list(o) -%}
 {% for i in o.value %}
-{{ print_opt({ o.key: i }) }}
+{{ print_opt({ key: o.key, value: i }) }}
 {% endfor %}
 {%- endmacro %}
 
