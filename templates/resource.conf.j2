@@ -6,16 +6,21 @@
 ###############################
 
 {% macro print_opt(o) -%}
+{% filter indent(width=4) %}
 {{ o.key | replace('_',' ') }} = {{ o.value }}
+{% endfilter %}
 {%- endmacro %}
 
 {% macro print_list(o) -%}
+{% filter indent(width=4) %}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
 {% endfor %}
+{% endfilter %}
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
+{% filter indent(width=2) %}
 {% if opt.value | type_debug == "dict" %}
 {% set opt_to_items = opt.value | dict2items %}
 {{ opt.key }} {
@@ -28,6 +33,7 @@
 {% else %}
 {{ print_opt(opt)  }}
 {% endif %}
+{% endfilter %}
 {%- endmacro %}
 
 {{ resource }} {
