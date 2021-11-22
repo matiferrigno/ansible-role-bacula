@@ -5,28 +5,32 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% macro print_opt(o) -%}
-  {{ o.key | replace('_',' ') }} = {{ o.value }}
+{% macro print_opt(o,n_indent) %}
+{% filter indent(width=n_indent) %}
+{{ o.key | replace('_',' ') }} = {{ o.value }}
+{% endfilter %}
+{% endmacro %}
+
+{% macro print_list(o,n_indent) -%}
+{% filter indent(width=n_indent) %}
+{% for i in o.value %}
+{{ o.key | replace('_',' ') }} = {{ i }}
+{% endfor %}
+{% endfilter %}
 {%- endmacro %}
 
-{% macro print_list(o) -%}
-{% for i in o.value -%}
-  {{ o.key | replace('_',' ') }} = {{ i }}
-{%- endfor %}
-{%- endmacro %}
-
-{% macro proccess_opt(opt) -%}
+{% macro proccess_opt(opt,n_indent) -%}
 {% if opt.value | type_debug == "dict" %}
-{% set opt_to_items = opt.value | dict2items %}
+  {% set opt_to_items = opt.value | dict2items %}
   {{ opt.key }} {
-{%  for o2i in opt_to_items %}
-  {{ proccess_opt(o2i) }}
-{%  endfor %}
+    {% for o2i in opt_to_items %}
+    {{ proccess_opt(o2i, n_indent + 2) }}
+    {% endfor %}
   }
-{% elif opt.value | type_debug == "list" -%}
-  {{ print_list(opt) }}
+{% elif opt.value | type_debug == "list" %}
+  {{ print_list(opt, n_indent) }}
 {% else %}
-  {{ print_opt(opt) }}
+  {{ print_opt(opt, n_indent) }}
 {% endif %}
 {%- endmacro %}
 
@@ -34,7 +38,7 @@
 
 {%  if resource_options is defined and resource_options | type_debug == "dict" %}
 {%  for ro in resource_options | dict2items %}
-  {{ proccess_opt(ro) }}
+  {{ proccess_opt(ro,0) }}
 {%  endfor %}
 {%  endif %}
 {% for f in include_files | default([]) %}
