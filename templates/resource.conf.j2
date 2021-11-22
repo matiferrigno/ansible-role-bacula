@@ -34,7 +34,7 @@
 
 {% if resource_options is defined and resource_options | type_debug == "dict" %}
 {% for ro in resource_options | dict2items %}
-{{ proccess_opt(ro) | indent }}
+{{ proccess_opt(ro) }}
 {% endfor %}
 {% endif %}
 {% for f in include_files | default([]) %}
