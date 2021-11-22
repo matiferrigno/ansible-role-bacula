@@ -27,7 +27,7 @@
 {{ print_list(opt) }}
 {%- else -%}
 {{ print_opt(opt) | indent }}
-{%- endif -%}
+{% endif -%}
 {%- endmacro %}
 
 {{ resource }} {
