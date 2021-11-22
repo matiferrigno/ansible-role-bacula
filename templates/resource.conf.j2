@@ -24,9 +24,9 @@
 {%- endfor %}
 }
 {% elif opt.value | type_debug == "list" %}
-{{ print_list(opt) }}
+{{ print_list(opt) | indent }}
 {% else %}
-{{ print_opt(opt) }}
+{{ print_opt(opt) | indent }}
 {% endif %}
 {%- endmacro %}
 
