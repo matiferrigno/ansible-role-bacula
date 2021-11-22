@@ -11,7 +11,7 @@
 
 {% macro print_list(o) -%}
 {% for i in o.value %}
-{{ print_opt({ key: o.key, value: i }) }}
+{{ o.key | replace('_',' ') }} = {{ i }}
 {% endfor %}
 {%- endmacro %}
 
