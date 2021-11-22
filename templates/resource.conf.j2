@@ -20,9 +20,6 @@
 {% for o2i in opt.value | dict2items %}
 {{ proccess_opt(o2i) }}
 {% endfor %}
-{% endif %}
-
-
 {% elif opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
 {% else %}
