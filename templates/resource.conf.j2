@@ -22,11 +22,11 @@
 {% for o2i in opt_to_items %}
 {{ proccess_opt(o2i) }}
 {% endfor %}
-{{ '}' | indent }}
+{{ '}'  }}
 {% elif opt.value | type_debug == "list" %}
-{{ print_list(opt) | indent }}
+{{ print_list(opt) }}
 {% else %}
-{{ print_opt(opt) | indent }}
+{{ print_opt(opt)  }}
 {% endif %}
 {%- endmacro %}
 
