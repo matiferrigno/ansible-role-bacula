@@ -12,7 +12,7 @@
 {% macro print_list(o) -%}
 {% for i in o.value %}
 {{ o.key | replace('_',' ') }} = {{ i }}
-{%- endfor %}
+{% endfor %}
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
