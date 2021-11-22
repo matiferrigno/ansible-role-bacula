@@ -16,7 +16,7 @@
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
-{{ o2i.key }} - {{ o2i.value }}
+{{ opt.key }} - {{ opt.value }}
 {% if opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
 {% else %}
