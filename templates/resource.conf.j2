@@ -23,7 +23,7 @@
   {{ proccess_opt(o2i) }}
 {%  endfor %}
   }
-{% elif opt.value | type_debug == "list" %}
+{% elif opt.value | type_debug == "list" -%}
   {{ print_list(opt) }}
 {% else %}
   {{ print_opt(opt) }}
