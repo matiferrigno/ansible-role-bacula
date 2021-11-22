@@ -16,8 +16,10 @@
 {%- endmacro %}
 
 {% macro proccess_opt(opt) -%}
-{{ opt.key }} - {{ opt.value }}
-{% if opt.value | type_debug == "list" %}
+{% if opt.value | type_debug == "dict" %}
+{% set o2item = opt.value | dict2items %}
+{{ o2item.key }} -  {{ o2item.value }}
+{% elif opt.value | type_debug == "list" %}
 {{ print_list(opt) }}
 {% else %}
 {{ print_opt(opt) }}
