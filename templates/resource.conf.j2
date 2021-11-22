@@ -6,12 +6,12 @@
 ###############################
 
 {% macro print_opt(o, n_indent) -%}
-{{ o.key | replace('_',' ') | ident(n_indent) }} = {{ o.value }}
+{{ o.key | replace('_',' ') | indent(n_indent) }} = {{ o.value }}
 {%- endmacro %}
 
 {% macro print_list(o, n_indent) -%}
 {% for i in o.value %}
-{{ o.key | replace('_',' ') | ident(n_indent) }} = {{ i }}
+{{ o.key | replace('_',' ') | indent(n_indent) }} = {{ i }}
 {% endfor %}
 {%- endmacro %}
 
