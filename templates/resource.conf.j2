@@ -6,12 +6,12 @@
 ###############################
 
 {% macro print_opt(o) %}
-{{ o.key | replace('_',' ') }} = {{ o.value }}
+  {{ o.key | replace('_',' ') }} = {{ o.value }}
 {% endmacro %}
 
 {% macro print_list(o) %}
 {% for i in o.value %}
-{{ o.key | replace('_',' ') }} = {{ i }}
+  {{ o.key | replace('_',' ') }} = {{ i }}
 {% endfor %}
 {% endmacro %}
 
