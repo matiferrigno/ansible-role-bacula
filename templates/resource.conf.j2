@@ -18,15 +18,15 @@
 {% macro proccess_opt(opt) -%}
 {% if opt.value | type_debug == "dict" %}
 {% set opt_to_items = opt.value | dict2items %}
-{{ opt.key }} {
+{{ opt.key | indent }} {
 {% for o2i in opt_to_items %}
-{{ proccess_opt(o2i) | indent }}
+{{ proccess_opt(o2i) | indent | indent }}
 {%- endfor %}
-}
+{{ '}' | indent }}
 {% elif opt.value | type_debug == "list" %}
-{{ print_list(opt) | indent }}
+{{ print_list(opt) }}
 {% else %}
-{{ print_opt(opt) | indent }}
+{{ print_opt(opt) }}
 {% endif %}
 {%- endmacro %}
 
