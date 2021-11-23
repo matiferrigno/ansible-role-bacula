@@ -114,6 +114,12 @@
     clients: "{{ clients | default([]) + ({ 'host': item } | combine(hostvars[item]['bacula_client'] | default([])) } }}"
   loop: "{{ groups[bacula_clients_group] }}"
 
+- debug:
+    msg: "{{ item[0] }} - {{ item[1] }}"
+  with_nested:
+    - "{{ bacula_pools }}"
+    - "{{ groups[bacula_clients_group] }}"
+
 - name: Get list of pool by clients
   set_fact:
     pools: |
