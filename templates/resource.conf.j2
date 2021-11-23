@@ -30,7 +30,7 @@
 {{ resource }} {
 
 {%  if resource_options is defined and resource_options | type_debug == "dict" %}
-{%-  for ro in resource_options | dict2items -%}
+{%-  for ro in resource_options -%}
 {{ proccess_opt(ro,2) }}
 {%  endfor -%}
 {%  endif %}
