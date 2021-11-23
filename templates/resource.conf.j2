@@ -29,9 +29,9 @@
 
 {{ resource }} {
 
-{%  if resource_options is defined and resource_options | type_debug == "dict" %}
+{%  if resource_options is defined and resource_options | type_debug == "list" %}
 {%-  for ro in resource_options -%}
-{{ proccess_opt(ro,2) }}
+{{ proccess_opt(ro|dict2items,2) }}
 {%  endfor -%}
 {%  endif %}
 {% for f in include_files | default([]) %}
