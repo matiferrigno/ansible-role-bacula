@@ -29,11 +29,12 @@
 
 {{ resource }} {
 
-{%  if resource_options is defined and resource_options | type_debug == "list" %}
-{%-  for ro in resource_options -%}
-{{ proccess_opt(ro|dict2items,2) }}
-{%  endfor -%}
-{%  endif %}
+{%  for res in resource_options | default([]) -%}
+{%  for opt in res | dict2items %}
+{{ proccess_opt(opt,2) }}
+{%  endfor %}
+{%  endfor %}
+
 {% for f in include_files | default([]) %}
 @{{ f }}
 {% endfor %}
