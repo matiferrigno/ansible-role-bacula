@@ -118,7 +118,9 @@
       {% set client_changes = { 'Name': pName, 'Address': pAddress } %}
       {% set client = {} %}
       {% for c in client_changes | dict2items %}
-      {% client | combine(client_changes) if c.value is not False %}
+      {% if c.value is not False %}
+      {% client | combine(client_changes) %}
+      {% endif %}
       {% endfor %}
       {{ clients | default(bacula_clients) + [ client_config | combine(client) ] }}
   loop: "{{ groups[bacula_clients_group] }}"
@@ -145,7 +147,9 @@
       {% set job_changes = { 'Name': pName, 'FileSet': pFileSet, 'JobDefs': pJobDefs, 'Schedule': pSchedule } %}
       {% set job = {} %}
       {% for c in job_changes | dict2items %}
+      {% if c.value is not False %}
       {% job | combine(job_changes) if c.value is not False %}
+      {% endif %}
       {% endfor %}
       {{ pools | default([]) + [item[0] | combine(job)] }}
   with_nested:
