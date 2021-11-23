@@ -119,7 +119,7 @@
       {% for c in client_changes | dict2items %}
       {% set cfg = (cfg | combine(c)) if c.value is not none else cfg %}
       {% endfor %}
-      {{ clients | default([]) + cfg }}
+      {{ clients | default([]) + [ cfg ] }}
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
