@@ -223,7 +223,7 @@ bacula_pools: |
 ###
 # Tags "#client#" will be replaced with client's name.
 # Tags "#client_fqdn#" will be replaced with client's fqdn.
-bacula__common_clients:
+bacula__common__clients:
   Name: "#client#-fd"
   Address: "#client_fqdn#"
   FDPort: 9102
