@@ -112,8 +112,8 @@
 - name: Get list of all clients
   set_fact:
     clients: |
-      {% set client_config = bacula_common_clients | (combine(hostvars[item]['bacula_client'] | default([]))) %}
-      {{ (clients | default(bacula_clients)) + [ client_config ] }}
+      {% set client_config = bacula_common_clients | combine(hostvars[item]['bacula_client'] | default([])) %}
+      {{ clients | default(bacula_clients) + [ client_config ] }}
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
