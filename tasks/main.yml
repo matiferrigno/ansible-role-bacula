@@ -118,7 +118,7 @@
       {% set client_config = False %}
       {% endif %}
       {{
-        (jobs | default([]) + [{ 'host': item, 'config': client_config }]) if client_config
+        (jobs | default([]) + [{ 'key': item, 'value': client_config }]) if client_config
       }}
   loop: "{{ groups[bacula_clients_group] }}"
 
@@ -183,7 +183,7 @@
     - resource: Job
       resource_options: "{{ jobs }}"
       dest: "config.d/jobs.conf"
-    - resource: Director,
+    - resource: Director
       resource_options: "{{ bacula_directors }}"
       include_endline:
         - "@{{ bacula_root }}/etc/config.d/console.conf"
