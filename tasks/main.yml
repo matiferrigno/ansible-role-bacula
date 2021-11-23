@@ -117,9 +117,9 @@
       {% set pAddress = cfg.Address | replace('#client_fqdn#', hostvars[item]['ansible_fqdn']) if cfg.Address | d() else none %}
       {% set client_changes = { 'Name': pName, 'Address': pAddress } %}
       {% for c in client_changes | dict2items %}
-      {% cfg = (cfg | combine(c)) if c.value is not none else cfg %}
+      {% set cfg = (cfg | combine(c)) if c.value is not none else cfg %}
       {% endfor %}
-      {{ clients | default(bacula_clients) + [ cfg ] }}
+      {{ clients | default([]) + cfg }}
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
