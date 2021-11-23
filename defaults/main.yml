@@ -34,8 +34,8 @@ bacula__default__directors:
   QueryFile: "{{ bacula_root + '/scripts/query.sql' }}"
 
 bacula_directors: |
-  {{ bacula__default__directors | combine(
-    bacula_custom_directors | default({})
+  {{ bacula__default__directors | join(
+    bacula_custom_directors | default([])
   )}}
 
 ###
@@ -46,8 +46,8 @@ bacula__default__consoles:
     Password: changeme!
 
 bacula_consoles: |
-  {{ bacula__default__consoles | combine(
-    bacula_custom_consoles | default({})
+  {{ bacula__default__consoles | join(
+    bacula_custom_consoles | default([])
   )}}
 
 ###
@@ -86,8 +86,8 @@ bacula_jobdefs_custom:
     Priority: 10
 
 bacula_jobdefs: |
-  {{ bacula__default__jobdefs | combine(
-    bacula_jobdefs_custom | default({})
+  {{ bacula__default__jobdefs | join(
+    bacula_jobdefs_custom | default([])
   )}}
 
 ###
@@ -114,8 +114,8 @@ bacula__default__messages:
 
 
 bacula_messages: |
-  {{ bacula__default__messages | combine(
-    bacula_messages_custom | default({})
+  {{ bacula__default__messages | join(
+    bacula_messages_custom | default([])
   )}}
 
 
@@ -139,8 +139,8 @@ bacula__default__schedules:
       - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
 
 bacula_schedules: |
-  {{ bacula__default__schedules | combine(
-    bacula_schedules_custom | default({})
+  {{ bacula__default__schedules | join(
+    bacula_schedules_custom | default([])
   )}}
 
 ###
@@ -165,8 +165,8 @@ bacula__default__filesets:
         - /.fsck
 
 bacula_filesets: |
-  {{ bacula__default__filesets | combine(
-    bacula_filesets_custom | default({})
+  {{ bacula__default__filesets | join(
+    bacula_filesets_custom | default([])
   )}}
 
 ###
@@ -203,6 +203,6 @@ bacula__default__pools:
     LabelFormat: "#client#-Inc-"
 
 bacula_pools: |
-  {{ bacula__default__pools | combine(
-    bacula_pools_custom | default({})
+  {{ bacula__default__pools | join(
+    bacula_pools_custom | default([])
   )}}
