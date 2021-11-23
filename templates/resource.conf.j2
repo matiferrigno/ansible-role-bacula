@@ -27,14 +27,12 @@
 {%- endif %}
 {%- endmacro -%}
 
+{%  for res in resource_options | default([]) -%}
 {{ resource }} {
 
-{%  for res in resource_options | default([]) -%}
 {%  for opt in res | dict2items %}
 {{ proccess_opt(opt,2) }}
 {%  endfor %}
-{%  endfor %}
-
 {% for f in include_files | default([]) %}
 @{{ f }}
 {% endfor %}
@@ -42,6 +40,9 @@
 {{ l }}
 {% endfor %}
 }
+
+{%  endfor %}
+
 {% for e in include_endline | default([]) %}
 {{ e }}
 {% endfor %}
