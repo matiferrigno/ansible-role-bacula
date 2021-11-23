@@ -179,6 +179,12 @@ bacula_filesets: |
 # Pools
 ###
 
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Only Name and LabelFormat is being evaluated.
+
 bacula__default__pools:
   - Name: "#client#-Full-Pool"
     Pool_Type: Backup
