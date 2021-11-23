@@ -111,7 +111,7 @@
 
 - name: Get list of all clients
   set_fact:
-    clients: "{{ clients | default([]) + ({ 'host': item } | combine(hostvars[item]['bacula_client'] | default([])) } }}"
+    clients: "{{ clients | default([]) + ({ 'host': item } | combine(hostvars[item]['bacula_client'] | default([])) }}"
   loop: "{{ groups[bacula_clients_group] }}"
 
 - debug:
