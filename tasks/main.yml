@@ -144,7 +144,7 @@
       {% set cSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
       {% set job_changes = { 'Name': cName, 'FileSet': cFileSet, 'JobDefs': cJobDefs, 'Schedule': cSchedule } %}
       {% for c in job_changes | dict2items %}
-      {% if (job.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
+      {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
       {% endfor %}
       {{ jobs | default([]) + hostvars[item]['bacula_client_jobs']|default([]) + [ job ] }}
   with_nested:
