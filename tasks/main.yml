@@ -109,17 +109,11 @@
     group: "{{ bacula_group }}"
     state: directory
 
-- name: Get list of all jobs
+- name: Get list of all clients
   set_fact:
-    jobs: |
-      {% if hostvars[item]['bacula_client_jobs'] | d() and hostvars[item]['bacula_client_jobs'] | length > 0 %}
-      {% set client_config = hostvars[item]['bacula_client_jobs'] %}
-      {% else %}
-      {% set client_config = False %}
-      {% endif %}
-      {{
-        (jobs | default([]) + [{ 'key': item, 'value': client_config }]) if client_config
-      }}
+    clients: |
+      {% set client_config = bacula_common_clients | (combine(hostvars[item]['bacula_client'] | default([]))) %}
+      {{ (clients | default(bacula_clients)) + [ client_config ] }}
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
@@ -180,8 +174,11 @@
     - resource: Pool
       resource_options: "{{ pools }}"
       dest: "config.d/pools.conf"
+    - resource: Client
+      resource_options: "{{ clients if bacula__dynamic__clients else bacula_clients }}"
+      dest: "config.d/clients.conf"
     - resource: Job
-      resource_options: "{{ jobs }}"
+      resource_options: "{{ jobs if bacula__dynamic__jobs else bacula_jobs }}"
       dest: "config.d/jobs.conf"
     - resource: Director
       resource_options: "{{ bacula_directors }}"

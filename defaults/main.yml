@@ -219,7 +219,29 @@ bacula_pools: |
   }}
 
 ###
-# Pools
+# Clients
+###
+# Tags "#client#" will be replaced with client's name.
+# Tags "#client_fqdn#" will be replaced with client's fqdn.
+bacula__common_clients:
+  Name: "#client#-fd"
+  Address: "#client_fqdn#"
+  FDPort: 9102
+  AutoPrune: True
+  Maximum_Concurrent_Jobs: 3
+  Password: changeme!
+
+bacula__default__clients: []
+bacula__dynamic__clients: True
+bacula_clients: |
+  {{
+    bacula__default__clients +
+    bacula_custom_clients | default([])
+  }}
+
+
+###
+# Jobs
 ###
 
 # Tags "#client#" will be replaced with client's name.
@@ -230,14 +252,14 @@ bacula_pools: |
 #  - Only Name, FileSet, JobDefs, Schedule is being evaluated.
 #  - If no tag #client# found within the name the job is considerated isolated.
 #    else job is applied on each client.
-#  - bacula_jobs_clients dinamicly append bacula_client_jobs var on each client.
+#  - bacula__dyn__jobs dinamicly append bacula_client_jobs var on each client.
 #    Jobs in bacula_client_jobs only belongs to his owner.
 
 bacula__default__jobs: []
+bacula__dynamic__jobs: True
 
 bacula_jobs: |
   {{
     bacula__default__jobs +
-    bacula_jobs_clients | default([]) +
     bacula_jobs_custom | default([])
   }}
