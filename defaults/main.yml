@@ -259,6 +259,7 @@ bacula_clients: |
 #    Jobs in bacula_client_jobs only belongs to his owner.
 
 bacula__default__jobs: []
+
 bacula__dynamic__jobs: True
 
 bacula_jobs: |

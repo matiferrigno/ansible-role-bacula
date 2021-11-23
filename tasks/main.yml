@@ -137,16 +137,16 @@
 - name: Get list of jobs by clients
   set_fact:
     jobs: |
-      {% set pName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
-      {% set pFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else none %}
-      {% set pJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else none %}
-      {% set pSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
-      {% set job_changes = { 'Name': pName, 'FileSet': pFileSet, 'JobDefs': pJobDefs, 'Schedule': pSchedule } %}
       {% set job = item[0] %}
+      {% set cName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
+      {% set cFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else none %}
+      {% set cJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else none %}
+      {% set cSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
+      {% set job_changes = { 'Name': cName, 'FileSet': cFileSet, 'JobDefs': cJobDefs, 'Schedule': cSchedule } %}
       {% for c in job_changes | dict2items %}
       {% if (job.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
       {% endfor %}
-      {{ jobs | default([]) + [ job ] }}
+      {{ jobs | default([]) + hostvars[item]['bacula_client_jobs']|default([]) + [ job ] }}
   with_nested:
     - "{{ bacula_jobs }}"
     - "{{ groups[bacula_clients_group] }}"
