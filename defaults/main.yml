@@ -70,8 +70,6 @@ bacula__default__jobdefs:
     Prune_Jobs: yes
     Prune_Volumes: Yes
     Priority: 10
-
-bacula_jobdefs_custom:
   - Name: DefaultLinuxJob
     Type: Backup
     Level: Incremental
@@ -218,4 +216,28 @@ bacula_pools: |
   {{
     bacula__default__pools +
     bacula_pools_custom | default([])
+  }}
+
+###
+# Pools
+###
+
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Notes:
+#  - Only Name, FileSet, JobDefs, Schedule is being evaluated.
+#  - If no tag #client# found within the name the job is considerated isolated.
+#    else job is applied on each client.
+#  - bacula_jobs_clients dinamicly append bacula_client_jobs var on each client.
+#    Jobs in bacula_client_jobs only belongs to his owner.
+
+bacula__default__jobs: []
+
+bacula_jobs: |
+  {{
+    bacula__default__jobs +
+    bacula_jobs_clients | default([]) +
+    bacula_jobs_custom | default([])
   }}

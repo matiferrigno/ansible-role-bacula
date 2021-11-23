@@ -111,7 +111,7 @@
 
 - name: Get list of all clients
   set_fact:
-    clients: "{{ clients | default([]) + [{ 'host': item, 'config': hostvars[item]['bacula_client'] }] }}"
+    clients: "{{ clients | default([]) + [{ 'host': item, 'config': hostvars[item]['bacula_client_jobs'] }] }}"
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
@@ -124,6 +124,23 @@
       }}
   with_nested:
     - "{{ bacula_pools }}"
+    - "{{ groups[bacula_clients_group] }}"
+
+- name: Get list of jobs by clients
+  set_fact:
+    jobs: |
+      {% set pName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else False %}
+      {% set pFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else False %}
+      {% set pJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else False %}
+      {% set pSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else False %}
+      {% set job_changes = { 'Name': pName, 'FileSet': pFileSet, 'JobDefs': pJobDefs, 'Schedule': pSchedule } %}
+      {% set job = {} %}
+      {% for c in job_changes | dict2items %}
+      {% job | combine(job_changes) if c.value is not False %}
+      {% endfor %}
+      {{ pools | default([]) + [item[0] | combine(job)] }}
+  with_nested:
+    - "{{ bacula_jobs }}"
     - "{{ groups[bacula_clients_group] }}"
 
 - name: Update configs
@@ -155,6 +172,9 @@
     - resource: Pool
       resource_options: "{{ pools }}"
       dest: "config.d/pools.conf"
+    - resource: Job
+      resource_options: "{{ jobs }}"
+      dest: "config.d/jobs.conf"
     - resource: Director,
       resource_options: "{{ bacula_directors }}"
       include_endline:
