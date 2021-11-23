@@ -116,6 +116,7 @@
       {% set client_config = hostvars[item]['bacula_client_jobs'] %}
       {% else %}
       {% set client_config = False %}
+      {% endif %}
       {{
         (clients | default([]) + [{ 'host': item, 'config': client_config }]) if client_config
       }}
