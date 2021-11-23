@@ -112,8 +112,15 @@
 - name: Get list of all clients
   set_fact:
     clients: |
-      {% set client_config = bacula__common__clients | combine(hostvars[item]['bacula_client'] | default([])) %}
-      {{ clients | default(bacula_clients) + [ client_config ] }}
+      {% set cfg = bacula__common__clients | combine(hostvars[item][bacula_client_config] | default({})) %}
+      {% set pName = cfg.Name | replace('#client#', item) if cfg.Name | d() else False %}
+      {% set pAddress = cfg.Address | replace('#client#', item) if cfg.Address | d() else False %}
+      {% set client_changes = { 'Name': pName, 'Address': pAddress } %}
+      {% set client = {} %}
+      {% for c in client_changes | dict2items %}
+      {% client | combine(client_changes) if c.value is not False %}
+      {% endfor %}
+      {{ clients | default(bacula_clients) + [ client_config | combine(client) ] }}
   loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients

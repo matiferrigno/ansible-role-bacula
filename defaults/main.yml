@@ -17,6 +17,8 @@ bacula_group: tape
 bacula_storage_default: bacula-sd
 
 bacula_clients_group: bacula-client
+bacula_client_config: 'bacula_client'
+bacula_client_jobs_config: 'bacula_client_jobs'
 
 ###
 # Director
@@ -230,6 +232,7 @@ bacula__common__clients:
   AutoPrune: True
   Maximum_Concurrent_Jobs: 3
   Password: changeme!
+
 
 bacula__default__clients: []
 bacula__dynamic__clients: True
