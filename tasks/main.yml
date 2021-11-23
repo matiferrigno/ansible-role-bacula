@@ -116,17 +116,15 @@
 
 - name: Get list of pool by clients
   set_fact:
-    pools: |
-      {{ item[0] }} - {{ item[1] }}
+    pools: "{{ item[0] }} - {{ item[1] }}"
+  with_nested:
+    - "{{ groups[bacula_clients_group] }}"
+    - "{{ clients }}"
       # {% set pName = item[0].Name | replace('#client#', item[1]) %}
       # {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
       # {{
       #   pools | default([]) | join(item[0].update({ 'Name': pName, 'LabelFormat': pLabelFormat }))
       # }}
-  with_nested:
-    - "{{ groups[bacula_clients_group] }}"
-    - "{{ clients }}"
-
 - debug:
     msg: "{{ pools }}"
 
