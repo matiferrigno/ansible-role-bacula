@@ -120,7 +120,7 @@
       {% set pName = item[0].Name | replace('#client#', item[1]) %}
       {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
       {{
-        (pools | default([])) + [(item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })])
+        pools | default([])) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]
       }}
   with_nested:
     - "{{ bacula_pools }}"
