@@ -111,26 +111,21 @@
 
 - name: Get list of all clients
   set_fact:
-    clients: "{{ clients | default([]) + ({ 'host': item } | combine(hostvars[item]['bacula_client'] | default([]))) }}"
+    clients: "{{ clients | default([]) + [{ 'host': item, 'config': hostvars[item]['bacula_client'] }] }}"
   loop: "{{ groups[bacula_clients_group] }}"
-
-- debug:
-    msg: "{{ item[0] }} - {{ item[1] }}"
-  with_nested:
-    - "{{ bacula_pools }}"
-    - "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of pool by clients
   set_fact:
     pools: |
-      {% set pName = item[0].Name | replace('#client#', item[1]) %}
-      {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
-      {{
-        pools | default([]) | join(item[0].update({ 'Name': pName, 'LabelFormat': pLabel }))
-      }}
+      {{ item[0] }} - {{ item[1] }}
+      # {% set pName = item[0].Name | replace('#client#', item[1]) %}
+      # {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
+      # {{
+      #   pools | default([]) | join(item[0].update({ 'Name': pName, 'LabelFormat': pLabelFormat }))
+      # }}
   with_nested:
-    - "{{ bacula_pools }}"
     - "{{ groups[bacula_clients_group] }}"
+    - "{{ clients }}"
 
 - debug:
     msg: "{{ pools }}"
