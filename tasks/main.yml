@@ -153,7 +153,7 @@
       resource_options: "{{ bacula_filesets }}"
       dest: "config.d/filesets.conf"
     - resource: Pool
-      resource_options: "{{ bacula_pools }}"
+      resource_options: "{{ pools }}"
       dest: "config.d/pools.conf"
     - resource: Director,
       resource_options: "{{ bacula_directors }}"
