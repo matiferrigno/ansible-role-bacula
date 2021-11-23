@@ -68,6 +68,8 @@ bacula__default__jobdefs:
     Prune_Jobs: yes
     Prune_Volumes: Yes
     Priority: 10
+
+bacula_jobdefs_custom:
   - Name: DefaultLinuxJob
     Type: Backup
     Level: Incremental
