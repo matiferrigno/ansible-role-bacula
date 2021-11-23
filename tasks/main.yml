@@ -175,10 +175,10 @@
       resource_options: "{{ pools }}"
       dest: "config.d/pools.conf"
     - resource: Client
-      resource_options: "{{ clients if bacula__dynamic__clients else bacula_clients }}"
+      resource_options: "{{ clients | default([]) if bacula__dynamic__clients else bacula_clients }}"
       dest: "config.d/clients.conf"
     - resource: Job
-      resource_options: "{{ jobs if bacula__dynamic__jobs else bacula_jobs }}"
+      resource_options: "{{ jobs | default([]) if bacula__dynamic__jobs else bacula_jobs }}"
       dest: "config.d/jobs.conf"
     - resource: Director
       resource_options: "{{ bacula_directors }}"
