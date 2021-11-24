@@ -139,7 +139,7 @@
     clients_jobs: |
       {{
         clients_jobs | default([]) + hostvars[item][bacula_client_jobs_config]
-          if hostvars[item][bacula_client_jobs_config] | d()
+          if hostvars[item][bacula_client_jobs_config] | d() else (clients_jobs | default([]))
       }}
   loop: "{{ groups[bacula_clients_group] }}"
 
