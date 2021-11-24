@@ -1,7 +1,7 @@
 ---
 # handlers file for matiferrigno.ansible-bacula
 
-- name: Bacula-dir restarted
+- name: restart
   systemd:
     name: bacula-dir
     state: restarted

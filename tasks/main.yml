@@ -13,6 +13,8 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     mode: 0640
+    backup: yes
+    validate:
   vars:
     resource: "{{ item.resource }}"
     resource_options: "{{ item.resource_options | default([]) }}"
