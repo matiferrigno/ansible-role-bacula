@@ -205,7 +205,7 @@
       resource_options: "{{ bacula_jobdefs | default([]) }}"
       dest: "config.d/jobdefs.conf"
     - resource: Job
-      resource_options: "{{ jobs + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([]) }}"
+      resource_options: "{{ jobs | default([]) + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([]) }}"
       dest: "config.d/jobs.conf"
     - resource: Messages
       resource_options: "{{ bacula_messages | default([]) }}"
