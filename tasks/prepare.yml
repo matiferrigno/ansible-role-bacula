@@ -75,7 +75,7 @@
 - name: Transform list of jobs
   set_fact:
     jobs: |
-      {% set job = bacula__common__job | combine(item[0]) %}
+      {% set job = bacula__common__jobs | default([]) | combine(item[0]) %}
       {% set cName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
       {% set cClient = item[0].Client | replace('#client#', item[1]) if item[0].Client | d() else none %}
       {% set cPool = item[0].Pool | replace('#client#', item[1]) if item[0].Pool | d() else none %}
