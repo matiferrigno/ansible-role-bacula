@@ -76,15 +76,15 @@
   set_fact:
     jobs: |
       {% set job = bacula__common__jobs | default({}) | combine(item[0]) %}
-      {% set cName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
-      {% set cClient = item[0].Client | replace('#client#', item[1]) if item[0].Client | d() else none %}
-      {% set cPool = item[0].Pool | replace('#client#', item[1]) if item[0].Pool | d() else none %}
-      {% set cFullBackupPool = item[0].Full_Backup_Pool | replace('#client#', item[1]) if item[0].Full_Backup_Pool | d() else none %}
-      {% set cDifferentialBackupPool = item[0].Differential_Backup_Pool | replace('#client#', item[1]) if item[0].Differential_Backup_Pool | d() else none %}
-      {% set cIncrementalBackupPool = item[0].Incremental_Backup_Pool | replace('#client#', item[1]) if item[0].Incremental_Backup_Pool | d() else none %}
-      {% set cFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else none %}
-      {% set cJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else none %}
-      {% set cSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
+      {% set cName = job.Name | replace('#client#', item[1]) if job.Name | d() else none %}
+      {% set cClient = job.Client | replace('#client#', item[1]) if job.Client | d() else none %}
+      {% set cPool = job.Pool | replace('#client#', item[1]) if job.Pool | d() else none %}
+      {% set cFullBackupPool = job.Full_Backup_Pool | replace('#client#', item[1]) if job.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = job.Differential_Backup_Pool | replace('#client#', item[1]) if job.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = job.Incremental_Backup_Pool | replace('#client#', item[1]) if job.Incremental_Backup_Pool | d() else none %}
+      {% set cFileSet = job.FileSet | replace('#client#', item[1]) if job.FileSet | d() else none %}
+      {% set cJobDefs = job.JobDefs | replace('#client#', item[1]) if job.JobDefs | d() else none %}
+      {% set cSchedule = job.Schedule | replace('#client#', item[1]) if job.Schedule | d() else none %}
       {% set job_changes = {
         'Name': cName,
         'Client': cClient,
