@@ -38,9 +38,16 @@
 - name: Fetch filesets defined on each client
   set_fact:
     dyn_filesets: |
+      {%
+        set hFilesets =
+          hostvars[item][bacula_client_filesets_var] | default([])
+            if hostvars[item][bacula_client_filesets_var] | d()
+              else none
+      %}
       {{
-        dyn_filesets | default([]) + bacula__common__clients | default({}) | combine(hostvars[item][bacula_client_filesets_var])
-          if hostvars[item][bacula_client_filesets_var] | d()
+        dyn_filesets | default([]) +
+          hFilesets | default([]) | map('combine',bacula__common__filesets,hFilesets)
+            if hFilesets is not none
             else dyn_filesets | default([])
       }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
