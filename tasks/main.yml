@@ -214,7 +214,7 @@
       resource_options: "{{ bacula_schedules | default([]) }}"
       dest: "config.d/schedules.conf"
     - resource: Storage
-      resource_options: "{{ bacula_storage | default([]) + dyn_storages | default([]) if bacula__dynamic__storages else bacula_storage | default([]) }}"
+      resource_options: "{{ bacula_storages | default([]) + dyn_storages | default([]) if bacula__dynamic__storages else bacula_storages | default([]) }}"
       dest: "config.d/storages.conf"
     - resource: Pool
       resource_options: "{{ pools | default([]) }}"
