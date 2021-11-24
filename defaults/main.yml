@@ -15,20 +15,22 @@ bacula_root: /opt/bacula
 bacula_owner: bacula
 bacula_group: tape
 
-bacula_client_group: 'bacula-client'
-bacula_client_var: 'bacula_client'
-bacula_client_jobs_var: 'bacula_client_jobs'
-bacula_storage_group: 'bacula-storage'
-bacula_storage_var: 'bacula_storage'
+bacula_client_group: bacula-client
+bacula_client_var: bacula_client
+bacula_client_jobs_var: bacula_client_jobs
+bacula_storage_group: bacula-storage
+bacula_storage_var: bacula_storage
 bacula_storage_default: bacula-sd
+bacula_catalog_group: bacula-catalog
+bacula_catalog_var: bacula_catalog
 
 ###
 # Director
 ###
 bacula__default__directors:
-  - Name: "bacula-dir"
+  - Name: bacula-dir
     Description: "Some description here"
-    DIRAddress: "0.0.0.0"
+    DIRAddress: 0.0.0.0
     DIRport: 9101
     Password: changeme!
     Messages: "{{ bacula_messages_default }}"
@@ -43,6 +45,26 @@ bacula_directors: |
     bacula__default__directors +
     bacula_custom_directors | default([])
   }}
+
+###
+# Catalog
+###
+bacula_catalog_default: bacula-catalog
+bacula__dynamic__clients: True
+bacula__default__catalogs:
+  - Name: bacula-catalog
+    dbname: bacula
+    user: bacula
+    password: "{{ bacula_catalog_default_password | default('changeme!') }}"
+    DB_Address: localhost
+    DB_Port: 3306
+
+bacula_catalogs: |
+  {{
+    bacula__default__catalogs +
+    bacula_custom_catalogs | default([])
+  }}
+
 
 ###
 # Console
@@ -65,7 +87,7 @@ bacula__default__jobdefs:
     Type: Backup
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
-    FileSet: "default-windows-fs"
+    FileSet: default-windows-fs
     Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
@@ -79,7 +101,7 @@ bacula__default__jobdefs:
     Type: Backup
     Level: Incremental
     Storage: "{{ bacula_storage_default }}"
-    FileSet: "default-linux-fs"
+    FileSet: default-linux-fs
     Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
     Prefer_Mounted_Volumes: No
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
@@ -276,8 +298,8 @@ bacula_jobs: |
 ###
 
 bacula__default__storages:
-  - Name: "bacula-sd"
-    Address: "127.0.0.1"
+  - Name: bacula-sd
+    Address: 127.0.0.1
     SDPort: 9103
     Password: changeme!
     Device: FileStorage-

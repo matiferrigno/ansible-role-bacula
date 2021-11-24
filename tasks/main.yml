@@ -143,7 +143,7 @@
       }}
   loop: "{{ groups[bacula_client_group] }}"
 
-- name: Fetch storages on group "{{ bacula_storages_group }}"
+- name: Fetch storages on group "{{ bacula_storage_group }}"
   set_fact:
     dyn_storages: |
       {{
@@ -151,6 +151,15 @@
           if hostvars[item][bacula_storage_var] | d() else (dyn_storages | default([]))
       }}
   loop: "{{ groups[bacula_storage_group] }}"
+
+- name: Fetch catalogs on group "{{ bacula_catalog_group }}"
+  set_fact:
+    dyn_catalogs: |
+      {{
+        dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var]
+          if hostvars[item][bacula_catalog_var] | d() else (dyn_catalogs | default([]))
+      }}
+  loop: "{{ groups[bacula_catalog_group] }}"
 
 - name: Transform list of jobs
   set_fact:
@@ -182,6 +191,9 @@
     resource_raw_lines: "{{ item.resource_raw_lines | default([]) }}"
     file_raw_lines: "{{ item.file_raw_lines | default([]) }}"
   loop:
+    - resource: Catalog
+      resource_options: "{{ bacula_catalogs | default([]) + dyn_catalogs | default([]) if bacula__dynamic__catalogs else bacula_catalogs | default([]) }}"
+      dest: "config.d/catalog.conf"
     - resource: Console
       resource_options: "{{ bacula_consoles }}"
       dest: "config.d/console.conf"
