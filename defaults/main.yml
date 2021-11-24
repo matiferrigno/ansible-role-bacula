@@ -257,6 +257,7 @@ bacula__common__clients:
   AutoPrune: True
   Maximum_Concurrent_Jobs: 3
   Password: changeme!
+  Catalog: bacula-catalog
 
 
 bacula__default__clients: []
