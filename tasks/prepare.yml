@@ -25,16 +25,6 @@
     - "{{ bacula_pools }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
 
-- name: Fetch jobs defined on each client
-  set_fact:
-    dyn_jobs: |
-      {{
-        dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var]
-          if hostvars[item][bacula_client_jobs_var] | d()
-            else dyn_jobs | default([])
-      }}
-  loop: "{{ groups[bacula_client_group] | default([]) }}"
-
 - name: Fetch filesets defined on each client
   set_fact:
     dyn_filesets: |
@@ -72,6 +62,43 @@
       }}
   loop: "{{ groups[bacula_catalog_group] | default([]) }}"
 
+- name: Fetch jobs defined on each client and tranform
+  set_fact:
+    dyn_jobs: |
+      {% set aux = dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var]
+          if hostvars[item][bacula_client_jobs_var] | d()
+            else dyn_jobs | default([])
+      %}
+      {% set jobs = aux | map ('combine',bacula__common__jobs,aux) %}
+      {% for j in jobs %}
+      {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
+      {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
+      {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
+      {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
+      {% set cFileSet = j.FileSet | replace('#client#', item) if j.FileSet | d() else none %}
+      {% set cJobDefs = j.JobDefs | replace('#client#', item) if j.JobDefs | d() else none %}
+      {% set cSchedule = j.Schedule | replace('#client#', item) if j.Schedule | d() else none %}
+      {% set job_changes = {
+        'Name': cName,
+        'Client': cClient,
+        'FileSet': cFileSet,
+        'JobDefs': cJobDefs,
+        'Schedule': cSchedule,
+        'Pool': cPool,
+        'Full_Backup_Pool': cFullBackupPool,
+        'Differential_Backup_Pool': cDifferentialBackupPool,
+        'Incremental_Backup_Pool': cIncrementalBackupPool
+        }
+      %}
+      {% for c in job_changes | dict2items %}
+      {% if (j.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
+      {% endfor %}
+      {% endfor %}
+      {{ dyn_jobs | default([]) + [ j ] }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
 - name: Transform list of jobs
   set_fact:
     jobs: |
@@ -102,5 +129,5 @@
       {% endfor %}
       {{ jobs | default([]) + [ job ] }}
   with_nested:
-    - "{{ bacula_jobs + dyn_jobs | default([]) }}"
+    - "{{ bacula_jobs | default([]) }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
