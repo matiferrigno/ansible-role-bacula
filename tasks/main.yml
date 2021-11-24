@@ -44,7 +44,7 @@
     - resource: FileSet
       resource_options: "{{ bacula_filesets | default([]) }}"
       dest: "config.d/filesets.conf"
-    - resource: JobDef
+    - resource: JobDefs
       resource_options: "{{ bacula_jobdefs | default([]) }}"
       dest: "config.d/jobdefs.conf"
     - resource: Job
