@@ -18,7 +18,7 @@ bacula_group: tape
 bacula_client_group: 'bacula-client'
 bacula_client_var: 'bacula_client'
 bacula_client_jobs_var: 'bacula_client_jobs'
-bacula_storages_group: 'bacula-storage'
+bacula_storage_group: 'bacula-storage'
 bacula_storage_var: 'bacula_storage'
 bacula_storage_default: bacula-sd
 
