@@ -50,7 +50,7 @@ bacula_directors: |
 # Catalog
 ###
 bacula_catalog_default: bacula-catalog
-bacula__dynamic__clients: True
+bacula__dynamic__catalogs: True
 bacula__default__catalogs:
   - Name: bacula-catalog
     dbname: bacula
