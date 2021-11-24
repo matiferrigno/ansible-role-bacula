@@ -29,7 +29,7 @@
   set_fact:
     dyn_jobs: |
       {{
-        dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var]
+        (dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var])
           if hostvars[item][bacula_client_jobs_var] | d() else (dyn_jobs | default([]))
       }}
   loop: "{{ groups[bacula_client_group] }}"
@@ -38,7 +38,7 @@
   set_fact:
     dyn_storages: |
       {{
-        dyn_storages | default([]) + hostvars[item][bacula_storage_var]
+        (dyn_storages | default([]) + hostvars[item][bacula_storage_var])
           if hostvars[item][bacula_storage_var] | d() else (dyn_storages | default([]))
       }}
   loop: "{{ groups[bacula_storage_group] }}"
@@ -47,7 +47,7 @@
   set_fact:
     dyn_catalogs: |
       {{
-        dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var]
+        (dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var])
           if hostvars[item][bacula_catalog_var] | d() else (dyn_catalogs | default([]))
       }}
   loop: "{{ groups[bacula_catalog_group] }}"
