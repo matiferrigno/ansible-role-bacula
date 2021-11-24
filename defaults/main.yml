@@ -15,9 +15,9 @@ bacula_root: /opt/bacula
 bacula_owner: bacula
 bacula_group: tape
 
-bacula_client_group: 'bacula_client'
+bacula_client_group: 'bacula-client'
 bacula_client_jobs_var: 'bacula_client_jobs'
-bacula_storages_group: 'bacula_storage'
+bacula_storages_group: 'bacula-storage'
 bacula_storage_var: 'bacula_storage'
 bacula_storage_default: bacula-sd
 
