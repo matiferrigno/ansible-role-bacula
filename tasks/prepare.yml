@@ -1,0 +1,70 @@
+---
+
+- name: Fetch clients on group "{{ bacula_client_group }}"
+  set_fact:
+    dyn_clients: |
+      {% set cfg = bacula__common__clients | combine(hostvars[item][bacula_client_var] | default({})) %}
+      {% set pName = cfg.Name | replace('#client#', item) if cfg.Name | d() else none %}
+      {% set pAddress = cfg.Address | replace('#client_fqdn#', hostvars[item]['ansible_fqdn']) if cfg.Address | d() else none %}
+      {% set client_changes = { 'Name': pName, 'Address': pAddress } %}
+      {% for c in client_changes | dict2items %}
+      {% if (cfg.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
+      {% endfor %}
+      {{ dyn_clients | default([]) + [ cfg ] }}
+  loop: "{{ groups[bacula_client_group] }}"
+
+- name: Fetch pools and define separate one for each client
+  set_fact:
+    pools: |
+      {% set pName = item[0].Name | replace('#client#', item[1]) %}
+      {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
+      {{
+        pools | default([]) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]
+      }}
+  with_nested:
+    - "{{ bacula_pools }}"
+    - "{{ groups[bacula_client_group] }}"
+
+- name: Fetch jobs defined on each client
+  set_fact:
+    dyn_jobs: |
+      {{
+        dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var]
+          if hostvars[item][bacula_client_jobs_var] | d() else (dyn_jobs | default([]))
+      }}
+  loop: "{{ groups[bacula_client_group] }}"
+
+- name: Fetch storages on group "{{ bacula_storage_group }}"
+  set_fact:
+    dyn_storages: |
+      {{
+        dyn_storages | default([]) + hostvars[item][bacula_storage_var]
+          if hostvars[item][bacula_storage_var] | d() else (dyn_storages | default([]))
+      }}
+  loop: "{{ groups[bacula_storage_group] }}"
+
+- name: Fetch catalogs on group "{{ bacula_catalog_group }}"
+  set_fact:
+    dyn_catalogs: |
+      {{
+        dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var]
+          if hostvars[item][bacula_catalog_var] | d() else (dyn_catalogs | default([]))
+      }}
+  loop: "{{ groups[bacula_catalog_group] }}"
+
+- name: Transform list of jobs
+  set_fact:
+    jobs: |
+      {% set job = item[0] %}
+      {% set cName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
+      {% set cFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else none %}
+      {% set cJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else none %}
+      {% set cSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
+      {% set job_changes = { 'Name': cName, 'FileSet': cFileSet, 'JobDefs': cJobDefs, 'Schedule': cSchedule } %}
+      {% for c in job_changes | dict2items %}
+      {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
+      {% endfor %}
+      {{ jobs | default([]) + [ job ] }}
+  with_nested:
+    - "{{ bacula_jobs }}"
+    - "{{ groups[bacula_client_group] }}"
