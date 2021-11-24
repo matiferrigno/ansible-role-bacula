@@ -141,7 +141,7 @@
         clients_jobs | default([]) + hostvars[item][bacula_client_jobs_config]
           if hostvars[item][bacula_client_jobs_config] | d()
       }}
-    loop: "{{ groups[bacula_clients_group] }}"
+  loop: "{{ groups[bacula_clients_group] }}"
 
 - name: Get list of jobs by clients
   set_fact:
