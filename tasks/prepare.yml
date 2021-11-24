@@ -102,5 +102,5 @@
       {% endfor %}
       {{ jobs | default([]) + [ job ] }}
   with_nested:
-    - "{{ bacula_jobs }}"
+    - "{{ bacula_jobs + dyn_jobs | default([]) }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
