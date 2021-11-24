@@ -146,7 +146,7 @@
       {% for c in job_changes | dict2items %}
       {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
       {% endfor %}
-      {{ jobs | default([]) + hostvars[item]['bacula_client_jobs']|default([]) + [ job ] }}
+      {{ jobs | default([]) + hostvars[item[1]]['bacula_client_jobs']|default([]) + [ job ] }}
   with_nested:
     - "{{ bacula_jobs }}"
     - "{{ groups[bacula_clients_group] }}"
