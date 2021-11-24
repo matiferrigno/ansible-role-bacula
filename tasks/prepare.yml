@@ -11,7 +11,7 @@
       {% if (cfg.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
       {% endfor %}
       {{ dyn_clients | default([]) + [ cfg ] }}
-  loop: "{{ groups[bacula_client_group] }}"
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch pools and define separate one for each client
   set_fact:
@@ -23,34 +23,37 @@
       }}
   with_nested:
     - "{{ bacula_pools }}"
-    - "{{ groups[bacula_client_group] }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch jobs defined on each client
   set_fact:
     dyn_jobs: |
       {{
-        (dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var])
-          if hostvars[item][bacula_client_jobs_var] | d() else (dyn_jobs | default([]))
+        dyn_jobs | default([]) + hostvars[item][bacula_client_jobs_var]
+          if hostvars[item][bacula_client_jobs_var] | d()
+            else dyn_jobs | default([])
       }}
-  loop: "{{ groups[bacula_client_group] }}"
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch storages on group "{{ bacula_storage_group }}"
   set_fact:
     dyn_storages: |
       {{
-        (dyn_storages | default([]) + hostvars[item][bacula_storage_var])
-          if hostvars[item][bacula_storage_var] | d() else (dyn_storages | default([]))
+        dyn_storages | default([]) + hostvars[item][bacula_storage_var]
+          if hostvars[item][bacula_storage_var] | d()
+            else (dyn_storages | default([])
       }}
-  loop: "{{ groups[bacula_storage_group] }}"
+  loop: "{{ groups[bacula_storage_group] | default([]) }}"
 
 - name: Fetch catalogs on group "{{ bacula_catalog_group }}"
   set_fact:
     dyn_catalogs: |
       {{
-        (dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var])
-          if hostvars[item][bacula_catalog_var] | d() else (dyn_catalogs | default([]))
+        dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var]
+          if hostvars[item][bacula_catalog_var] | d()
+            else dyn_catalogs | default([])
       }}
-  loop: "{{ groups[bacula_catalog_group] }}"
+  loop: "{{ groups[bacula_catalog_group] | default([]) }}"
 
 - name: Transform list of jobs
   set_fact:
@@ -67,4 +70,4 @@
       {{ jobs | default([]) + [ job ] }}
   with_nested:
     - "{{ bacula_jobs }}"
-    - "{{ groups[bacula_client_group] }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
