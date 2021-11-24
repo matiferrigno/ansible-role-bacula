@@ -44,7 +44,7 @@
         - "@{{ bacula_root }}/etc/config.d/pools.conf"
       dest: "bacula-dir.conf"
     - resource: FileSet
-      resource_options: "{{ bacula_filesets | default([]) }}"
+      resource_options: "{{ bacula_filesets | default([]) + dyn_filesets | default([]) | default([]) if bacula__dynamic__filesets else bacula_filesets | default([]) }}"
       dest: "config.d/filesets.conf"
     - resource: JobDefs
       resource_options: "{{ bacula_jobdefs | default([]) }}"

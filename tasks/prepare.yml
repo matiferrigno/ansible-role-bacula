@@ -35,6 +35,16 @@
       }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
 
+- name: Fetch filesets defined on each client
+  set_fact:
+    dyn_filesets: |
+      {{
+        dyn_filesets | default([]) + bacula__common__clients | default({}) | combine(hostvars[item][bacula_client_filesets_var])
+          if hostvars[item][bacula_client_filesets_var] | d()
+            else dyn_filesets | default([])
+      }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
 - name: Fetch storages on group "{{ bacula_storage_group }}"
   set_fact:
     dyn_storages: |

@@ -17,6 +17,7 @@ bacula_group: tape
 
 bacula_client_group: bacula-client
 bacula_client_var: bacula_client
+bacula_client_filesets_var: bacula_filesets
 bacula_client_jobs_var: bacula_client_jobs
 bacula_storage_group: bacula-storage
 bacula_storage_var: bacula_storage
@@ -176,6 +177,12 @@ bacula_schedules: |
 ###
 # FileSets
 ###
+bacula__common__filesets:
+  Include:
+    Options:
+      signature: MD5
+      compression: GZIP6
+
 bacula__default__filesets:
   - Name: default-linux-fs
     Include:
@@ -203,6 +210,7 @@ bacula__default__filesets:
         - "\\ProgramData"
     Exclude: {}
 
+bacula__dynamic__filesets: yes
 bacula_filesets: |
   {{
     bacula__default__filesets +
