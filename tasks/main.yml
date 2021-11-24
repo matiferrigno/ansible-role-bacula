@@ -37,6 +37,7 @@
         - "@{{ bacula_root }}/etc/config.d/clients.conf"
         - "@{{ bacula_root }}/etc/config.d/filesets.conf"
         - "@{{ bacula_root }}/etc/config.d/jobdefs.conf"
+        - "@{{ bacula_root }}/etc/config.d/jobs.conf"
         - "@{{ bacula_root }}/etc/config.d/messages.conf"
         - "@{{ bacula_root }}/etc/config.d/schedules.conf"
         - "@{{ bacula_root }}/etc/config.d/storages.conf"

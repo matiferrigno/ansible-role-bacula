@@ -10,3 +10,4 @@
   shell: "./bacula-dir -t"
   args:
     chdir: "{{ bacula_root }}/bin"
+  changed_when: false
