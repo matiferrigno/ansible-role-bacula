@@ -30,6 +30,7 @@ bacula__default__directors:
     Description: "Some description here"
     DIRAddress: "0.0.0.0"
     DIRport: 9101
+    Password: changeme!
     Messages: "{{ bacula_messages_default }}"
     WorkingDirectory: "{{ bacula_root }}"
     PidDirectory: "{{ bacula_root + '/working/' }}"
