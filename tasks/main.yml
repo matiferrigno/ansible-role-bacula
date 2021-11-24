@@ -178,7 +178,9 @@
     mode: 0640
   vars:
     resource: "{{ item.resource }}"
-    resource_options: "{{ item.resource_options }}"
+    resource_options: "{{ item.resource_options | default([]) }}"
+    resource_raw_lines: "{{ item.resource_raw_lines | default([]) }}"
+    file_raw_lines: "{{ item.file_raw_lines | default([]) }}"
   loop:
     - resource: Console
       resource_options: "{{ bacula_consoles }}"
@@ -188,7 +190,7 @@
       dest: "config.d/clients.conf"
     - resource: Director
       resource_options: "{{ bacula_directors }}"
-      include_endline:
+      file_raw_lines:
         - "@{{ bacula_root }}/etc/config.d/console.conf"
         - "@{{ bacula_root }}/etc/config.d/clients.conf"
         - "@{{ bacula_root }}/etc/config.d/filesets.conf"

@@ -40,16 +40,13 @@
 {%  for opt in res | dict2items %}
 {{ proccess_opt(opt,2) }}
 {%  endfor %}
-{% for f in include_files | default([]) %}
-@{{ f }}
-{% endfor %}
-{% for l in include_line | default([]) %}
-{{ l }}
+{% for f in resource_raw_lines | default([]) %}
+{{ f }}
 {% endfor %}
 }
 
 {%  endfor %}
 
-{% for e in include_endline | default([]) %}
+{% for e in file_raw_lines | default([]) %}
 {{ e }}
 {% endfor %}
