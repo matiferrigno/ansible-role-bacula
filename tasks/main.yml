@@ -134,6 +134,15 @@
     - "{{ bacula_pools }}"
     - "{{ groups[bacula_clients_group] }}"
 
+- name: Get list of jobs defined on clients
+  set_fact:
+    clients_jobs: |
+      {{
+        clients_jobs | default([]) + hostvars[item][bacula_client_jobs_config]
+          if hostvars[item][bacula_client_jobs_config] | d()
+      }}
+    loop: "{{ groups[bacula_clients_group] }}"
+
 - name: Get list of jobs by clients
   set_fact:
     jobs: |
@@ -146,9 +155,9 @@
       {% for c in job_changes | dict2items %}
       {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
       {% endfor %}
-      {{ jobs | default([]) + hostvars[item[1]]['bacula_client_jobs']|default([]) + [ job ] }}
+      {{ jobs | default([]) + [ job ] }}
   with_nested:
-    - "{{ bacula_jobs }}"
+    - "{{ bacula_jobs + clients_jobs }}"
     - "{{ groups[bacula_clients_group] }}"
 
 - name: Update configs
