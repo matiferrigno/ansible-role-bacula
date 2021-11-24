@@ -157,7 +157,7 @@
       {% endfor %}
       {{ jobs | default([]) + [ job ] }}
   with_nested:
-    - "{{ bacula_jobs + clients_jobs }}"
+    - "{{ bacula_jobs }}"
     - "{{ groups[bacula_clients_group] }}"
 
 - name: Update configs
@@ -187,13 +187,13 @@
       resource_options: "{{ bacula_filesets }}"
       dest: "config.d/filesets.conf"
     - resource: Pool
-      resource_options: "{{ pools }}"
+      resource_options: "{{ pools | default([]) }}"
       dest: "config.d/pools.conf"
     - resource: Client
       resource_options: "{{ clients | default([]) if bacula__dynamic__clients else bacula_clients }}"
       dest: "config.d/clients.conf"
     - resource: Job
-      resource_options: "{{ jobs | default([]) if bacula__dynamic__jobs else bacula_jobs }}"
+      resource_options: "{{ jobs | default([]) + clients_jobs | default([]) if bacula__dynamic__jobs else clients_jobs | default([]) }}"
       dest: "config.d/jobs.conf"
     - resource: Director
       resource_options: "{{ bacula_directors }}"
