@@ -5,3 +5,8 @@
   systemd:
     name: bacula-dir
     state: restarted
+
+- name: configtest
+  shell: "./bacula-dir -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
