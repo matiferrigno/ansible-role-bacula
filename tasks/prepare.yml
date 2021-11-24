@@ -75,12 +75,28 @@
 - name: Transform list of jobs
   set_fact:
     jobs: |
-      {% set job = item[0] %}
+      {% set job = bacula__common__job | combine(item[0]) %}
       {% set cName = item[0].Name | replace('#client#', item[1]) if item[0].Name | d() else none %}
+      {% set cClient = item[0].Client | replace('#client#', item[1]) if item[0].Client | d() else none %}
+      {% set cPool = item[0].Pool | replace('#client#', item[1]) if item[0].Pool | d() else none %}
+      {% set cFullBackupPool = item[0].Full_Backup_Pool | replace('#client#', item[1]) if item[0].Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = item[0].Differential_Backup_Pool | replace('#client#', item[1]) if item[0].Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = item[0].Incremental_Backup_Pool | replace('#client#', item[1]) if item[0].Incremental_Backup_Pool | d() else none %}
       {% set cFileSet = item[0].FileSet | replace('#client#', item[1]) if item[0].FileSet | d() else none %}
       {% set cJobDefs = item[0].JobDefs | replace('#client#', item[1]) if item[0].JobDefs | d() else none %}
       {% set cSchedule = item[0].Schedule | replace('#client#', item[1]) if item[0].Schedule | d() else none %}
-      {% set job_changes = { 'Name': cName, 'FileSet': cFileSet, 'JobDefs': cJobDefs, 'Schedule': cSchedule } %}
+      {% set job_changes = {
+        'Name': cName,
+        'Client': cClient,
+        'FileSet': cFileSet,
+        'JobDefs': cJobDefs,
+        'Schedule': cSchedule,
+        'Pool': cPool,
+        'Full_Backup_Pool': cFullBackupPool,
+        'Differential_Backup_Pool': cDifferentialBackupPool,
+        'Incremental_Backup_Pool': cIncrementalBackupPool
+        }
+      %}
       {% for c in job_changes | dict2items %}
       {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
       {% endfor %}

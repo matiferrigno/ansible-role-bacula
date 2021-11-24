@@ -24,7 +24,7 @@ bacula_storage_var: bacula_storage
 bacula_storage_default: bacula-sd
 bacula_catalog_group: bacula-catalog
 bacula_catalog_var: bacula_catalog
-
+bacula_jobdefs_default: bacula-sd
 ###
 # Director
 ###
@@ -300,6 +300,13 @@ bacula_clients: |
 #    else job is applied on each client.
 #  - bacula__dyn__jobs dinamicly append bacula_client_jobs var on each client.
 #    Jobs in bacula_client_jobs only belongs to his owner.
+
+bacula__common__jobs:
+    Pool: #client#-Inc-Pool
+    Full_Backup_Pool: #client#-Full-Pool
+    Differential_Backup_Pool: #client#-Diff-Pool
+    Incremental_Backup_Pool: #client#-Inc-Pool
+    Client: #client#-fd
 
 bacula__default__jobs: []
 
