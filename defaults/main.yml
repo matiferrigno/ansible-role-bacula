@@ -14,11 +14,12 @@ bacula_install_client: yes
 bacula_root: /opt/bacula
 bacula_owner: bacula
 bacula_group: tape
-bacula_storage_default: bacula-sd
 
-bacula_clients_group: bacula-client
-bacula_client_config: 'bacula_client'
-bacula_client_jobs_config: 'bacula_client_jobs'
+bacula_client_group: 'bacula_client'
+bacula_client_jobs_var: 'bacula_client_jobs'
+bacula_storages_group: 'bacula_storage'
+bacula_storage_var: 'bacula_storage'
+bacula_storage_default: bacula-sd
 
 ###
 # Director
@@ -266,4 +267,24 @@ bacula_jobs: |
   {{
     bacula__default__jobs +
     bacula_jobs_custom | default([])
+  }}
+
+###
+# Storage
+###
+
+bacula__default__storages:
+  - Name: "bacula-sd"
+    Address: "127.0.0.1"
+    SDPort: 9103
+    Password: changeme!
+    Device: FileStorage-
+    Media_Type: File
+    Maximum_Concurrent_Jobs: 10
+
+bacula__dynamic__storages: True
+bacula_storages: |
+  {{
+    bacula__default__storages +
+    bacula_custom_storages | default([])
   }}
