@@ -1,10 +1,10 @@
 ---
 
 - name: Fetch binaries and install
-  include_tasks: install.yml
+  include_tasks: ./install.yml
 
 - name: Prepare configuration
-  include_tasks: prepare.yml
+  include_tasks: ./prepare.yml
 
 - name: Update configs on server
   template:
