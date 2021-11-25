@@ -112,7 +112,7 @@
 - name: Change permissions on /var/log/bacula/
   ansible.builtin.file:
     src: "{{ bacula_root }}/log"
-    dest: "/var/log/bacula/"
+    dest: "/var/log/bacula"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: link
