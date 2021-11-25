@@ -108,6 +108,3 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: directory
-
-- name: Change permissions on /var/log/bacula/
-  ansible.builtin.shell: "chown {{"
