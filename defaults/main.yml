@@ -134,9 +134,9 @@ bacula__default__messages:
     Operatorcommand: "/usr/sbin/bsmtp -h {{ bacula_messages_relay }} -f {{ bacula_messages_from }} -s '{{ bacula_message_operator_subject }}' %r"
     Mail: "{{ bacula_messages_rcpt }} = error, warning, !skipped, !terminate, !restored"
     Append:
-      - "'/var/log/bacula/info.log' = info, terminate"
-      - "'/var/log/bacula/error_warning.log' = error, warning, !terminate, notsaved"
-      - "'/var/log/bacula/all.log' = all"
+      - "'{{ bacula_root }}/log/info.log' = info, terminate"
+      - "'{{ bacula_root }}/log/error_warning.log' = error, warning, !terminate, notsaved"
+      - "'{{ bacula_root }}/log/all.log' = all"
     Operator: "{{ bacula_messages_rcpt }} = mount"
     Console: "error, warning, !terminate"
     Syslog: all
