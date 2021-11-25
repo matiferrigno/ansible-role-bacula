@@ -70,7 +70,7 @@
             else dyn_jobs | default([])
       %}
       {% for i in aux %}
-      {% set j = i | cobine(bacula__common__jobs,i) %}
+      {% set j = i | combine(bacula__common__jobs,i) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
       {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
       {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
