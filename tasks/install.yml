@@ -108,3 +108,10 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: directory
+
+- name: Create directory /var/log/bacula/
+  ansible.builtin.file:
+    dest: "/var/log/bacula/"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: directory
