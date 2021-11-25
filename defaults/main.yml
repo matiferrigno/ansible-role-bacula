@@ -57,7 +57,7 @@ bacula__default__catalogs:
     dbname: bacula
     user: baculausr
     password: "{{ bacula_catalog_default_password | default('changeme!') }}"
-    DB_Address: localhost
+    DB_Address: 127.0.0.1
     DB_Port: 3306
 
 bacula_catalogs: |
