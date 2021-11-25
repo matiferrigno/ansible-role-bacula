@@ -65,7 +65,7 @@
 - name: Fetch jobs defined on each client and tranform
   set_fact:
     dyn_jobs: |
-      {% res = [] %}
+      {% set res = [] %}
       {% for i in hostvars[item][bacula_client_jobs_var] | default([]) %}
       {% set j = i | combine(bacula__common__jobs,i) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
