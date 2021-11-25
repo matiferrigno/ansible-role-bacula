@@ -64,7 +64,7 @@
     - resource: Pool
       resource_options: "{{ pools | default([]) }}"
       dest: "config.d/pools.conf"
-  register: results
+  register: res
   notify:
   - configtest
 
@@ -73,4 +73,4 @@
     path: "{{ item.backup_file }}"
     state: absent
   when: not (bacula_keep_file_backup | default(false)) and item.backup_file | d()
-  loop: "{{ results }}"
+  loop: "{{ res.results }}"
