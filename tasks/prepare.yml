@@ -65,6 +65,7 @@
 - name: Fetch jobs defined on each client and tranform
   set_fact:
     dyn_jobs: |
+      {% res = [] %}
       {% for i in hostvars[item][bacula_client_jobs_var] | default([]) %}
       {% set j = i | combine(bacula__common__jobs,i) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
@@ -91,8 +92,9 @@
       {% for c in job_changes | dict2items %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
+      {% res.append([j]) %}
       {% endfor %}
-      {{ dyn_jobs | default([]) + [ j ] }}
+      {{ res }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Transform list of jobs
