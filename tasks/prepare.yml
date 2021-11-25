@@ -89,7 +89,7 @@
         }
       %}
       {% for c in job_changes | dict2items %}
-      {% if (j.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
+      {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
       {% endfor %}
       {{ dyn_jobs | default([]) + [ j ] }}
