@@ -92,9 +92,9 @@
       {% for c in job_changes | dict2items %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
-      {% if res.append([j]) %} {% endif %}
+      {% if res.append(j) %} {% endif %}
       {% endfor %}
-      {{ res }}
+      {{ dyn_jobs | default([]) + res }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Transform list of jobs
