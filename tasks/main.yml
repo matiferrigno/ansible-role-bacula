@@ -72,7 +72,7 @@
 
 - name: Clean file backups
   file:
-    path: "{{ item }}"
+    path: "{{ item.backup_file }}"
     state: absent
-  loop: "{{ results.backup_file }}"
-  when: not (bacula_keep_file_backup | default(false))
+  when: not (bacula_keep_file_backup | default(false)) and item.backup_file | d()
+  loop: "{{ results }}"
