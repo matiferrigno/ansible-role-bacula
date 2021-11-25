@@ -68,6 +68,8 @@
   notify:
   - configtest
 
+- debug: msg="{{ results }}"
+
 - name: Clean file backups
   file:
     path: "{{ item }}"
