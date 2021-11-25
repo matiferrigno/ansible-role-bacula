@@ -69,7 +69,8 @@
           if hostvars[item][bacula_client_jobs_var] | d()
             else dyn_jobs | default([])
       %}
-      {% for j in aux | map('combine',bacula__common__jobs,aux) %}
+      {% for i in aux %}
+      {% set j = i | combine(bacula__common__jobs,j) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
       {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
       {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
