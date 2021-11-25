@@ -302,6 +302,7 @@ bacula_clients: |
 #    Jobs in bacula_client_jobs only belongs to his owner.
 
 bacula__common__jobs:
+  Name: "Backup_#client#"
   Pool: "#client#-Inc-Pool"
   Full_Backup_Pool: "#client#-Full-Pool"
   Differential_Backup_Pool: "#client#-Diff-Pool"
