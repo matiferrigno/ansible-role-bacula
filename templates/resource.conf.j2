@@ -5,13 +5,13 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% include './templates/macros.j2' %}
+{% import "./templates/macros.j2" as macro %}
 
 {%  for res in resource_options | default([]) -%}
 {{ resource }} {
 
 {%  for opt in res | dict2items %}
-{{ proccess_opt(opt,2) }}
+{{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 {% for f in resource_raw_lines | default([]) %}
 {{ f }}

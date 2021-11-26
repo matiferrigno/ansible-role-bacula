@@ -5,12 +5,12 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-{% include './templates/macros.j2' %}
+{% import "./templates/macros.j2" as macro %}
 
 {%  for dir in Directors | default([]) -%}
 Director {
 {%  for opt in dir | dict2items %}
-{{ proccess_opt(opt,2) }}
+{{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
 {%  endfor %}
@@ -18,7 +18,7 @@ Director {
 {%  for fd in FileDaemon | default([]) -%}
 FileDaemon {
 {%  for opt in fd | dict2items %}
-{{ proccess_opt(opt,2) }}
+{{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
 {%  endfor %}
