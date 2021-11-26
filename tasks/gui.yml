@@ -11,8 +11,8 @@
     state: present
     filename: baculum
   loop:
-    - "deb [ arch=amd64 ] https://www.bacula.org/downloads/baculum/stable{{ '-11' if bacula_version | regex_search("^11\..*") }}/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
-    - "deb-src https://www.bacula.org/downloads/baculum/stable{{ '-11' if bacula_version | regex_search("^11\..*") }}/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
+    - "deb [ arch=amd64 ] https://www.bacula.org/downloads/baculum/stable{{ '-11' if bacula_version | regex_search('^11\\..*') }}/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
+    - "deb-src https://www.bacula.org/downloads/baculum/stable{{ '-11' if bacula_version | regex_search('^11\\..*') }}/{{ ansible_distribution | lower }} {{ distribution_release | lower }} main"
 
 - name: Install dependencies
   apt:
