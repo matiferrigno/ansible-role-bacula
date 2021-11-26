@@ -27,7 +27,8 @@ bacula_catalog_group: bacula-catalog
 bacula_catalog_var: bacula_catalog
 bacula_jobdefs_default: bacula-sd
 bacula_director_default: bacula-dir
-bacula_filedaemon_var: bacula_filedaemon
+bacula_filedaemon_var: bacula_fd_filedaemon
+bacula_filedaemon_director_var: bacula_fd_director
 ###
 # Director
 ###
@@ -49,6 +50,12 @@ bacula_director: |
     bacula__default__directors
     | combine(bacula_custom_directors | default({}))
   }}
+
+bacula__default__filedaemon_director:
+  Name: "{{ bacula__default__directors.Name }}"
+  Description: "{{ bacula__default__directors.Description }}"
+  Password: "changeme!"
+
 
 ###
 # Catalog
