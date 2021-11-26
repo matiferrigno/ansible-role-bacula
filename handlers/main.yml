@@ -11,3 +11,10 @@
   args:
     chdir: "{{ bacula_root }}/bin"
   changed_when: false
+
+
+- name: bacula-fd configtest
+  shell: "./bacula-fd -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
+  changed_when: false
