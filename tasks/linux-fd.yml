@@ -20,9 +20,9 @@
   when: tempfile_1.path is defined
   delegate_to: localhost
 
-- name: Getting bacula-client filename from Package file
-  ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*bacula-client.*\\.deb'"
-  register: filename
+- name: Getting filenames from Package file
+  ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*bacula-(client|common).*\\.deb'"
+  register: filenames
   when: tempfile_1.path is defined
   delegate_to: localhost
 
@@ -40,13 +40,13 @@
   when: tempfile_1.path is defined
   delegate_to: localhost
 
-- name: Fetching deb package bacula-client
+- name: Fetching deb packages
   ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
     dest: "files/debs/{{ item | basename }}"
-  loop: "{{ filename.stdout_lines }}"
-  when: filename.rc == 0
+  loop: "{{ filenames.stdout_lines }}"
+  when: filenames.rc == 0
   delegate_to: localhost
 
 - name: Create temporary directory
@@ -60,11 +60,15 @@
     src: "files/debs/{{ item | basename }}"
     dest: "{{ tempdir_1.path }}/{{ item | basename }}"
     mode: '0755'
-  loop: "{{ filename.stdout_lines }}"
-  when: filename.rc == 0 and tempdir_1.path is defined
+  loop: "{{ filenames.stdout_lines }}"
+  when: filenames.rc == 0 and tempdir_1.path is defined
+
+- name: Install bacula-common
+  apt:
+    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-common.*\\.deb') | first | basename }}"
+  when: filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Install bacula-client
   apt:
-    deb: "{{ tempdir_1.path }}/{{ filename.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
-  when: filename.rc == 0 and tempdir_1.path is defined
-
+    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
+  when: filenames.rc == 0 and tempdir_1.path is defined
