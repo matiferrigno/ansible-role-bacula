@@ -45,8 +45,8 @@
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
     dest: "files/debs/{{ item | basename }}"
-  loop: "{{ filenames.stdout_lines }}"
-  when: filenames.rc == 0
+  loop: "{{ filename.stdout_lines }}"
+  when: filename.rc == 0
   delegate_to: localhost
 
 - name: Create temporary directory
@@ -61,13 +61,13 @@
     src: "files/debs/{{ item | basename }}"
     dest: "{{ tempdir_1.path }}/{{ item | basename }}"
     mode: '0755'
-  loop: "{{ filenames.stdout_lines }}"
-  when: filenames.rc == 0 and tempdir_1.path is defined
+  loop: "{{ filename.stdout_lines }}"
+  when: filename.rc == 0 and tempdir_1.path is defined
   delegate_to: "{{ delegate }}"
 
 - name: Install bacula-client
   apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
-  when: filenames.rc == 0 and tempdir_1.path is defined
+    deb: "{{ tempdir_1.path }}/{{ filename.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
+  when: filename.rc == 0 and tempdir_1.path is defined
   delegate_to: "{{ delegate }}"
 
