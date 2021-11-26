@@ -81,7 +81,7 @@ bacula_catalogs: |
 # Console
 ###
 bacula__default__consoles:
-  - Name:
+  - Name: bacula-console
     Password: changeme!
 
 bacula_consoles: |
