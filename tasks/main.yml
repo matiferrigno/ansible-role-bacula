@@ -3,6 +3,7 @@
 - name: Fetch binaries and install
   include_tasks: install.yml
 
+
 - name: Prepare configuration
   include_tasks: prepare.yml
 
@@ -30,7 +31,7 @@
       resource_options: "{{ bacula_clients | default([]) + dyn_clients | default([]) if bacula__dynamic__clients else bacula_clients | default([]) }}"
       dest: "config.d/clients.conf"
     - resource: Director
-      resource_options: "{{ bacula_directors }}"
+      resource_options: "{{ [ bacula_director ] }}"
       file_raw_lines:
         - "@{{ bacula_root }}/etc/config.d/catalog.conf"
         - "@{{ bacula_root }}/etc/config.d/console.conf"
@@ -74,3 +75,28 @@
     state: absent
   when: not (bacula_keep_file_backup | default(false)) and item.backup_file | d()
   loop: "{{ res.results }}"
+
+- name: Install bacula-client
+  include_tasks: linux-fd.yml
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
+  delegate_to: "{{ item }}"
+  loop: "{{ group[bacula_client_group] }}"
+
+- name: Update config on client
+  template:
+    src: bacula-fd.conf.j2
+    dest: "{{ bacula_root }}/etc/bacula-fd.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  vars:
+    Directors:
+      - Name: "{{ bacula_director }}"
+        Password: "{{ bacula_director.Password }}"
+      - Name: "bacula-dir-mon"
+        Password: "{{ bacula_mon_password | default('changeme!') }}"
+        Monitor: "yes"
+    FileDaemon: "{{ [ bacula__common__filedaemon | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
+    Messages: "{{ [ bacula__common__messages | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
+  delegate_to: "{{ item }}"
+  loop: "{{ group[bacula_client_group] }}"

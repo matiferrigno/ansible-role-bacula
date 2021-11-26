@@ -78,15 +78,10 @@
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-aligned.*\\.deb') | first | basename }}"
   when: bacula_install_aligned and filenames.rc == 0 and tempdir_1.path is defined
 
-- name: Install bacula-client
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
-  when: bacula_install_client and filenames.rc == 0 and tempdir_1.path is defined
-
 - name: Install bacula
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-'+bacula_database_engine+'.*\\.deb') | first | basename }}"
-  when: filenames.rc == 0 and tempdir_1.path is defined
+  when: bacula_install_database and filenames.rc == 0 and tempdir_1.path is defined
 
 - name: Remove the temporary directory
   ansible.builtin.file:
