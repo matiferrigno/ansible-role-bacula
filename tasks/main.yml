@@ -3,6 +3,10 @@
 - name: Fetch binaries and install
   include_tasks: install.yml
 
+- name: Install Baculum
+  include_tasks: gui.yml
+  when: bacula_install_gui
+
 - name: Prepare configuration
   include_tasks: prepare.yml
 
