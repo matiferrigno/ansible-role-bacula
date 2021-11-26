@@ -1,7 +1,7 @@
 ---
 
 - set_fact:
-    base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64"
+    base_url: "{{ bacula_download_url }}/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ bacula_architecture | default('amd64') }}"
 
 - name: Create temporary file
   ansible.builtin.tempfile:
@@ -13,7 +13,7 @@
 # https://www.bacula.org/bacula-binary-package-download/
 - name: Fetch Packages file
   ansible.builtin.get_url:
-    url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
+    url: "{{ base_url }}/dists/{{ bacula_distribution_release | default(ansible_distribution_release) }}/main/binary-{{ bacula_architecture | default('amd64') }}/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
     force: yes
