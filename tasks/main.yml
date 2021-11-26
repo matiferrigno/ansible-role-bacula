@@ -3,7 +3,6 @@
 - name: Fetch binaries and install
   include_tasks: install.yml
 
-
 - name: Prepare configuration
   include_tasks: prepare.yml
 
