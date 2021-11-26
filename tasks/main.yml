@@ -81,7 +81,7 @@
   vars:
     delegate: "{{ item }}"
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
-  loop: "{{ group[bacula_client_group] }}"
+  loop: "{{ groups[bacula_client_group] }}"
 
 - name: Update config on client
   template:
@@ -100,4 +100,4 @@
     FileDaemon: "{{ [ bacula__common__filedaemon | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
     Messages: "{{ [ bacula__common__messages | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
   delegate_to: "{{ item }}"
-  loop: "{{ group[bacula_client_group] }}"
+  loop: "{{ groups[bacula_client_group] }}"
