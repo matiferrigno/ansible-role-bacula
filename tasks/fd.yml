@@ -13,8 +13,7 @@
     mode: 0640
   vars:
     Directors:
-      - Name: "{{ bacula_director }}"
-        Password: "{{ bacula_director.Password }}"
+      - "{{ bacula_director }}"
       - Name: "bacula-dir-mon"
         Password: "{{ bacula_mon_password | default('changeme!') }}"
         Monitor: "yes"
