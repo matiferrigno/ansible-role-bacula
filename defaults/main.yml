@@ -358,7 +358,7 @@ bacula__common__filedaemon:
   FDAddress: |
     "{{
       hostvars[inventory_hostname][bacula_filedaemon_director_var].address
-        | default(ansible_default_ipv4)
+        | default(ansible_default_ipv4.address)
     }}"
   WorkingDirectory: "{{ bacula_root }}/"
   Pid_Directory: "{{ bacula_root }}/working/"
