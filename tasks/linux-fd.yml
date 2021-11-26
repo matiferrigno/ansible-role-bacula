@@ -54,6 +54,7 @@
     state: directory
     suffix: bacula
   register: tempdir_1
+  delegate_to: "{{ delegate }}"
 
 - name: Copy bacula-client.deb to server
   ansible.builtin.copy:
@@ -62,9 +63,11 @@
     mode: '0755'
   loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0 and tempdir_1.path is defined
+  delegate_to: "{{ delegate }}"
 
 - name: Install bacula-client
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
   when: filenames.rc == 0 and tempdir_1.path is defined
+  delegate_to: "{{ delegate }}"
 

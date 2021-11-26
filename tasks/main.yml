@@ -78,8 +78,9 @@
 
 - name: Install bacula-client
   include_tasks: linux-fd.yml
+  vars:
+    delegate: "{{ item }}"
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
-  delegate_to: "{{ item }}"
   loop: "{{ group[bacula_client_group] }}"
 
 - name: Update config on client
