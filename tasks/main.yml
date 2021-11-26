@@ -26,6 +26,9 @@
     - resource: Console
       resource_options: "{{ bacula_consoles }}"
       dest: "config.d/console.conf"
+    - resource: Director
+      resource_options: "{{ bacula_bconsole }}"
+      dest: "bconsole.conf"
     - resource: Client
       resource_options: "{{ bacula_clients | default([]) + dyn_clients | default([]) if bacula__dynamic__clients else bacula_clients | default([]) }}"
       dest: "config.d/clients.conf"

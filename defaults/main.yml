@@ -81,7 +81,7 @@ bacula_catalogs: |
 # Console
 ###
 bacula__default__consoles:
-  - Name: default
+  - Name:
     Password: changeme!
 
 bacula_consoles: |
@@ -360,3 +360,12 @@ bacula__common__filedaemon:
   Pid_Directory: "{{ bacula_root }}/working/"
   Maximum_Concurrent_Jobs: 20
   Plugin_Directory: "{{ bacula_root }}/plugins/"
+
+###
+# BConsole
+###
+bacula_bconsole:
+  Name: "{{ bacula_director_default }}"
+  DIRport: 9101
+  address: "127.0.0.1"
+  Password: "changeme!"
