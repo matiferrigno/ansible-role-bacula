@@ -75,29 +75,3 @@
     state: absent
   when: not (bacula_keep_file_backup | default(false)) and item.backup_file | d()
   loop: "{{ res.results }}"
-
-- name: Install bacula-client
-  include_tasks: linux-fd.yml
-  vars:
-    delegate: "{{ item }}"
-  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
-  loop: "{{ groups[bacula_client_group] }}"
-
-- name: Update config on client
-  template:
-    src: bacula-fd.conf.j2
-    dest: "{{ bacula_root }}/etc/bacula-fd.conf"
-    owner: "{{ bacula_owner }}"
-    group: "{{ bacula_group }}"
-    mode: 0640
-  vars:
-    Directors:
-      - Name: "{{ bacula_director }}"
-        Password: "{{ bacula_director.Password }}"
-      - Name: "bacula-dir-mon"
-        Password: "{{ bacula_mon_password | default('changeme!') }}"
-        Monitor: "yes"
-    FileDaemon: "{{ [ bacula__common__filedaemon | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
-    Messages: "{{ [ bacula__common__messages | combine(hostvars[item][bacula_filedaemon_var]|default({})) ] }}"
-  delegate_to: "{{ item }}"
-  loop: "{{ groups[bacula_client_group] }}"
