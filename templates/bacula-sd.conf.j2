@@ -7,25 +7,25 @@
 
 {% import "./templates/macros.j2" as macro %}
 
-{%  for dir in Directors | default([]) -%}
+Storage {
+{%  for opt in Storage | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+}
+
+{%  for dir in Director | default([]) -%}
 Director {
 {%  for opt in dir | dict2items %}
 {{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
-
 {%  endfor %}
-
-FileDaemon {
-{%  for opt in FileDaemon | dict2items %}
-{{ macro.proccess_opt(opt,2) }}
-{%  endfor %}
-}
 
 Messages {
   Name = Standard
   director = {{ bacula_director_default }} = all, !skipped, !restored
 }
+
 
 {% for e in file_raw_lines | default([]) %}
 {{ e }}

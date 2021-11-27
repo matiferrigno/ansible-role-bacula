@@ -17,7 +17,6 @@
       - Name: "bacula-dir-mon"
         Password: "{{ bacula_mon_password | default('changeme!') }}"
         Monitor: "yes"
-    FileDaemon: "{{ [ bacula__common__filedaemon | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) ] }}"
-    Messages: "{{ [ bacula__common__messages | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) ] }}"
+    FileDaemon: "{{ bacula__common__filedaemon | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) }}"
   notify:
     - bacula-fd configtest

@@ -1,0 +1,26 @@
+---
+
+###
+# Schedules
+###
+bacula__default__schedules:
+  - name: DailyFI-Weekly
+    run:
+      - "Level=Full sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+  - name: DailyFDI-Biweekly
+    run:
+      - "Level=Full 1st,3rd sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Differential 2nd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+  - name: DailyFDI-Monthly
+    run:
+      - "Level=Full 1st sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Differential 2nd,3rd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+
+bacula_schedules: |
+  {{
+    bacula__default__schedules +
+    bacula_schedules_custom | default([])
+  }}

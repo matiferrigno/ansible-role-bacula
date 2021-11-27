@@ -1,0 +1,47 @@
+---
+
+
+###
+# Pools
+###
+
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Only Name and LabelFormat is being evaluated.
+
+bacula__default__pools:
+  - Name: "#client#-Full-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 15day
+    Maximum_Volume_Jobs: 3
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Full-"
+  - Name: "#client#-Diff-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 15day
+    Maximum_Volume_Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Diff-"
+  - Name: "#client#-Inc-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 15day
+    Maximum Volume Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Inc-"
+
+bacula_pools: |
+  {{
+    bacula__default__pools +
+    bacula_pools_custom | default([])
+  }}

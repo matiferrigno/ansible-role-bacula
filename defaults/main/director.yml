@@ -1,0 +1,39 @@
+---
+
+###
+# Director
+###
+bacula__default__directors:
+  Name: bacula-dir
+  Description: "Some description here"
+  DIRAddress: 0.0.0.0
+  DIRport: 9101
+  Password: changeme!
+  Messages: "{{ bacula_messages_default }}"
+  WorkingDirectory: "{{ bacula_root }}"
+  PidDirectory: "{{ bacula_root + '/working/' }}"
+  Heartbeat_Interval: 60
+  Maximum_Concurrent_Jobs: 50
+  QueryFile: "{{ bacula_root + '/scripts/query.sql' }}"
+
+bacula_director: |
+  {{
+    bacula__default__directors
+    | combine(bacula_custom_directors | default({}))
+  }}
+
+bacula__default__storages:
+  - Name: bacula-sd
+    Address: 127.0.0.1
+    SDPort: 9103
+    Password: changeme!
+    Device: FileStorage-
+    Media_Type: File
+    Maximum_Concurrent_Jobs: 10
+
+bacula__dynamic__storages: yes
+bacula_storages: |
+  {{
+    bacula__default__storages +
+    bacula_custom_storages | default([])
+  }}

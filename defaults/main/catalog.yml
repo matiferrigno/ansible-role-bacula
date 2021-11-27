@@ -1,0 +1,20 @@
+---
+
+###
+# Catalog
+###
+bacula_catalog_default: bacula-catalog
+bacula__dynamic__catalogs: yes
+bacula__default__catalogs:
+  - Name: bacula-catalog
+    dbname: bacula
+    user: baculausr
+    password: "{{ bacula_catalog_default_password | default('changeme!') }}"
+    DB_Address: 127.0.0.1
+    DB_Port: 3306
+
+bacula_catalogs: |
+  {{
+    bacula__default__catalogs +
+    bacula_custom_catalogs | default([])
+  }}

@@ -1,0 +1,33 @@
+---
+
+###
+# Storage
+###
+
+bacula__default__storages:
+  - Name: bacula-sd
+    Address: 127.0.0.1
+    SDPort: 9103
+    Password: changeme!
+    Device: FileStorage-
+    Media_Type: File
+    Maximum_Concurrent_Jobs: 10
+
+bacula__dynamic__storages: yes
+bacula_storages: |
+  {{
+    bacula__default__storages +
+    bacula_custom_storages | default([])
+  }}
+
+bacula__common__storage:
+  - Name: bacula-sd
+    SDAddress: |
+      {{
+        hostvars[inventory_hostname][bacula_filedaemon_director_var].address
+          | default(ansible_default_ipv4.address)
+      }}
+    WorkingDirectory: "{{ bacula_root }}/"
+    Pid_Directory: "{{ bacula_root }}/working/"
+    Maximum_Concurrent_Jobs: 20
+    Plugin_Directory: "{{ bacula_root }}/plugins/"

@@ -1,0 +1,23 @@
+---
+
+###
+# Console
+###
+bacula__default__consoles:
+  - Name: bacula-console
+    Password: changeme!
+
+bacula_consoles: |
+  {{
+    bacula__default__consoles +
+    bacula_custom_consoles | default([])
+  }}
+
+###
+# BConsole
+###
+bacula_bconsole:
+  Name: "{{ bacula_director_default }}"
+  DIRport: 9101
+  address: 127.0.0.1
+  Password: "changeme!"

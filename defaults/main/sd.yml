@@ -1,0 +1,6 @@
+---
+
+bacula__default__storage_director:
+  Name: "{{ bacula__default__directors.Name }}"
+  Description: "{{ bacula__default__directors.Description }}"
+  Password: "changeme!"

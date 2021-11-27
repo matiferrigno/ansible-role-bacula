@@ -1,0 +1,34 @@
+---
+
+###
+# Jobs
+###
+
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Notes:
+#  - Only Name, FileSet, JobDefs, Schedule is being evaluated.
+#  - If no tag #client# found within the name the job is considerated isolated.
+#    else job is applied on each client.
+#  - bacula__dyn__jobs dinamicly append bacula_client_jobs var on each client.
+#    Jobs in bacula_client_jobs only belongs to his owner.
+
+bacula__common__jobs:
+  Name: "Backup_#client#"
+  Pool: "#client#-Inc-Pool"
+  Full_Backup_Pool: "#client#-Full-Pool"
+  Differential_Backup_Pool: "#client#-Diff-Pool"
+  Incremental_Backup_Pool: "#client#-Inc-Pool"
+  Client: "#client#-fd"
+
+bacula__default__jobs: []
+
+bacula__dynamic__jobs: yes
+
+bacula_jobs: |
+  {{
+    bacula__default__jobs +
+    bacula_jobs_custom | default([])
+  }}
