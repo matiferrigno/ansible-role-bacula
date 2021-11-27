@@ -357,10 +357,10 @@ bacula__common__filedaemon:
   Name: "{{ inventory_hostname }}-fd"
   FDPort: 9102
   FDAddress: |
-    "{{
+    {{
       hostvars[inventory_hostname][bacula_filedaemon_director_var].address
         | default(ansible_default_ipv4.address)
-    }}"
+    }}
   WorkingDirectory: "{{ bacula_root }}/"
   Pid_Directory: "{{ bacula_root }}/working/"
   Maximum_Concurrent_Jobs: 20
@@ -372,5 +372,5 @@ bacula__common__filedaemon:
 bacula_bconsole:
   Name: "{{ bacula_director_default }}"
   DIRport: 9101
-  address: "127.0.0.1"
+  address: 127.0.0.1
   Password: "changeme!"
