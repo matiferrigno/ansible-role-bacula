@@ -4,7 +4,7 @@
   include_tasks: install/director.yml
 
 - name: Install Baculum
-  include_tasks: gui.yml
+  include_tasks: install/gui.yml
   when: bacula_install_gui
 
 - name: Prepare configuration
