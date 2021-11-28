@@ -70,7 +70,6 @@
       {% set changes = False %}
       {% for c in storage_changes | dict2items %}
       {% if (sto.update({ c.key: c.value }) if c.value is not none else sto) %}
-      {% if (changes.update(True) %} {% endif %}
       {% endif %}
       {% endfor %}
       {{ storages | default([]) + [ sto ] }}
