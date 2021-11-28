@@ -23,6 +23,7 @@ bacula_client_filesets_var: bacula_filesets
 bacula_client_jobs_var: bacula_client_jobs
 bacula_storage_group: bacula-storage
 bacula_storage_var: bacula_storage
+bacula_storage_directors_var: bacula_storage_directors
 bacula__default__storage_director: bacula_storage_directors
 bacula_storage_default: bacula-sd
 bacula_catalog_group: bacula-catalog
