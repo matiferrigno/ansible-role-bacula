@@ -58,11 +58,11 @@
 - name: Transform list of storages
   set_fact:
     storages: |
-      {% set res = [] %}
-      {% for i in hostvars[item]['bacula_storages'] | default([]) %}
+      {% set sto = bacula__common__storage | combine(item[0]) %}
+      {% for i in hostvars[item[1]]['bacula_storages'] | default([]) %}
       {% set s = i | combine(bacula__common__storage,i) %}
-      {% set cName = s.Name | replace('#client#', item) if s.Name | d() else none %}
-      {% set cDevice = s.Device | replace('#client#', item) if s.Device | d() else none %}
+      {% set cName = s.Name | replace('#client#', item[1]) if s.Name | d() else none %}
+      {% set cDevice = s.Device | replace('#client#', item[1]) if s.Device | d() else none %}
       {% set storage_changes = {
         'Name': cName,
         'Device': cDevice
@@ -74,7 +74,9 @@
       {% if res.append(s) %} {% endif %}
       {% endfor %}
       {{ dyn_storages | default([]) + res }}
-  loop: "{{ groups[bacula_client_group] | default([]) }}"
+  with_nested:
+    - "{{ bacula_storages | default([]) }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch catalogs on group "{{ bacula_catalog_group }}"
   set_fact:
