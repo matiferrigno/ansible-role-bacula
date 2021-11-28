@@ -45,8 +45,6 @@ schedule_DailyFDI_Monthly: |
   {% set runs = [ "Level=Full 1st sun at ", "Level=Differential 2nd,3rd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
   {% for h in range(24) %}
   {% for m in ['00','30'] %}
-  {% for r in runs %}
-  {% endfor %}
   {% if res.append({ 'name': 'DailyFDI-Monthly-'+h|string+m, 'run': r + h|string+':'+m }) %}
   {% endif %}
   {% endfor %}
