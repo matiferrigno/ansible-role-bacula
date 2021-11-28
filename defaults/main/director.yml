@@ -22,17 +22,29 @@ bacula_director: |
     | combine(bacula_custom_directors | default({}))
   }}
 
-bacula__default__storages:
+###
+# Storage
+###
+
+bacula__default__director_storages:
   - Name: bacula-sd
     Address: 127.0.0.1
     SDPort: 9103
     Password: changeme!
-    Device: FileStorage-
+    Device: "FileStorage-#client#"
     Media_Type: File
     Maximum_Concurrent_Jobs: 10
 
-bacula__dynamic__storages: yes
-bacula_storages: |
+bacula__dynamic__director_storages: yes
+
+bacula__common__director_storage:
+  Address: 127.0.0.1
+  SDPort: 9103
+  Password: changeme!
+  Media_Type: File
+  Maximum_Concurrent_Jobs: 10
+
+bacula_director_storages: |
   {{
     bacula__default__storages +
     bacula_custom_storages | default([])
