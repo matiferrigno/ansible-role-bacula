@@ -49,3 +49,335 @@ bacula_director_storages: |
     bacula__default__director_storages +
     bacula_custom_storages | default([])
   }}
+
+###
+# Catalog
+###
+bacula_catalog_default: bacula-catalog
+bacula__dynamic__catalogs: yes
+bacula__default__catalogs:
+  - Name: bacula-catalog
+    dbname: bacula
+    user: baculausr
+    password: "{{ bacula_catalog_default_password | default('changeme!') }}"
+    DB_Address: 127.0.0.1
+    DB_Port: 3306
+
+bacula_catalogs: |
+  {{
+    bacula__default__catalogs +
+    bacula_custom_catalogs | default([])
+  }}
+
+###
+# Clients
+###
+# Tags "#client#" will be replaced with client's name.
+# Tags "#client_fqdn#" will be replaced with client's fqdn.
+bacula__common__clients:
+  Name: "#client#-fd"
+  Address: "#client_address#"
+  FDPort: 9102
+  AutoPrune: yes
+  Maximum_Concurrent_Jobs: 3
+  Password: changeme!
+  Catalog: bacula-catalog
+
+
+bacula__default__clients: []
+bacula__dynamic__clients: yes
+bacula_clients: |
+  {{
+    bacula__default__clients +
+    bacula_custom_clients | default([])
+  }}
+
+###
+# Schedules
+###
+
+schedule_DailyVI_Weekly: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull sun at ", "Level=Incremental mon-sat at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'DailyVI-Weekly-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_DailyVDI_Biweekly: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull 1st,3rd sun at ", "Level=Differential 2nd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'DailyVDI-Biweekly-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_DailyVDI_Monthly: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull 1st sun at ", "Level=Differential 2nd,3rd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'DailyVDI-Monthly-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+bacula__default__schedules: "{{ schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly }}"
+
+bacula_schedules: |
+  {{
+    bacula__default__schedules +
+    bacula_schedules_custom | default([])
+  }}
+
+###
+# Console
+###
+bacula__default__consoles:
+  - Name: bacula-console
+    Password: changeme!
+
+bacula_consoles: |
+  {{
+    bacula__default__consoles +
+    bacula_custom_consoles | default([])
+  }}
+
+###
+# BConsole
+###
+bacula_bconsole:
+  Name: "{{ bacula_director_default }}"
+  DIRport: 9101
+  address: 127.0.0.1
+  Password: "changeme!"
+
+###
+# FileSets
+###
+bacula__common__filesets:
+  Include:
+    Options:
+      signature: MD5
+      compression: GZIP6
+
+bacula__default__filesets:
+  - Name: default-linux-fs
+    Include:
+      Options:
+        signature: MD5
+        compression: GZIP6
+      File:
+        - /etc
+        - /home
+        - /root
+        - /var/backups
+    Exclude:
+      File:
+        - /proc
+        - /tmp
+        - /.journal
+        - /.fsck
+  - Name: default-windows-fs
+    Include:
+      Options:
+        signature: MD5
+        compression: GZIP6
+      File:
+        - "\\Users"
+        - "\\ProgramData"
+    Exclude: {}
+
+bacula__dynamic__filesets: yes
+bacula_filesets: |
+  {{
+    bacula__default__filesets +
+    bacula_filesets_custom | default([])
+  }}
+
+###
+# JobDefs
+###
+bacula__default__jobdefs:
+  - Name: DefaultWindowsJob
+    Type: Backup
+    Level: Incremental
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: default-windows-fs
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
+    Prefer_Mounted_Volumes: no
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Messages: "{{ bacula_messages_default }}"
+    SpoolAttributes: yes
+    Prune_Files: yes
+    Prune_Jobs: yes
+    Prune_Volumes: yes
+    Priority: 10
+  - Name: DefaultLinuxJob
+    Type: Backup
+    Level: Incremental
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: default-linux-fs
+    Max_Wait_Time: "{{ bacula_jobdef_maximum_wait_time | default(3600) }}"
+    Prefer_Mounted_Volumes: no
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Messages: "{{ bacula_messages_default }}"
+    SpoolAttributes: yes
+    Prune_Files: yes
+    Prune_Jobs: yes
+    Prune_Volumes: yes
+    Priority: 10
+
+bacula_jobdefs: |
+  {{
+    bacula__default__jobdefs +
+    bacula_jobdefs_custom | default([])
+  }}
+
+###
+# Jobs
+###
+
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Notes:
+#  - Only Name, FileSet, JobDefs, Schedule is being evaluated.
+#  - If no tag #client# found within the name the job is considerated isolated.
+#    else job is applied on each client.
+#  - bacula__dyn__jobs dinamicly append bacula_client_jobs var on each client.
+#    Jobs in bacula_client_jobs only belongs to his owner.
+
+bacula__common__jobs:
+  Name: "Backup_#client#"
+  Pool: "#client#-Inc-Pool"
+  Full_Backup_Pool: "#client#-Full-Pool"
+  Differential_Backup_Pool: "#client#-Diff-Pool"
+  Incremental_Backup_Pool: "#client#-Inc-Pool"
+  VirtualFull_Backup_Pool: "#client#-VFull-Pool"
+  Schedule: "DailyVDI-Monthly-0000"
+  Client: "#client#-fd"
+  Backups_To_Keep: 30
+  DeleteConsolidatedJobs: yes
+
+bacula__default__jobs: []
+
+bacula__dynamic__jobs: yes
+
+bacula_jobs: |
+  {{
+    bacula__default__jobs +
+    bacula_jobs_custom | default([])
+  }}
+
+###
+# Messages
+###
+bacula_messages_default: bacula-msg
+bacula_messages_from: "root@{{ ansible_fqdn }}"
+bacula_messages_rcpt: "root@{{ ansible_fqdn }}"
+bacula_message_mail_subject: "Bacula: %t %e of %c %l"
+bacula_message_operator_subject: "Bacula: Intervention needed for %j"
+bacula_messages_relay: 127.0.0.1
+bacula__default__messages:
+  - Name: bacula-msg
+    MailCommand: "{{ bacula_root }}/bin/bsmtp -h {{ bacula_messages_relay }} -f {{ bacula_messages_from }} -s '{{ bacula_message_mail_subject }}' %r"
+    Operatorcommand: "{{ bacula_root }}/bin/bsmtp -h {{ bacula_messages_relay }} -f {{ bacula_messages_from }} -s '{{ bacula_message_operator_subject }}' %r"
+    Mail: "{{ bacula_messages_rcpt }} = error, warning, !skipped, !terminate, !restored"
+    Append:
+      - "'{{ bacula_root }}/log/info.log' = info, terminate"
+      - "'{{ bacula_root }}/log/error_warning.log' = error, warning, !terminate, notsaved"
+      - "'{{ bacula_root }}/log/all.log' = all"
+    Operator: "{{ bacula_messages_rcpt }} = mount"
+    Console: "error, warning, !terminate"
+    Syslog: all
+
+
+bacula_messages: |
+  {{
+    bacula__default__messages +
+    bacula_messages_custom | default([])
+  }}
+
+###
+# Pools
+###
+
+# Tags "#client#" will be replaced with client's name.
+#  Ex. "#client#-Full-Pool":
+#      client1 -> client1-Full-Pool
+#      client2 -> client2-Full-Pool
+# Only Name and LabelFormat is being evaluated.
+
+bacula__default__pools:
+  - Name: "#client#-VFull-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 30day
+    Maximum Volume Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Inc-"
+  - Name: "#client#-Full-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 30day
+    Maximum_Volume_Jobs: 3
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Full-"
+  - Name: "#client#-Diff-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 15day
+    Maximum_Volume_Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Diff-"
+  - Name: "#client#-Inc-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 7day
+    Maximum Volume Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Inc-"
+
+bacula_pools: |
+  {{
+    bacula__default__pools +
+    bacula_pools_custom | default([])
+  }}
