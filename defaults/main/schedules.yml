@@ -11,7 +11,7 @@ schedule_DailyFI_Weekly: |
   {% for m in ['00','30'] %}
     {%
     if res | append(
-      { name: 'DailyFI-Weekly-'+h|string+m, run: (r | map('join',h|string+':'+m)) }
+      { 'name': 'DailyFI-Weekly-'+h|string+m, 'run': (r | map('join',h|string+':'+m)) }
     )
     %} {% endif %}
   {% endfor %}
@@ -25,7 +25,7 @@ schedule_DailyFDI_Biweekly: |
   {% for m in ['00','30'] %}
     {%
     if res | append(
-      { name: 'DailyFDI-Biweekly-'+h|string+m, run: (r | map('join',h|string+':'+m)) }
+      { 'name': 'DailyFDI-Biweekly-'+h|string+m, 'run': (r | map('join',h|string+':'+m)) }
     )
     %} {% endif %}
   {% endfor %}
@@ -39,7 +39,7 @@ schedule_DailyFDI_Monthly: |
   {% for m in ['00','30'] %}
     {%
     if res | append(
-      { name: 'DailyFDI-Monthly-'+h|string+m, run: (r | map('join',h|string+':'+m)) }
+      { 'name': 'DailyFDI-Monthly-'+h|string+m, 'run': (r | map('join',h|string+':'+m)) }
     )
     %} {% endif %}
   {% endfor %}
