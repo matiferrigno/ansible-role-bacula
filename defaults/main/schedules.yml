@@ -12,7 +12,7 @@ schedule_DailyFI_Weekly: |
   {% for r in runs %}
     {%
     if res.append(
-      { 'name': 'DailyFI-Weekly-'+h|string+m, 'run': r + h|string+':'+m)) }
+      { 'name': 'DailyFI-Weekly-'+h|string+m, 'run': r + h|string+':'+m }
     )
     %} {% endif %}
   {% endfor %}
@@ -27,7 +27,7 @@ schedule_DailyFDI_Biweekly: |
   {% for r in runs %}
     {%
     if res.append(
-      { 'name': 'DailyFDI-Biweekly-'+h|string+m, 'run': r + h|string+':'+m)) }
+      { 'name': 'DailyFDI-Biweekly-'+h|string+m, 'run': r + h|string+':'+m }
     )
     %} {% endif %}
   {% endfor %}
@@ -43,7 +43,7 @@ schedule_DailyFDI_Monthly: |
   {% for r in runs %}
     {%
     if res.append(
-      { 'name': 'DailyFDI-Monthly-'+h|string+m, 'run': r + h|string+':'+m)) }
+      { 'name': 'DailyFDI-Monthly-'+h|string+m, 'run': r + h|string+':'+m }
     )
     %} {% endif %}
   {% endfor %}
