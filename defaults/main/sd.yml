@@ -33,8 +33,15 @@ bacula__common__device:
 bacula__dynamic__devices: yes
 
 bacula__default__devices:
-  # - Name: FileStorage-Default
-  #   Archive_Device: "{{ bacula_storage_devices_root }}/default/"
+  - Name: FileStorage-default
+    Media_Type: File
+    Device_Type: File
+    Archive_Device: "{{ bacula_storage_devices_root }}/default"
+    LabelMedia: yes
+    Random_Access: yes
+    AutomaticMount: yes
+    RemovableMedia: no
+    AlwaysOpen: no
   - Name: FileStorage-#client#
     Media_Type: File
     Device_Type: File
