@@ -3,21 +3,49 @@
 ###
 # Schedules
 ###
-bacula__default__schedules:
-  - name: DailyFI-Weekly
-    run:
-      - "Level=Full sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-  - name: DailyFDI-Biweekly
-    run:
-      - "Level=Full 1st,3rd sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - "Level=Differential 2nd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-  - name: DailyFDI-Monthly
-    run:
-      - "Level=Full 1st sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - "Level=Differential 2nd,3rd,4th,5th sun at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
-      - "Level=Incremental mon-sat at {% if hour|d() %} {{ hour }} {% else %} {{ [1,2,3,4]|random }}:00 {% endif %}"
+
+schedule_DailyFI_Weekly: |
+  {% set res = [ ] %}
+  {% set r = [ "Level=Full sun at ", "Level=Incremental mon-sat at "] %}
+    {% for m in ['00,30'] %}
+      {%
+      res | append(
+        { name: 'DailyFI-Weekly-'+h+m, run: (r | map('join',h+':'+m)) }
+      )
+      %}
+    {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_DailyFDI_Biweekly: |
+  {% set res = [ ] %}
+  {% set r = [ "Level=Full 1st,3rd sun at ", "Level=Differential 2nd,4th,5th sun at ", "Level=Incremental mon-sat at"] %}
+  {% for h in range(24) %}
+    {% for m in ['00,30'] %}
+      {%
+      res | append(
+        { name: 'DailyFDI-Biweekly-'+h+m, run: (r | map('join',h+':'+m)) }
+      )
+      %}
+    {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_DailyFDI_Monthly: |
+  {% set res = [ ] %}
+  {% set r = [ "Level=Full 1st sun at ", "Level=Differential 2nd,3rd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
+  {% for h in range(24) %}
+    {% for m in ['00,30'] %}
+      {%
+      res | append(
+        { name: 'DailyFDI-Monthly-'+h+m, run: (r | map('join',h+':'+m)) }
+      )
+      %}
+    {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+bacula__default__schedules: "{{ schedule_DailyFI_Weekly + schedule_DailyFDI_Biweekly + schedule_DailyFDI_Monthly }}"
 
 bacula_schedules: |
   {{
