@@ -23,7 +23,7 @@ bacula__common__device:
   Name: FileStorage-#client#
   Media_Type: File
   Device_Type: File
-  Archive_Device: "{{ bacula_storage_devices_root }}/#client#/"
+  Archive_Device: "{{ bacula_storage_devices_root }}/#client#"
   LabelMedia: yes
   Random_Access: yes
   AutomaticMount: yes
@@ -38,7 +38,7 @@ bacula__default__devices:
   - Name: FileStorage-#client#
     Media_Type: File
     Device_Type: File
-    Archive_Device: "{{ bacula_storage_devices_root }}/#client#/"
+    Archive_Device: "{{ bacula_storage_devices_root }}/#client#"
     LabelMedia: yes
     Random_Access: yes
     AutomaticMount: yes
