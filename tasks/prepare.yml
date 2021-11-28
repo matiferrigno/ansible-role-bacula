@@ -59,7 +59,7 @@
   set_fact:
     storages: |
       {% set res = [] %}
-      {% for i in hostvars[item][bacula_storage] | default([]) %}
+      {% for i in hostvars[item]['bacula_storages'] | default([]) %}
       {% set s = i | combine(bacula__common__storage,i) %}
       {% set cName = s.Name | replace('#client#', item) if s.Name | d() else none %}
       {% set cDevice = s.Device | replace('#client#', item) if s.Device | d() else none %}
