@@ -12,11 +12,20 @@
 # Only Name and LabelFormat is being evaluated.
 
 bacula__default__pools:
+  - Name: "#client#-VFull-Pool"
+    Pool_Type: Backup
+    Recycle: yes
+    AutoPrune: yes
+    Volume_Retention: 30day
+    Maximum Volume Jobs: 10
+    Use_Volume_Once: yes
+    Cleaning_Prefix: Clean
+    LabelFormat: "#client#-Inc-"
   - Name: "#client#-Full-Pool"
     Pool_Type: Backup
     Recycle: yes
     AutoPrune: yes
-    Volume_Retention: 15day
+    Volume_Retention: 30day
     Maximum_Volume_Jobs: 3
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
@@ -34,7 +43,7 @@ bacula__default__pools:
     Pool_Type: Backup
     Recycle: yes
     AutoPrune: yes
-    Volume_Retention: 15day
+    Volume_Retention: 7day
     Maximum Volume Jobs: 10
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
