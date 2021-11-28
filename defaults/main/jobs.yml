@@ -21,7 +21,7 @@ bacula__common__jobs:
   Full_Backup_Pool: "#client#-Full-Pool"
   Differential_Backup_Pool: "#client#-Diff-Pool"
   Incremental_Backup_Pool: "#client#-Inc-Pool"
-  Schedule: "DailyFDI-Biweekly"
+  Schedule: "DailyFDI-Monthly-0000"
   Client: "#client#-fd"
 
 bacula__default__jobs: []
