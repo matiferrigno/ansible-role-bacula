@@ -23,7 +23,7 @@
       set dName = item[0].Name | replace('#client#', item[1]) %}
       set dArchiveDevice = item[0].Archive_Device | replace('#client#', item[1]) %}
       {% set dName = item[0].Name | replace('#client#', item[1]) %}
-      {% set dArchive_Device = item[0].Archive_Device | replace('#client#', item[1]) %}
+      {% set dArchiveDevice = item[0].Archive_Device | replace('#client#', item[1]) %}
       {{
         devices | default([]) + [item[0] | combine({ 'Name': dName, 'Archive_Device': dArchiveDevice })]
       }}
