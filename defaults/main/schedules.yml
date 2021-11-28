@@ -13,7 +13,7 @@ schedule_DailyFI_Weekly: |
     if res.append(
       {
         'name': 'DailyFI-Weekly-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^.*(at )', '\\1 at '+h|string+':'+m) | list
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
       }
     )
   %}
@@ -31,7 +31,7 @@ schedule_DailyFDI_Biweekly: |
     if res.append(
       {
         'name': 'DailyFDI-Biweekly-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^.*(at )', '\\1 at '+h|string+':'+m) | list
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
       }
     )
   %}
@@ -49,7 +49,7 @@ schedule_DailyFDI_Monthly: |
     if res.append(
       {
         'name': 'DailyFDI-Monthly-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^.*(at )', '\\1 at '+h|string+':'+m) | list
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
       }
     )
   %}
