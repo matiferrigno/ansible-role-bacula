@@ -71,9 +71,7 @@
       {% for c in storage_changes | dict2items %}
       {% if (s.update({ c.key: c.value }) if c.value is not none else s) %}{% endif %}
       {% endfor %}
-      {% if res.append(s) %} {% endif %}
-      {% endfor %}
-      {{ dyn_storages | default([]) + res }}
+      {{ storages | default([]) + [ sto ] }}
   with_nested:
     - "{{ bacula_storages | default([]) }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
