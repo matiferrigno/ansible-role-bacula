@@ -27,7 +27,7 @@ bacula_director: |
 ###
 
 bacula__default__director_storages:
-  - Name: bacula-sd
+  - Name: "stg-#client#"
     Address: 127.0.0.1
     SDPort: 9103
     Password: changeme!
