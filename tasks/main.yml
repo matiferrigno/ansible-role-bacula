@@ -25,7 +25,7 @@
     file_raw_lines: "{{ item.file_raw_lines | default([]) }}"
   loop:
     - resource: Catalog
-      resource_options: "{{ bacula_catalogs | default([]) + dyn_catalogs | default([]) if bacula__dynamic__catalogs else bacula_catalogs | default([]) }}"
+      resource_options: "{{ (bacula_catalogs | default([]) + dyn_catalogs | default([]) if bacula__dynamic__catalogs else bacula_catalogs | default([])) | unique | list }}"
       dest: "config.d/catalog.conf"
     - resource: Console
       resource_options: "{{ bacula_consoles }}"
@@ -34,7 +34,7 @@
       resource_options: "{{ [ bacula_bconsole ] }}"
       dest: "bconsole.conf"
     - resource: Client
-      resource_options: "{{ bacula_clients | default([]) + dyn_clients | default([]) if bacula__dynamic__clients else bacula_clients | default([]) }}"
+      resource_options: "{{ (bacula_clients | default([]) + dyn_clients | default([]) if bacula__dynamic__clients else bacula_clients | default([])) | unique | list }}"
       dest: "config.d/clients.conf"
     - resource: Director
       resource_options: "{{ [ bacula_director ] }}"
@@ -51,13 +51,13 @@
         - "@{{ bacula_root }}/etc/config.d/pools.conf"
       dest: "bacula-dir.conf"
     - resource: FileSet
-      resource_options: "{{ bacula_filesets | default([]) + dyn_filesets | default([]) | default([]) if bacula__dynamic__filesets else bacula_filesets | default([]) }}"
+      resource_options: "{{ (bacula_filesets | default([]) + dyn_filesets | default([]) | default([]) if bacula__dynamic__filesets else bacula_filesets | default([])) | unique | list }}"
       dest: "config.d/filesets.conf"
     - resource: JobDefs
       resource_options: "{{ bacula_jobdefs | default([]) }}"
       dest: "config.d/jobdefs.conf"
     - resource: Job
-      resource_options: "{{ jobs | default([]) + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([]) }}"
+      resource_options: "{{ (jobs | default([]) + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([])) | unique | list }}"
       dest: "config.d/jobs.conf"
     - resource: Messages
       resource_options: "{{ bacula_messages | default([]) }}"
@@ -66,7 +66,7 @@
       resource_options: "{{ bacula_schedules | default([]) }}"
       dest: "config.d/schedules.conf"
     - resource: Storage
-      resource_options: "{{ storages | default([]) + dyn_storages | default([]) if bacula__dynamic__director_storages else storages | default([]) }}"
+      resource_options: "{{ (storages | default([]) + dyn_storages | default([]) if bacula__dynamic__director_storages else storages | default([]))| unique | list }}"
       dest: "config.d/storages.conf"
     - resource: Pool
       resource_options: "{{ pools | default([]) }}"
