@@ -1,6 +1,6 @@
 ---
 
-bacula_storage_devices_root: "/var/backups/"
+bacula_storage_devices_root: "/var/backups"
 
 bacula__common__storage:
   Name: bacula-sd
