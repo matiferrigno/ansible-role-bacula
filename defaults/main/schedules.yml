@@ -7,13 +7,14 @@
 schedule_DailyFI_Weekly: |
   {% set res = [ ] %}
   {% set r = [ "Level=Full sun at ", "Level=Incremental mon-sat at "] %}
-    {% for m in ['00','30'] %}
-      {%
-      if (res | append(
-        { name: 'DailyFI-Weekly-'+h+m, run: (r | map('join',h+':'+m)) }
-      ))
-      %} {% endif %}
-    {% endfor %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+    {%
+    if res | append(
+      { name: 'DailyFI-Weekly-'+h+m, run: (r | map('join',h+':'+m)) }
+    )
+    %} {% endif %}
+  {% endfor %}
   {% endfor %}
   {{ res }}
 
@@ -21,13 +22,13 @@ schedule_DailyFDI_Biweekly: |
   {% set res = [ ] %}
   {% set r = [ "Level=Full 1st,3rd sun at ", "Level=Differential 2nd,4th,5th sun at ", "Level=Incremental mon-sat at"] %}
   {% for h in range(24) %}
-    {% for m in ['00','30'] %}
-      {%
-      if (res | append(
-        { name: 'DailyFDI-Biweekly-'+h+m, run: (r | map('join',h+':'+m)) }
-      ))
-      %} {% endif %}
-    {% endfor %}
+  {% for m in ['00','30'] %}
+    {%
+    if res | append(
+      { name: 'DailyFDI-Biweekly-'+h+m, run: (r | map('join',h+':'+m)) }
+    )
+    %} {% endif %}
+  {% endfor %}
   {% endfor %}
   {{ res }}
 
@@ -35,13 +36,13 @@ schedule_DailyFDI_Monthly: |
   {% set res = [ ] %}
   {% set r = [ "Level=Full 1st sun at ", "Level=Differential 2nd,3rd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
   {% for h in range(24) %}
-    {% for m in ['00','30'] %}
-      {%
-      if (res | append(
-        { name: 'DailyFDI-Monthly-'+h+m, run: (r | map('join',h+':'+m)) }
-      ))
-      %} {% endif %}
-    {% endfor %}
+  {% for m in ['00','30'] %}
+    {%
+    if res | append(
+      { name: 'DailyFDI-Monthly-'+h+m, run: (r | map('join',h+':'+m)) }
+    )
+    %} {% endif %}
+  {% endfor %}
   {% endfor %}
   {{ res }}
 
