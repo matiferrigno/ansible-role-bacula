@@ -47,23 +47,6 @@
     dest: /etc/sudoers.d/baculum
     mode: 440
 
-- name: Add the user baculum to www-data
-  ansible.builtin.user:
-    name: bacula
-    group: www-data
-
-- name: Change ownership of a directory
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0770
-    recurse: true
-    owner: www-data
-    group: bacula
-  loop:
-    - "{{ bacula_root }}/working"
-    - "{{ bacula_root }}/etc"
-
 - name: Enable the Apache2 module rewrite
   community.general.apache2_module:
     state: present
