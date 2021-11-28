@@ -22,7 +22,7 @@ bacula__common__jobs:
   Differential_Backup_Pool: "#client#-Diff-Pool"
   Incremental_Backup_Pool: "#client#-Inc-Pool"
   VirtualFull_Backup_Pool: "#client#-VFull-Pool"
-  Schedule: "DailyFDI-Monthly-0000"
+  Schedule: "DailyVDI-Monthly-0000"
   Client: "#client#-fd"
   Backups_To_Keep: 30
   DeleteConsolidatedJobs: yes
