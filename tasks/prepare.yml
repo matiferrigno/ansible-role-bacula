@@ -59,8 +59,8 @@
   set_fact:
     storages: |
       {% set sto = bacula__common__storage | combine(item[0]) %}
-      {% set cName = s.Name | replace('#client#', item[1]) if s.Name | d() else none %}
-      {% set cDevice = s.Device | replace('#client#', item[1]) if s.Device | d() else none %}
+      {% set cName = sto.Name | replace('#client#', item[1]) if sto.Name | d() else none %}
+      {% set cDevice = sto.Device | replace('#client#', item[1]) if sto.Device | d() else none %}
       {%
         set storage_changes = {
           'Name': cName,
@@ -68,7 +68,7 @@
         }
       %}
       {% for c in storage_changes | dict2items %}
-      {% if (s.update({ c.key: c.value }) if c.value is not none else s) %}
+      {% if (sto.update({ c.key: c.value }) if c.value is not none else sto) %}
       {% endif %}
       {% endfor %}
       {{ storages | default([]) + [ sto ] }}
