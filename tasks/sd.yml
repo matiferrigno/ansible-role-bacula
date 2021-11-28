@@ -37,8 +37,8 @@
     group: "{{ bacula_group }}"
     mode: 0640
   when:
-    - item.Media_Type | d() and item.Media_Type == 'File'
-    - item.Device_Type | d() and item.Device_Type == 'File'
+    - item.Media_Type | d() and item.Media_Type == 'File' and item.Archive_Device | d()
+    - item.Device_Type | d() and item.Device_Type == 'File' and item.Archive_Device | d()
   loop: "{{ devices | default([]) + dyn_devices if bacula__dynamic__devices else devices | default([])  }}"
 
 - name: Update config on sd
