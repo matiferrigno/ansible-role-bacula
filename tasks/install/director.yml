@@ -103,3 +103,14 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: directory
+
+- name: Create log files
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}/log/{{ item }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: touch
+  loop:
+    - info.log
+    - error_warning.log
+    - all.log
