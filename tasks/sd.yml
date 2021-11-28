@@ -38,7 +38,7 @@
     mode: 0640
   vars:
     Directors: "{{ [ bacula__default__storage_director ] + hostvars[inventory_hostname][bacula_storage_directors_var] | default([]) }}"
-    Storage: "{{ bacula_storage | combine(bacula__common__storage,hostvars[inventory_hostname][bacula_storage_var]|default({})) }}"
+    Storage: "{{ bacula_storage | default([]) | combine(bacula__common__storage,hostvars[inventory_hostname][bacula_storage_var]|default({})) }}"
     Devices: "{{ bacula_devices | default([]) + dyn_devices if bacula__dynamic__devices else bacula_devices | default([])  }}"
   notify:
     - bacula-fd configtest
