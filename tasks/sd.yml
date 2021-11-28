@@ -47,7 +47,7 @@
     dest: "{{ bacula_root }}/etc/bacula-sd.conf"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
-    mode: 0640
+    mode: 0664
   vars:
     Directors: "{{ [ bacula__default__storage_director ] + hostvars[inventory_hostname][bacula_storage_directors_var] | default([]) }}"
     Storage: "{{ (bacula__common__storage,hostvars[inventory_hostname][bacula_storage_var] | default({})) | combine(bacula_storage | default({})) }}"
