@@ -10,7 +10,7 @@ bacula__default__directors:
   DIRport: 9101
   Password: changeme!
   Messages: "{{ bacula_messages_default }}"
-  WorkingDirectory: "{{ bacula_root }}"
+  WorkingDirectory: "{{ bacula_root + '/working/' }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
   Heartbeat_Interval: 60
   Maximum_Concurrent_Jobs: 50
