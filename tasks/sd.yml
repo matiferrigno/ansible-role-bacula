@@ -29,6 +29,18 @@
     - "{{ bacula_devices }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
 
+- name: Create device's directories
+  file:
+    state: directory
+    path: "{{ item.Archive_Device }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  when:
+    - item.Media_Type | d() and item.Media_Type == 'File'
+    - item.Device_Type | d() and item.Device_Type == 'File'
+  loop: "{{ devices | default([]) + dyn_devices if bacula__dynamic__devices else devices | default([])  }}"
+
 - name: Update config on sd
   template:
     src: bacula-sd.conf.j2
