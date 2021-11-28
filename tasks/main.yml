@@ -1,5 +1,10 @@
 ---
 
+- debug: msg="{{ schedule_DailyFDI_Monthly }}"
+- debug: msg="{{ schedule_DailyFDI_Biweekly }}"
+- debug: msg="{{ schedule_DailyFI_Weekly }}"
+- debug: msg="{{ schedule_DailyFI_Weekly + schedule_DailyFDI_Biweekly + schedule_DailyFDI_Monthly }}"
+
 - name: Fetch binaries and install
   include_tasks: install/director.yml
 
