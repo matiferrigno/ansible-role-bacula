@@ -13,7 +13,7 @@ Storage {
 {%  endfor %}
 }
 
-{%  for dir in Director | default([]) -%}
+{%  for dir in Directors | default([]) -%}
 Director {
 {%  for opt in dir | dict2items %}
 {{ macro.proccess_opt(opt,2) }}
