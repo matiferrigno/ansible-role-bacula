@@ -77,6 +77,7 @@
       {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
       {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
       {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
+      {% set cVirtualFullBackupPool = j.VirtualFull_Backup_Pool | replace('#client#', item) if j.VirtualFull_Backup_Pool | d() else none %}
       {% set cFileSet = j.FileSet | replace('#client#', item) if j.FileSet | d() else none %}
       {% set cJobDefs = j.JobDefs | replace('#client#', item) if j.JobDefs | d() else none %}
       {% set cSchedule = j.Schedule | replace('#client#', item) if j.Schedule | d() else none %}
@@ -87,6 +88,7 @@
         'JobDefs': cJobDefs,
         'Schedule': cSchedule,
         'Pool': cPool,
+        'VirtualFull_Backup_Pool': cVirtualFullBackupPool,
         'Full_Backup_Pool': cFullBackupPool,
         'Differential_Backup_Pool': cDifferentialBackupPool,
         'Incremental_Backup_Pool': cIncrementalBackupPool
