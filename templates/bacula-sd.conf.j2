@@ -26,6 +26,13 @@ Messages {
   director = {{ bacula_director_default }} = all, !skipped, !restored
 }
 
+{%  for device in Devices | default([]) -%}
+Device {
+{%  for opt in device | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+}
+{%  endfor %}
 
 {% for e in file_raw_lines | default([]) %}
 {{ e }}

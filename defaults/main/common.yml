@@ -24,7 +24,7 @@ bacula_client_jobs_var: bacula_client_jobs
 bacula_storage_group: bacula-storage
 bacula_storage_var: bacula_storage
 bacula_storage_directors_var: bacula_storage_directors
-bacula__default__storage_director: bacula_storage_directors
+bacula_storage_devices_var: bacula_devices
 bacula_storage_default: bacula-sd
 bacula_catalog_group: bacula-catalog
 bacula_catalog_var: bacula_catalog
@@ -32,3 +32,4 @@ bacula_jobdefs_default: bacula-sd
 bacula_director_default: bacula-dir
 bacula_filedaemon_var: bacula_fd_filedaemon
 bacula_filedaemon_director_var: bacula_fd_director
+bacula_device_default: FileStorage-Default
