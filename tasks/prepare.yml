@@ -73,7 +73,7 @@
       {% endfor %}
       {{ storages | default([]) + [ sto ] }}
   with_nested:
-    - "{{ bacula_director_storages | default([]) }}"
+    - "{{ bacula_director_storages | default(bacula__default__director_storages| default([])) }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch catalogs on group "{{ bacula_catalog_group }}"
