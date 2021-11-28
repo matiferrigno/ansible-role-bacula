@@ -4,7 +4,7 @@
 # Schedules
 ###
 
-schedule_DailyFI_Weekly: |
+schedule_DailyVI_Weekly: |
   {% set res = [ ] %}
   {% set runs = [ "Level=VirtualFull sun at ", "Level=Incremental mon-sat at "] %}
   {% for h in range(24) %}
@@ -22,7 +22,7 @@ schedule_DailyFI_Weekly: |
   {% endfor %}
   {{ res }}
 
-schedule_DailyFDI_Biweekly: |
+schedule_DailyVDI_Biweekly: |
   {% set res = [ ] %}
   {% set runs = [ "Level=VirtualFull 1st,3rd sun at ", "Level=Differential 2nd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
   {% for h in range(24) %}
@@ -40,7 +40,7 @@ schedule_DailyFDI_Biweekly: |
   {% endfor %}
   {{ res }}
 
-schedule_DailyFDI_Monthly: |
+schedule_DailyVDI_Monthly: |
   {% set res = [ ] %}
   {% set runs = [ "Level=VirtualFull 1st sun at ", "Level=Differential 2nd,3rd,4th,5th sun at ", "Level=Incremental mon-sat at "] %}
   {% for h in range(24) %}
