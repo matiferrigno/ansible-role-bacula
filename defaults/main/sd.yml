@@ -7,7 +7,7 @@ bacula__common__storage:
   SDAddress: |
     {{
       hostvars[inventory_hostname][bacula_filedaemon_director_var].address
-        | default(ansible_default_ipv4.address)
+        | default('0.0.0.0')
     }}
   WorkingDirectory: "{{ bacula_root + '/working/' }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
