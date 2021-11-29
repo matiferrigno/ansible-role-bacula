@@ -18,7 +18,7 @@
     mode: u=rx,g=rx,o=rx
     owner: bacula
     group: tape
-    src: _send_telegram.sh.j2
+    src: addons/_send_telegram.sh.j2
     dest: "{{ bacula_root }}/scripts/_send_telegram.sh"
   vars:
     id: bacula_addons.telegram.id
