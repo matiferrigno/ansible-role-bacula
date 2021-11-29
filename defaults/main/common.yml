@@ -12,7 +12,7 @@ bacula_install_client: yes
 bacula_install_database: yes
 bacula_root: /opt/bacula
 bacula_owner: bacula
-bacula_group: bacula
+bacula_group: tape
 
 bacula_client_group: bacula-client
 bacula_client_var: bacula_client
