@@ -6,12 +6,17 @@
     name: bacula-dir
     state: restarted
 
-- name: configtest
+- name: bacula-dir configtest
   shell: "./bacula-dir -t"
   args:
     chdir: "{{ bacula_root }}/bin"
   changed_when: false
 
+- name: bacula-sd configtest
+  shell: "./bacula-sd -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
+  changed_when: false
 
 - name: bacula-fd configtest
   shell: "./bacula-fd -t"

@@ -1,8 +1,18 @@
 ---
 
 - name: Install bacula-client
-  include_tasks: install/linux-fd.yml
-  when: bacula_client_install | default(true) and (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false))
+  include_tasks: install/bacula.yml
+  vars:
+    bacula_install_console: yes
+    bacula_install_common: yes
+    bacula_install_client: yes
+    bacula_install_aligned: no
+    bacula_install_gui: no
+    bacula_install_database: no
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
+
+- name: Prepare configuration (all)
+  include_tasks: prepare/all.yml
 
 - name: Update config on client
   template:
