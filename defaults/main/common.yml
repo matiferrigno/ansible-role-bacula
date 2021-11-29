@@ -23,6 +23,8 @@ bacula_storage_var: bacula_storage
 bacula_storage_directors_var: bacula_storage_directors
 bacula_storage_devices_var: bacula_devices
 bacula_storage_default: bacula-sd
+bacula_storage_default_address: bacula-sd.local
+bacula_storage_default_host: bacula-sd
 bacula_catalog_group: bacula-catalog
 bacula_catalog_var: bacula_catalog
 bacula_jobdefs_default: bacula-sd

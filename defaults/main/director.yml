@@ -28,14 +28,14 @@ bacula_director: |
 
 bacula__default__director_storages:
   - Name: "bacula-sd"
-    Address: "{{ hostvars[bacula_storage_default]['ansible_default_ipv4'].address }}"
+    Address: "{{ hostvars[bacula_storage_default_host]['ansible_default_ipv4'].address | default(bacula_storage_default_address) }}"
     SDPort: 9103
     Password: changeme!
     Device: FileStorage-default
     Media_Type: File
     Maximum_Concurrent_Jobs: 10
   - Name: "stg-#client#"
-    Address: "{{ hostvars[bacula_storage_default]['ansible_default_ipv4'].address }}"
+    Address: "{{ hostvars[bacula_storage_default_host]['ansible_default_ipv4'].address | default(bacula_storage_default_address) }}"
     SDPort: 9103
     Password: changeme!
     Device: "FileStorage-#client#"
