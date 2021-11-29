@@ -31,8 +31,8 @@
       RunScript: {
         Command: "{{ bacula_root }}/scripts/_send_telegram.sh %i",
         RunsWhen: After,
-        RunsOnFailure: "{{ (bacula_addons.telegram.on_failure | default(true) }}",
-        RunsOnClient: "{{ (bacula_addons.telegram.on_client | default(false) }}",
-        RunsOnSuccess: "{{ bacula_addons.telegram.on_success | default(true) }}"
+        RunsOnFailure: "{{ bacula_addons.telegram.on_failure | default(true) | bool }}",
+        RunsOnClient: "{{ bacula_addons.telegram.on_client | default(false) | bool }}",
+        RunsOnSuccess: "{{ bacula_addons.telegram.on_success | default(true) | bool }}"
       }
     }
