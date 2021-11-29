@@ -28,7 +28,7 @@
 - name: Create runscript
   set_fact:
     telegram_runscript: {
-      RunScript {
+      RunScript: {
         Command: "{{ bacula_root }}/scripts/_send_telegram.sh %i",
         RunsWhen: After,
         RunsOnFailure: "{{ (bacula_addons | dict2items)['telegram'].on_failure | default(true) }}",
