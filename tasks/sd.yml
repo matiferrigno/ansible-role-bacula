@@ -35,7 +35,7 @@
     path: "{{ item.Archive_Device }}"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
-    mode: 0640
+    mode: 0755
   when:
     - item.Media_Type | d() and item.Media_Type == 'File' and item.Archive_Device | d()
     - item.Device_Type | d() and item.Device_Type == 'File' and item.Archive_Device | d()
