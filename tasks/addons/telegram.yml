@@ -7,7 +7,7 @@
 
 - name: Create log file for telegram
   file:
-    path: "{{ bacula_addons_telegram_logfile | default(bacula_root'+/log/telegram.log') }}"
+    path: "{{ bacula_addons.telegram.logfile | default(bacula_root+'/log/telegram.log') }}"
     state: touch
     mode: u=rw,g=rw,o=r
     owner: "{{ bacula_owner }}"
@@ -21,9 +21,9 @@
     src: _send_telegram.sh.j2
     dest: "{{ bacula_root }}/scripts/_send_telegram.sh"
   vars:
-    id: (bacula_addons | dict2items)['telegram'].id
-    api_token: (bacula_addons | dict2items)['telegram'].api_token
-    logfile: (bacula_addons | dict2items)['telegram'].logfile
+    id: bacula_addons.telegram.id
+    api_token: bacula_addons.telegram.api_token
+    logfile: bacula_addons.telegram.logfile
 
 - name: Create runscript
   set_fact:
@@ -31,8 +31,8 @@
       RunScript: {
         Command: "{{ bacula_root }}/scripts/_send_telegram.sh %i",
         RunsWhen: After,
-        RunsOnFailure: "{{ (bacula_addons | dict2items)['telegram'].on_failure | default(true) }}",
-        RunsOnClient: "{{ (bacula_addons | dict2items)['telegram'].on_client | default(false) }}",
-        RunsOnSuccess: "{{ bacula_addons | dict2items)['telegram'].on_success | default(true) }}"
+        RunsOnFailure: "{{ (bacula_addons.telegram.on_failure | default(true) }}",
+        RunsOnClient: "{{ (bacula_addons.telegram.on_client | default(false) }}",
+        RunsOnSuccess: "{{ bacula_addons.telegram.on_success | default(true) }}"
       }
     }
