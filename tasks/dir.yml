@@ -1,0 +1,86 @@
+---
+
+- name: Fetch binaries and install
+  include_tasks: install/bacula.yml
+
+- name: Install Baculum
+  include_tasks: install/baculum.yml
+  when: bacula_install_gui
+
+- name: Prepare configuration (all)
+  include_tasks: prepare/all.yml
+
+- name: Prepare configuration (dir)
+  include_tasks: prepare/dir.yml
+
+- name: Update configs on server
+  template:
+    src: resource.conf.j2
+    dest: "{{ bacula_root }}/etc/{{ item.dest }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+    backup: yes
+  vars:
+    resource: "{{ item.resource }}"
+    resource_options: "{{ item.resource_options | default([]) }}"
+    resource_raw_lines: "{{ item.resource_raw_lines | default([]) }}"
+    file_raw_lines: "{{ item.file_raw_lines | default([]) }}"
+  loop:
+    - resource: Catalog
+      resource_options: "{{ (bacula_catalogs | default([]) + dyn_catalogs | default([]) if bacula__dynamic__catalogs else bacula_catalogs | default([])) | unique | list }}"
+      dest: "config.d/catalog.conf"
+    - resource: Console
+      resource_options: "{{ bacula_consoles }}"
+      dest: "config.d/console.conf"
+    - resource: Director
+      resource_options: "{{ [ bacula_bconsole ] }}"
+      dest: "bconsole.conf"
+    - resource: Client
+      resource_options: "{{ (bacula_clients | default([]) + dyn_clients | default([]) if bacula__dynamic__clients else bacula_clients | default([])) | unique | list }}"
+      dest: "config.d/clients.conf"
+    - resource: Director
+      resource_options: "{{ [ bacula_director ] }}"
+      file_raw_lines:
+        - "@{{ bacula_root }}/etc/config.d/catalog.conf"
+        - "@{{ bacula_root }}/etc/config.d/console.conf"
+        - "@{{ bacula_root }}/etc/config.d/clients.conf"
+        - "@{{ bacula_root }}/etc/config.d/filesets.conf"
+        - "@{{ bacula_root }}/etc/config.d/jobdefs.conf"
+        - "@{{ bacula_root }}/etc/config.d/jobs.conf"
+        - "@{{ bacula_root }}/etc/config.d/messages.conf"
+        - "@{{ bacula_root }}/etc/config.d/schedules.conf"
+        - "@{{ bacula_root }}/etc/config.d/storages.conf"
+        - "@{{ bacula_root }}/etc/config.d/pools.conf"
+      dest: "bacula-dir.conf"
+    - resource: FileSet
+      resource_options: "{{ (bacula_filesets | default([]) + dyn_filesets | default([]) | default([]) if bacula__dynamic__filesets else bacula_filesets | default([])) | unique | list }}"
+      dest: "config.d/filesets.conf"
+    - resource: JobDefs
+      resource_options: "{{ bacula_jobdefs | default([]) | map('combine',telegram_runscript) }}"
+      dest: "config.d/jobdefs.conf"
+    - resource: Job
+      resource_options: "{{ (jobs | default([]) + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([])) | unique | list }}"
+      dest: "config.d/jobs.conf"
+    - resource: Messages
+      resource_options: "{{ bacula_messages | default([]) }}"
+      dest: "config.d/messages.conf"
+    - resource: Schedule
+      resource_options: "{{ bacula_schedules | default([]) }}"
+      dest: "config.d/schedules.conf"
+    - resource: Storage
+      resource_options: "{{ (storages | default([]) + dyn_storages | default([]) if bacula__dynamic__director_storages else storages | default([]))| unique | list }}"
+      dest: "config.d/storages.conf"
+    - resource: Pool
+      resource_options: "{{ pools | default([]) }}"
+      dest: "config.d/pools.conf"
+  register: res
+  notify:
+    - bacula-dir configtest
+
+- name: Clean file backups
+  file:
+    path: "{{ item.backup_file }}"
+    state: absent
+  when: not (bacula_keep_file_backup | default(false)) and item.backup_file | d()
+  loop: "{{ res.results }}"

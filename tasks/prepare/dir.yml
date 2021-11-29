@@ -1,0 +1,158 @@
+---
+
+- name: Fetch clients on group "{{ bacula_client_group }}"
+  set_fact:
+    dyn_clients: |
+      {% set cfg = bacula__common__clients | combine(hostvars[item][bacula_client_var] | default({})) %}
+      {% set pName = cfg.Name | replace('#client#', item) if cfg.Name | d() else none %}
+      {% set pAddress = cfg.Address | replace('#client_address#',
+      hostvars[item][bacula_filedaemon_director_var].address
+        | default(hostvars[item]['ansible_default_ipv4'].address))
+        if cfg.Address | d() else none %}
+      {% set client_changes = { 'Name': pName, 'Address': pAddress } %}
+      {% for c in client_changes | dict2items %}
+      {% if (cfg.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
+      {% endfor %}
+      {{ dyn_clients | default([]) + [ cfg ] }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Fetch pools and define separate one for each client
+  set_fact:
+    pools: |
+      {% set pName = item[0].Name | replace('#client#', item[1]) %}
+      {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
+      {{
+        pools | default([]) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]
+      }}
+  with_nested:
+    - "{{ bacula_pools }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Fetch filesets defined on each client
+  set_fact:
+    dyn_filesets: |
+      {%
+        set hFilesets =
+          hostvars[item][bacula_client_filesets_var] | default([])
+            if hostvars[item][bacula_client_filesets_var] | d()
+              else none
+      %}
+      {{
+        dyn_filesets | default([]) +
+          hFilesets | default([]) | map('combine',bacula__common__filesets,hFilesets)
+            if hFilesets is not none
+            else dyn_filesets | default([])
+      }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Fetch storages on group "{{ bacula_storage_group }}"
+  set_fact:
+    dyn_storages: |
+      {{
+        dyn_storages | default([]) + hostvars[item][bacula_storage_var]
+          if hostvars[item][bacula_storage_var] | d()
+            else dyn_storages | default([])
+      }}
+  loop: "{{ groups[bacula_storage_group] | default([]) }}"
+
+- name: Transform list of storages
+  set_fact:
+    storages: |
+      {% set sto = bacula__common__director_storage | combine(item[0]) %}
+      {% set cName = sto.Name | replace('#client#', item[1]) if sto.Name | d() else none %}
+      {% set cDevice = sto.Device | replace('#client#', item[1]) if sto.Device | d() else none %}
+      {%
+        set storage_changes = {
+          'Name': cName,
+          'Device': cDevice
+        }
+      %}
+      {% set changes = False %}
+      {% for c in storage_changes | dict2items %}
+      {% if (sto.update({ c.key: c.value }) if c.value is not none else sto) %}
+      {% endif %}
+      {% endfor %}
+      {{ storages | default([]) + [ sto ] }}
+  with_nested:
+    - "{{ bacula_director_storages | default(bacula__default__director_storages| default([])) }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Fetch catalogs on group "{{ bacula_catalog_group }}"
+  set_fact:
+    dyn_catalogs: |
+      {{
+        dyn_catalogs | default([]) + hostvars[item][bacula_catalog_var]
+          if hostvars[item][bacula_catalog_var] | d()
+            else dyn_catalogs | default([])
+      }}
+  loop: "{{ groups[bacula_catalog_group] | default([]) }}"
+
+- name: Fetch jobs defined on each client and tranform
+  set_fact:
+    dyn_jobs: |
+      {% set res = [] %}
+      {% for i in hostvars[item][bacula_client_jobs_var] | default([]) %}
+      {% set j = i | combine(bacula__common__jobs,i) %}
+      {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
+      {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
+      {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
+      {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
+      {% set cVirtualFullBackupPool = j.VirtualFull_Backup_Pool | replace('#client#', item) if j.VirtualFull_Backup_Pool | d() else none %}
+      {% set cFileSet = j.FileSet | replace('#client#', item) if j.FileSet | d() else none %}
+      {% set cJobDefs = j.JobDefs | replace('#client#', item) if j.JobDefs | d() else none %}
+      {% set cSchedule = j.Schedule | replace('#client#', item) if j.Schedule | d() else none %}
+      {% set job_changes = {
+        'Name': cName,
+        'Client': cClient,
+        'FileSet': cFileSet,
+        'JobDefs': cJobDefs,
+        'Schedule': cSchedule,
+        'Pool': cPool,
+        'VirtualFull_Backup_Pool': cVirtualFullBackupPool,
+        'Full_Backup_Pool': cFullBackupPool,
+        'Differential_Backup_Pool': cDifferentialBackupPool,
+        'Incremental_Backup_Pool': cIncrementalBackupPool
+        }
+      %}
+      {% for c in job_changes | dict2items %}
+      {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
+      {% endfor %}
+      {% if res.append(j) %} {% endif %}
+      {% endfor %}
+      {{ dyn_jobs | default([]) + res }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Transform list of jobs
+  set_fact:
+    jobs: |
+      {% set job = bacula__common__jobs | combine(item[0]) %}
+      {% set cName = job.Name | replace('#client#', item[1]) if job.Name | d() else none %}
+      {% set cClient = job.Client | replace('#client#', item[1]) if job.Client | d() else none %}
+      {% set cPool = job.Pool | replace('#client#', item[1]) if job.Pool | d() else none %}
+      {% set cFullBackupPool = job.Full_Backup_Pool | replace('#client#', item[1]) if job.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = job.Differential_Backup_Pool | replace('#client#', item[1]) if job.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = job.Incremental_Backup_Pool | replace('#client#', item[1]) if job.Incremental_Backup_Pool | d() else none %}
+      {% set cFileSet = job.FileSet | replace('#client#', item[1]) if job.FileSet | d() else none %}
+      {% set cJobDefs = job.JobDefs | replace('#client#', item[1]) if job.JobDefs | d() else none %}
+      {% set cSchedule = job.Schedule | replace('#client#', item[1]) if job.Schedule | d() else none %}
+      {% set job_changes = {
+        'Name': cName,
+        'Client': cClient,
+        'FileSet': cFileSet,
+        'JobDefs': cJobDefs,
+        'Schedule': cSchedule,
+        'Pool': cPool,
+        'Full_Backup_Pool': cFullBackupPool,
+        'Differential_Backup_Pool': cDifferentialBackupPool,
+        'Incremental_Backup_Pool': cIncrementalBackupPool
+        }
+      %}
+      {% for c in job_changes | dict2items %}
+      {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
+      {% endfor %}
+      {{ jobs | default([]) + [ job ] }}
+  with_nested:
+    - "{{ bacula_jobs | default([]) }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"

@@ -1,0 +1,5 @@
+---
+
+- name: Install telegram addon
+  include_tasks: addons/telegram.yml
+  when: (bacula_addons | default({}) | dict2items)['telegram'].enabled | default(false)

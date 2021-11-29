@@ -1,0 +1,42 @@
+---
+
+- name: Fetch devices and define separate one for each client
+  set_fact:
+    dyn_devices: |
+      {%
+        set devices =
+          hostvars[item][bacula_storage_devices_var] | default([])
+            if hostvars[item][bacula_storage_devices_var] | d()
+              else none
+      %}
+      {{
+        dyn_devices | default([]) +
+          devices | default([]) | map('combine',devices,bacula__common__device)
+            if devices is not none
+            else dyn_devices | default([])
+      }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Transform every device
+  set_fact:
+    devices: |
+      {% set dName = item[0].Name | replace('#client#', item[1]) %}
+      {% set dArchiveDevice = item[0].Archive_Device | replace('#client#', item[1]) %}
+      {{
+        devices | default([]) + [item[0] | combine({ 'Name': dName, 'Archive_Device': dArchiveDevice })]
+      }}
+  with_nested:
+    - "{{ bacula_devices }}"
+    - "{{ groups[bacula_client_group] | default([]) }}"
+
+- name: Create device's directories
+  file:
+    state: directory
+    path: "{{ item.Archive_Device }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0755
+  when:
+    - item.Media_Type | d() and item.Media_Type == 'File' and item.Archive_Device | d()
+    - item.Device_Type | d() and item.Device_Type == 'File' and item.Archive_Device | d()
+  loop: "{{ devices | default([]) + dyn_devices if bacula__dynamic__devices else devices | default([])  }}"

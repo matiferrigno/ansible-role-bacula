@@ -1,0 +1,38 @@
+---
+
+- name: Install curl
+  apt:
+    name: curl
+    update_cache: yes
+
+- name: Create log file for telegram
+  file:
+    path: "{{ bacula_addons_telegram_logfile | default(bacula_root'+/log/telegram.log') }}"
+    state: touch
+    mode: u=rw,g=rw,o=r
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+
+- name: Create script _send_telegram.sh
+  template:
+    mode: u=rx,g=rx,o=rx
+    owner: bacula
+    group: tape
+    src: _send_telegram.sh.j2
+    dest: "{{ bacula_root }}/scripts/_send_telegram.sh"
+  vars:
+    id: (bacula_addons | dict2items)['telegram'].id
+    api_token: (bacula_addons | dict2items)['telegram'].api_token
+    logfile: (bacula_addons | dict2items)['telegram'].logfile
+
+- name: Create runscript
+  set_fact:
+    telegram_runscript: {
+      RunScript {
+        Command: "{{ bacula_root }}/scripts/_send_telegram.sh %i",
+        RunsWhen: After,
+        RunsOnFailure: "{{ (bacula_addons | dict2items)['telegram'].on_failure | default(true) }}",
+        RunsOnClient: "{{ (bacula_addons | dict2items)['telegram'].on_client | default(false) }}",
+        RunsOnSuccess: "{{ bacula_addons | dict2items)['telegram'].on_success | default(true) }}"
+      }
+    }
