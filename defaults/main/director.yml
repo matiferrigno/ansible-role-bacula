@@ -25,7 +25,7 @@ bacula_director: |
 ###
 # Storage
 ###
-:
+
 bacula__default__director_storages:
   - Name: "bacula-sd"
     Address: "{{ hostvars[bacula_storage_default]['ansible_default_ipv4'].address }}"
