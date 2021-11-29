@@ -1,0 +1,7 @@
+---
+
+- name: Install dir
+  include_tasks: dir.yml
+
+- name: Install sd
+  include_tasks: sd.yml
