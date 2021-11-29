@@ -25,17 +25,17 @@ bacula_director: |
 ###
 # Storage
 ###
-
+:
 bacula__default__director_storages:
   - Name: "bacula-sd"
-    Address: 127.0.0.1
+    Address: "{{ hostvars[bacula_storage_default]['ansible_default_ipv4'].address }}"
     SDPort: 9103
     Password: changeme!
     Device: FileStorage-default
     Media_Type: File
     Maximum_Concurrent_Jobs: 10
   - Name: "stg-#client#"
-    Address: 127.0.0.1
+    Address: "{{ hostvars[bacula_storage_default]['ansible_default_ipv4'].address }}"
     SDPort: 9103
     Password: changeme!
     Device: "FileStorage-#client#"
