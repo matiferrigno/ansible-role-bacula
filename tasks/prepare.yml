@@ -39,7 +39,7 @@
       %}
       {{
         dyn_filesets | default([]) +
-          hFilesets | default([]) | map('combine',hFilesets,bacula__common__filesets)
+          hFilesets | default([]) | map('combine',bacula__common__filesets,hFilesets)
             if hFilesets is not none
             else dyn_filesets | default([])
       }}
