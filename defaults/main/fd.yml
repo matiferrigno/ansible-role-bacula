@@ -17,6 +17,6 @@ bacula__common__filedaemon:
   Plugin_Directory: "{{ bacula_root }}/plugins/"
 
 bacula__default__filedaemon_director:
-  Name: "{{ bacula__default__directors.Name }}"
-  Description: "{{ bacula__default__directors.Description }}"
+  Name: "{{ bacula__default__director.Name }}"
+  Description: "{{ bacula__default__director.Description }}"
   Password: "changeme!"

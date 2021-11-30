@@ -14,8 +14,8 @@ bacula__common__storage:
   Plugin_Directory: "{{ bacula_root }}/plugins/"
 
 bacula__default__storage_director:
-  Name: "{{ bacula__default__directors.Name }}"
-  Description: "{{ bacula__default__directors.Description }}"
+  Name: "{{ bacula__default__director.Name }}"
+  Description: "{{ bacula__default__director.Description }}"
   Password: "changeme!"
 
 bacula__common__device:
