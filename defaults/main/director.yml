@@ -3,7 +3,7 @@
 ###
 # Director
 ###
-bacula__default__directors:
+bacula__default__director:
   Name: bacula-dir
   Description: "Some description here"
   DIRAddress: 0.0.0.0
@@ -18,8 +18,8 @@ bacula__default__directors:
 
 bacula_director: |
   {{
-    bacula__default__directors
-    | combine(bacula_custom_directors | default({}))
+    bacula__default__director
+    | combine(bacula_custom_director | default({}))
   }}
 
 ###

@@ -114,6 +114,7 @@
     dest: "{{ bacula_root }}/log/{{ item }}"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
+    mode: u=rw,g=rw,o=r
     state: touch
   loop:
     - info.log
