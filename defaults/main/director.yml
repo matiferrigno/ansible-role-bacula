@@ -19,13 +19,12 @@ bacula__default__director:
 bacula_director: |
   {{
     bacula__default__director
-    | combine(bacula_custom_director | default({}))
+    | combine(bacula__custom__director | default({}))
   }}
 
 ###
 # Storage
 ###
-
 bacula__default__director_storages:
   - Name: "bacula-sd"
     Address: "{{ hostvars[bacula_storage_default_host]['ansible_default_ipv4'].address | default(bacula_storage_default_address) }}"
@@ -54,7 +53,7 @@ bacula__common__director_storage:
 bacula_director_storages: |
   {{
     bacula__default__director_storages +
-    bacula_custom_storages | default([])
+    bacula__custom__storages | default([])
   }}
 
 ###
@@ -73,7 +72,7 @@ bacula__default__catalogs:
 bacula_catalogs: |
   {{
     bacula__default__catalogs +
-    bacula_custom_catalogs | default([])
+    bacula__custom__catalogs | default([])
   }}
 
 ###
@@ -96,13 +95,12 @@ bacula__dynamic__clients: yes
 bacula_clients: |
   {{
     bacula__default__clients +
-    bacula_custom_clients | default([])
+    bacula__custom__clients | default([])
   }}
 
 ###
 # Schedules
 ###
-
 schedule_DailyVI_Weekly: |
   {% set res = [ ] %}
   {% set runs = [ "Level=VirtualFull sun at ", "Level=Incremental mon-sat at "] %}
@@ -175,17 +173,25 @@ bacula__default__consoles:
 bacula_consoles: |
   {{
     bacula__default__consoles +
-    bacula_custom_consoles | default([])
+    bacula__custom__consoles | default([])
   }}
 
 ###
 # BConsole
 ###
-bacula_bconsole:
+
+bacula__default__bconsole:
   Name: "{{ bacula_director_default }}"
   DIRport: 9101
   address: 127.0.0.1
   Password: "changeme!"
+
+bacula_bconsole: |
+  {{
+    bacula__default__bconsole +
+    bacula__custom__console | default({})
+  }}
+
 
 ###
 # FileSets

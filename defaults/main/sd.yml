@@ -13,10 +13,17 @@ bacula__common__storage:
   Maximum_Concurrent_Jobs: 20
   Plugin_Directory: "{{ bacula_root }}/plugins/"
 
-bacula__default__storage_director:
-  Name: "{{ bacula__default__director.Name }}"
-  Description: "{{ bacula__default__director.Description }}"
-  Password: "changeme!"
+bacula_storage: |
+  {{
+    bacula__common__storage
+    | combine(bacula__custom__storage | default({}))
+  }}
+
+###
+# Devices
+###
+
+bacula__dynamic__devices: yes
 
 bacula__common__device:
   Name: FileStorage-#client#
@@ -28,8 +35,6 @@ bacula__common__device:
   AutomaticMount: yes
   RemovableMedia: no
   AlwaysOpen: no
-
-bacula__dynamic__devices: yes
 
 bacula__default__devices:
   - Name: FileStorage-default
@@ -54,6 +59,6 @@ bacula__default__devices:
 bacula_devices: |
   {{
     bacula__default__devices | default([]) +
-    bacula_custom_devices | default([])
+    bacula__custom__devices | default([])
   }}
 
