@@ -1,11 +1,11 @@
 ---
 
-- name: Fetch binaries and install
-  include_tasks: install/bacula.yml
-
 - name: Install Baculum
   include_tasks: install/baculum.yml
   when: bacula_install_gui
+
+- name: Fetch binaries and install
+  include_tasks: install/bacula.yml
 
 - name: Prepare configuration (all)
   include_tasks: prepare/all.yml

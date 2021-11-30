@@ -119,3 +119,10 @@
     - info.log
     - error_warning.log
     - all.log
+
+- name: Check permissions on "{{ bacula_root }}"
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: directory
