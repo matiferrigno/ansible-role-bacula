@@ -8,9 +8,7 @@
 {% import "./templates/macros.j2" as macro %}
 
 Storage {
-{%  for opt in Storage | dict2items %}
-{{ macro.proccess_opt(opt,2) }}
-{%  endfor %}
+{{ macro.proccess_opt(Storage|dict2items,2) }}
 }
 
 {%  for dir in Directors | default([]) -%}
