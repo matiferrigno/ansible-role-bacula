@@ -167,13 +167,10 @@ bacula_schedules: |
 ###
 # Console
 ###
-bacula__default__consoles:
-  - Name: bacula-console
-    Password: changeme!
+bacula__default__consoles: []
 
 bacula_consoles: |
   {{
-    bacula__default__consoles +
     bacula__custom__consoles | default([])
   }}
 
