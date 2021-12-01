@@ -8,6 +8,7 @@
     state: file
     suffix: temp
   register: tempfile_1
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu")
   delegate_to: localhost
 
 # https://www.bacula.org/bacula-binary-package-download/
@@ -16,27 +17,27 @@
     url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
-  when: tempfile_1.path is defined
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
   delegate_to: localhost
 
 - name: Getting filenames from Package file
   ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
-  when: tempfile_1.path is defined
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
   delegate_to: localhost
 
 - name: Remove the temporary file
   ansible.builtin.file:
     path: "{{ tempfile_1.path }}"
     state: absent
-  when: tempfile_1.path is defined
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
   delegate_to: localhost
 
 - name: Create directory for debs
   ansible.builtin.file:
     path: "files/debs/"
     state: directory
-  when: tempfile_1.path is defined
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
   delegate_to: localhost
 
 - name: Download deb packages
@@ -45,7 +46,7 @@
     mode: u=rx,g=rx,o=
     dest: "files/debs/{{ item | basename }}"
   loop: "{{ filenames.stdout_lines }}"
-  when: filenames.rc == 0
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
   delegate_to: localhost
 
 - name: Download windows binary
@@ -54,7 +55,7 @@
     mode: u=r,g=r,o=
     dest: "files/win64/{{ bacula_download_url_windows | basename }}"
   loop: "{{ filenames.stdout_lines }}"
-  when: filenames.rc == 0
+  when: (ansible_facts['os_family'] == "Windows") and  filenames.rc == 0
   delegate_to: localhost
 
 - name: Create temporary directory
