@@ -7,8 +7,9 @@
 - name: Fetch binaries and install
   include_tasks: install/bacula.yml
 
-- name: Prepare configuration (all)
-  include_tasks: prepare/all.yml
+- name: Install telegram addon
+  include_tasks: addons/telegram.yml
+  when: (bacula_addons | default({})).telegram.enabled | default(false) | bool
 
 - name: Prepare configuration (dir)
   include_tasks: prepare/dir.yml

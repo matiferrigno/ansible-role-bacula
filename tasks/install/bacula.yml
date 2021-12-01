@@ -2,6 +2,7 @@
 
 - set_fact:
     base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64"
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Create temporary file
   ansible.builtin.tempfile:

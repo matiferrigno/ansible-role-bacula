@@ -10,9 +10,6 @@
     bacula_install_gui: no
     bacula_install_database: no
 
-- name: Prepare configuration (all)
-  include_tasks: prepare/all.yml
-
 - name: Update config on client
   template:
     src: bacula-fd.conf.j2
