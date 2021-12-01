@@ -1,0 +1,8 @@
+---
+
+
+- name: Install Bacula-fd (windows)
+  ansible.windows.win_package:
+    path: "{{ tempdir_1.path }}/{{ bacula_download_url_windows | basename }}"
+    product_id: 'bacula-fd'
+    arguments: /S

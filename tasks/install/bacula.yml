@@ -16,7 +16,6 @@
     url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
-    force: yes
   when: tempfile_1.path is defined
   delegate_to: localhost
 
@@ -40,11 +39,20 @@
   when: tempfile_1.path is defined
   delegate_to: localhost
 
-- name: Fetching deb packages
+- name: Download deb packages
   ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
     dest: "files/debs/{{ item | basename }}"
+  loop: "{{ filenames.stdout_lines }}"
+  when: filenames.rc == 0
+  delegate_to: localhost
+
+- name: Download windows binary
+  ansible.builtin.get_url:
+    url: "{{ bacula_download_url_windows }}"
+    mode: u=r,g=r,o=
+    dest: "files/win64/{{ bacula_download_url_windows | basename }}"
   loop: "{{ filenames.stdout_lines }}"
   when: filenames.rc == 0
   delegate_to: localhost
@@ -61,32 +69,20 @@
     dest: "{{ tempdir_1.path }}/{{ item | basename }}"
     mode: '0755'
   loop: "{{ filenames.stdout_lines }}"
-  when: filenames.rc == 0 and tempdir_1.path is defined
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0 and tempdir_1.path is defined
 
-- name: Install bacula-common
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-common.*\\.deb') | first | basename }}"
-  when: bacula_install_common and filenames.rc == 0 and tempdir_1.path is defined
+- name: Copy exe to server
+  ansible.windows.win_copy:
+    src: "files/win64/{{ bacula_download_url_windows | basename }}"
+    dest: "{{ tempdir_1.path }}/{{ bacula_download_url_windows | basename }}"
 
-- name: Install bacula-console
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-console.*\\.deb') | first | basename }}"
-  when: bacula_install_console and filenames.rc == 0 and tempdir_1.path is defined
+- name: Install fd on linux
+  include_tasks: fd-linux.yml
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
-- name: Install bacula-client
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-client.*\\.deb') | first | basename }}"
-  when: bacula_install_client and filenames.rc == 0 and tempdir_1.path is defined
-
-- name: Install bacula-aligned
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-aligned.*\\.deb') | first | basename }}"
-  when: bacula_install_aligned and filenames.rc == 0 and tempdir_1.path is defined
-
-- name: Install bacula
-  apt:
-    deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-'+bacula_database_engine+'.*\\.deb') | first | basename }}"
-  when: bacula_install_database and filenames.rc == 0 and tempdir_1.path is defined
+- name: Install fd on windows
+  include_tasks: fd-win64.yml
+  when: ansible_facts['os_family'] == "Windows"
 
 - name: Remove the temporary directory
   ansible.builtin.file:
@@ -101,6 +97,7 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: link
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Create directory config.d/
   ansible.builtin.file:
@@ -108,6 +105,7 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Create log files
   ansible.builtin.file:
@@ -120,6 +118,7 @@
     - info.log
     - error_warning.log
     - all.log
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Check permissions on "{{ bacula_root }}"
   ansible.builtin.file:
@@ -127,3 +126,4 @@
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
     state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"

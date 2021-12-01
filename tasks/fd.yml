@@ -9,7 +9,7 @@
     bacula_install_aligned: no
     bacula_install_gui: no
     bacula_install_database: no
-  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" or bacula_omit_linux_family_check | default(false)
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Prepare configuration (all)
   include_tasks: prepare/all.yml
