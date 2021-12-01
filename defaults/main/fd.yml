@@ -19,4 +19,4 @@ bacula__common__filedaemon:
 bacula__default__filedaemon_director:
   Name: "{{ bacula__default__director.Name }}"
   Description: "{{ bacula__default__director.Description }}"
-  Password: "changeme!"
+  Password: "{{ bacula_director_default_password }}"
