@@ -182,7 +182,7 @@ bacula__default__bconsole:
   Name: "{{ bacula_director_default }}"
   DIRport: 9101
   address: 127.0.0.1
-  Password: "changeme!"
+  Password: "{{ bacula_director_password }}"
 
 bacula_bconsole: |
   {{
