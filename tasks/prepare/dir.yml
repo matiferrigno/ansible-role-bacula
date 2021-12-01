@@ -5,6 +5,7 @@
     dyn_clients: |
       {% set cfg = bacula__common__clients | combine(hostvars[item][bacula_client_var] | default({})) %}
       {% set pName = cfg.Name | replace('#client#', item) if cfg.Name | d() else none %}
+      {% set pPassword = cfg.Name | replace('#client#', hostvars[item]['bacula_client_password']) if cfg.Password | d() else none %}
       {% set pAddress = cfg.Address | replace('#client_address#',
       hostvars[item][bacula_filedaemon_director_var].address
         | default(hostvars[item]['ansible_default_ipv4'].address | default(hostvars[item]['ansible_ip_addresses'][0])))

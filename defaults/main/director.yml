@@ -87,7 +87,7 @@ bacula__common__clients:
   FDPort: 9102
   AutoPrune: yes
   Maximum_Concurrent_Jobs: 3
-  Password: "{{ bacula_client_password | default('changeme!') }}"
+  Password: "#client_password#"
   Catalog: bacula-catalog
 
 
