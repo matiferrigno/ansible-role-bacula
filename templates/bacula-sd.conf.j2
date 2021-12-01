@@ -8,7 +8,7 @@
 {% import "./templates/macros.j2" as macro %}
 
 Storage {
-{%  for opt in [ Storage | dict2items] %}
+{%  for opt in Storage | dict2items %}
 {{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
