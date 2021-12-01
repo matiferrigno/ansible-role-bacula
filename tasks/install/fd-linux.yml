@@ -24,3 +24,20 @@
   apt:
     deb: "{{ tempdir_1.path }}/{{ filenames.stdout_lines | select('match', '.*/bacula-'+bacula_database_engine+'.*\\.deb') | first | basename }}"
   when: bacula_install_database and filenames.rc == 0 and tempdir_1.path is defined
+
+- name: Update config on client
+  template:
+    src: bacula-fd.conf.j2
+    dest: "{{ bacula_root }}/etc/bacula-fd.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  vars:
+    Directors:
+      - "{{ bacula__default__filedaemon_director | default(bacula_filedaemon_director_var) }}"
+      - Name: "bacula-dir-mon"
+        Password: "{{ bacula_mon_password | default('changeme!') }}"
+        Monitor: "yes"
+    FileDaemon: "{{ bacula__common__filedaemon | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) }}"
+  notify:
+    - bacula-fd configtest
