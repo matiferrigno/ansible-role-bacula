@@ -1,8 +1,10 @@
 ---
 
-- name: Install curl
+- name: Install curl and bc
   apt:
-    name: curl
+    pkg:
+    - curl
+    - bc
     update_cache: yes
 
 - name: Create log file for telegram
@@ -21,9 +23,9 @@
     src: addons/_send_telegram.sh.j2
     dest: "{{ bacula_root }}/scripts/_send_telegram.sh"
   vars:
-    id: bacula_addons.telegram.id
-    api_token: bacula_addons.telegram.api_token
-    logfile: bacula_addons.telegram.logfile
+    id: "{{ bacula_addons.telegram.id }}"
+    api_token: "{{  bacula_addons.telegram.api_token }}"
+    logfile: "{{ bacula_addons.telegram.logfile }}"
 
 - name: Create runscript
   set_fact:
