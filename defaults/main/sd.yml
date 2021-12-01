@@ -3,7 +3,7 @@
 bacula_storage_devices_root: "/var/backups"
 bacula__default__storage_director:
   Name: Bacula-dir
-  Password: "{{ bacula_director_password }}"
+  Password: "{{ bacula_director_default_password }}"
 
 bacula__common__storage:
   Name: bacula-sd
