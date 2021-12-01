@@ -3,13 +3,13 @@
 ###
 # Director
 ###
-bacula_director_password: changeme!
+bacula__default__director_password: changeme!
 bacula__default__director:
   Name: bacula-dir
   Description: "Some description here"
   DIRAddress: 0.0.0.0
   DIRport: 9101
-  Password: "{{ bacula_director_password }}"
+  Password: "{{ bacula__default__director_password }}"
   Messages: "{{ bacula_messages_default }}"
   WorkingDirectory: "{{ bacula_root + '/working/' }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
@@ -182,7 +182,7 @@ bacula__default__bconsole:
   Name: "{{ bacula_director_default }}"
   DIRport: 9101
   address: 127.0.0.1
-  Password: "{{ bacula_director_password }}"
+  Password: "{{ bacula__default__director_password }}"
 
 bacula_bconsole: |
   {{
