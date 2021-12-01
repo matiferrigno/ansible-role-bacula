@@ -108,12 +108,11 @@
     state: absent
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" and tempdir_1.path is defined
 
-- name: Remove windows temporary directory
-  ansible.builtin.file:
-    path: "{{ win_tempdir.path }}"
-    state: absent
-  when: ansible_facts['os_family'] == "Windows" and win_tempdir.path is defined
-
+# - name: Remove windows temporary directory
+#   ansible.builtin.file:
+#     path: "{{ win_tempdir.path }}"
+#     state: absent
+#   when: ansible_facts['os_family'] == "Windows" and win_tempdir.path is defined
 
 - name: Create a symlink /etc/bacula
   ansible.builtin.file:
