@@ -190,7 +190,7 @@ bacula__default__bconsole:
 bacula_bconsole: |
   {{
     bacula__default__bconsole +
-    bacula__custom__console | default({})
+    bacula__custom__bconsole | default({})
   }}
 
 
