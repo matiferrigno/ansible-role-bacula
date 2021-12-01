@@ -51,6 +51,13 @@
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
   delegate_to: localhost
 
+- name: Create directory for win64
+  ansible.builtin.file:
+    path: "files/win64/"
+    state: directory
+  when: ansible_facts['os_family'] == "Windows"
+  delegate_to: localhost
+
 - name: Download windows binary
   ansible.builtin.get_url:
     url: "{{ bacula_download_url_windows }}"
