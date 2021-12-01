@@ -64,6 +64,14 @@
     state: directory
     suffix: bacula
   register: tempdir_1
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Create temporary directory
+  ansible.windows.win_tempfile:
+    state: directory
+    suffix: bacula
+  register: win_tempdir
+  when: ansible_facts['os_family'] == "Windows"
 
 - name: Copy debs to server
   ansible.builtin.copy:
@@ -76,7 +84,7 @@
 - name: Copy exe to server
   ansible.windows.win_copy:
     src: "files/win64/{{ bacula_download_url_windows | basename }}"
-    dest: "{{ tempdir_1.path }}/{{ bacula_download_url_windows | basename }}"
+    dest: "{{ win_tempdir.path }}/{{ bacula_download_url_windows | basename }}"
   when: ansible_facts['os_family'] == "Windows"
 
 - name: Install fd on linux
@@ -91,7 +99,14 @@
   ansible.builtin.file:
     path: "{{ tempdir_1.path }}"
     state: absent
-  when: tempdir_1.path is defined
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" and tempdir_1.path is defined
+
+- name: Remove windows temporary directory
+  ansible.builtin.file:
+    path: "{{ win_tempdir.path }}"
+    state: absent
+  when: ansible_facts['os_family'] == "Windows" and win_tempdir.path is defined
+
 
 - name: Create a symlink /etc/bacula
   ansible.builtin.file:
