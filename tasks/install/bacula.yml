@@ -1,7 +1,7 @@
 ---
 
 - set_fact:
-    base_url: "{{ bacula_download_url }}/{{ ansible_distribution_release }}/amd64"
+    base_url: "{{ bacula_download_url }}/{{ bacula_distribution_release | default(ansible_distribution_release) }}/amd64"
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
 - name: Create temporary file
@@ -15,7 +15,7 @@
 # https://www.bacula.org/bacula-binary-package-download/
 - name: Fetch Packages file
   ansible.builtin.get_url:
-    url: "{{ base_url }}/dists/{{ ansible_distribution_release }}/main/binary-amd64/Packages"
+    url: "{{ base_url }}/dists/{{ bacula_distribution_release | default(ansible_distribution_release) }}/main/binary-amd64/Packages"
     dest: "{{ tempfile_1.path }}"
     mode: u=r,g=r,o=
     force: yes
@@ -37,7 +37,7 @@
 
 - name: Create directory for debs
   ansible.builtin.file:
-    path: "files/debs/{{ ansible_distribution_release }}/"
+    path: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/"
     state: directory
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
   delegate_to: localhost
@@ -46,7 +46,7 @@
   ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
-    dest: "files/debs/{{ ansible_distribution_release }}/{{ item | basename }}"
+    dest: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
   loop: "{{ filenames.stdout_lines }}"
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
   delegate_to: localhost
@@ -82,7 +82,7 @@
 
 - name: Copy debs to server
   ansible.builtin.copy:
-    src: "files/debs/{{ ansible_distribution_release }}/{{ item | basename }}"
+    src: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
     dest: "{{ tempdir_1.path }}/{{ item | basename }}"
     mode: '0755'
   loop: "{{ filenames.stdout_lines }}"
