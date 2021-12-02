@@ -83,7 +83,7 @@ bacula_catalogs: |
 # Tags "#client_fqdn#" will be replaced with client's fqdn.
 bacula__common__clients:
   Name: "#client#-fd"
-  Address: "{{ bacula_client_address | default('#client_address#') }}"
+  Address: "#client_address#"
   FDPort: 9102
   AutoPrune: yes
   Maximum_Concurrent_Jobs: 3

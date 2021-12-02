@@ -6,8 +6,8 @@
       {% set cfg = bacula__common__clients | combine(hostvars[item][bacula_client_var] | default({})) %}
       {% set pName = cfg.Name | replace('#client#', item) if cfg.Name | d() else none %}
       {% set pPassword = cfg.Password | replace('#client_password#', hostvars[item]['bacula_client_password']) if cfg.Password | d() else none %}
-      {% set pAddress = cfg.Address | replace('#client_address#',
-        hostvars[item]['ansible_default_ipv4'].address | default(hostvars[item]['ansible_ip_addresses'][0] | default('changeme!')))
+      {% set pAddress = cfg.Address | replace('#client_address#', bacula_client_address | default(
+        hostvars[item]['ansible_default_ipv4'].address | default(hostvars[item]['ansible_ip_addresses'][0] | default('changeme!'))))
         if cfg.Address | d() else none %}
       {% set client_changes = { 'Name': pName, 'Address': pAddress, 'Password': pPassword } %}
       {% for c in client_changes | dict2items %}
