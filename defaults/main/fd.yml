@@ -6,14 +6,14 @@
 bacula__common__filedaemon:
   Name: "{{ inventory_hostname }}-fd"
   FDPort: 9102
-  FDAddress: |
-    {{
-      hostvars[inventory_hostname][bacula_filedaemon_director_var].address
-        | default(ansible_default_ipv4.address | default('0.0.0.0'))
-    }}
+  # FDAddress: |
+  #   {{
+  #     hostvars[inventory_hostname][bacula_filedaemon_director_var].address
+  #       | default(ansible_default_ipv4.address | default('0.0.0.0'))
+  #   }}
   WorkingDirectory: "{{ bacula_root }}/"
   Pid_Directory: "{{ bacula_root }}/working/"
-  Maximum_Concurrent_Jobs: 20
+  Maximum_Concurrent_Jobs: 5
   Plugin_Directory: "{{ bacula_root }}/plugins/"
 
 bacula__default__filedaemon_director:

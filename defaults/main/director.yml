@@ -328,7 +328,7 @@ bacula__default__messages:
     Append:
       - "'{{ bacula_root }}/log/info.log' = info, terminate"
       - "'{{ bacula_root }}/log/error_warning.log' = error, warning, !terminate, notsaved"
-      - "'{{ bacula_root }}/log/all.log' = all"
+      - "'{{ bacula_root }}/log/all.log' = all, !skipped"
     Operator: "{{ bacula_messages_rcpt }} = mount"
     Console: "error, warning, !terminate"
     Syslog: all
