@@ -298,6 +298,7 @@ bacula__common__jobs:
   VirtualFull_Backup_Pool: "#client#-VFull-Pool"
   Schedule: "DailyVDI-Monthly-0000"
   Client: "#client#-fd"
+  Storage: "stg-#client#"
   Backups_To_Keep: 30
   DeleteConsolidatedJobs: yes
 

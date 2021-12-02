@@ -96,6 +96,7 @@
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
       {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
       {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
+      {% set cStorage = j.Storage | replace('#client#', item) if j.Storage | d() else none %}
       {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
       {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
       {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
@@ -108,6 +109,7 @@
         'Client': cClient,
         'FileSet': cFileSet,
         'JobDefs': cJobDefs,
+        'Storage': cStorage,
         'Schedule': cSchedule,
         'Pool': cPool,
         'VirtualFull_Backup_Pool': cVirtualFullBackupPool,
