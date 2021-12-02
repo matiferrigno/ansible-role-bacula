@@ -131,12 +131,21 @@
     state: directory
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
+- name: Create log directory
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}/log"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: u=rwx,g=rwx,o=rwx
+    state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
 - name: Create log files
   ansible.builtin.file:
     dest: "{{ bacula_root }}/log/{{ item }}"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
-    mode: u=rw,g=rw,o=r
+    mode: u=rwx,g=rwx,o=rwx
     state: touch
   loop:
     - info.log
