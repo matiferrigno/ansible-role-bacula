@@ -37,7 +37,7 @@
 
 - name: Create directory for debs
   ansible.builtin.file:
-    path: "files/debs/"
+    path: "files/debs/{{ ansible_distribution_release }}/"
     state: directory
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
   delegate_to: localhost
@@ -46,7 +46,7 @@
   ansible.builtin.get_url:
     url: "{{ base_url }}/{{ item }}"
     mode: u=rx,g=rx,o=
-    dest: "files/debs/{{ item | basename }}"
+    dest: "files/debs/{{ ansible_distribution_release }}/{{ item | basename }}"
   loop: "{{ filenames.stdout_lines }}"
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
   delegate_to: localhost
@@ -82,7 +82,7 @@
 
 - name: Copy debs to server
   ansible.builtin.copy:
-    src: "files/debs/{{ item | basename }}"
+    src: "files/debs/{{ ansible_distribution_release }}/{{ item | basename }}"
     dest: "{{ tempdir_1.path }}/{{ item | basename }}"
     mode: '0755'
   loop: "{{ filenames.stdout_lines }}"
