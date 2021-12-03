@@ -9,10 +9,7 @@ bacula__default__storage_director:
 
 bacula__common__storage:
   Name: bacula-sd
-  SDAddress: |
-    {{
-      ansible_default_ipv4.address | default('0.0.0.0')
-    }}
+  SDAddress: 0.0.0.0
   WorkingDirectory: "{{ bacula_root + '/working/' }}"
   PidDirectory: "{{ bacula_root + '/working/' }}"
   Maximum_Concurrent_Jobs: 20
