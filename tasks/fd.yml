@@ -10,3 +10,35 @@
     bacula_install_aligned: no
     bacula_install_gui: no
     bacula_install_database: no
+
+- name: Update config on client
+  template:
+    src: bacula-fd.conf.j2
+    dest: "{{ bacula_root }}/etc/bacula-fd.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0640
+  vars:
+    Directors:
+      - "{{ bacula__default__filedaemon_director | default(bacula_filedaemon_director_var) }}"
+      - Name: "bacula-dir-mon"
+        Password: "{{ bacula_mon_password | default('changeme!') }}"
+        Monitor: "yes"
+    FileDaemon: "{{ bacula__common__filedaemon | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) }}"
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+  notify:
+    - bacula-fd configtest
+
+- name: Update config on client
+  template:
+    src: bacula-fd.conf.j2
+    dest: "{{ bacula_root }}/bacula-fd.conf"
+    mode: 0640
+  vars:
+    Directors:
+      - "{{ bacula__default__filedaemon_director | default(bacula_filedaemon_director_var) }}"
+      - Name: "bacula-dir-mon"
+        Password: "{{ bacula_mon_password | default('changeme!') }}"
+        Monitor: "yes"
+    FileDaemon: "{{ bacula__common__filedaemon | combine(hostvars[inventory_hostname][bacula_filedaemon_var]|default({})) }}"
+  when: ansible_facts['os_family'] == "Windows"
