@@ -2,6 +2,7 @@
 
 - name: Install bacula-client
   include_tasks: install/bacula.yml
+  when: bacula_filedaemon_install | default(true)
   vars:
     bacula_install_console: yes
     bacula_install_common: yes
