@@ -31,7 +31,7 @@
   set_fact:
     telegram_runscript: {
       RunScript: {
-        Command: "{{ bacula_root }}/scripts/_send_telegram.sh %i",
+        Command: "\"{{ bacula_root }}/scripts/_send_telegram.sh %i\"",
         RunsWhen: After,
         RunsOnFailure: "{{ bacula_addons.telegram.on_failure | default(true) }}",
         RunsOnClient: "No",

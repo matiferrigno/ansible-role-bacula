@@ -58,7 +58,7 @@
       resource_options: "{{ (bacula_filesets | default([]) + dyn_filesets | default([]) | default([]) if bacula__dynamic__filesets else bacula_filesets | default([])) | unique | list }}"
       dest: "config.d/filesets.conf"
     - resource: JobDefs
-      resource_options: "{{ bacula_jobdefs | default([]) | map('combine',telegram_runscript) }}"
+      resource_options: "{{ bacula_jobdefs | default([]) | map('combine',telegram_runscript|default({})) }}"
       dest: "config.d/jobdefs.conf"
     - resource: Job
       resource_options: "{{ (jobs | default([]) + dyn_jobs | default([]) | default([]) if bacula__dynamic__jobs else jobs | default([])) | unique | list }}"
