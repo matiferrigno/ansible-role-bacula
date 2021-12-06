@@ -267,6 +267,11 @@ bacula__default__jobdefs:
     Prune_Jobs: yes
     Prune_Volumes: yes
     Priority: 10
+  - Name: DefaultRestoreJob
+    Type: Restore
+    Storage: "{{ bacula_storage_default }}"
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+    Messages: "{{ bacula_messages_default }}"
 
 bacula_jobdefs: |
   {{
@@ -302,7 +307,11 @@ bacula__common__jobs:
   Backups_To_Keep: 30
   DeleteConsolidatedJobs: yes
 
-bacula__default__jobs: []
+bacula__default__jobs:
+  Name: "Restore_#client#"
+  Type: Backup
+  JobDefs: DefaultRestoreJob
+  Storage: "{{ bacula_storage_default }}"
 
 bacula__dynamic__jobs: yes
 
