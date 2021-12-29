@@ -13,7 +13,7 @@
       {% for c in client_changes | dict2items %}
       {% if (cfg.update({ c.key: c.value }) if c.value is not none else cfg) %}{% endif %}
       {% endfor %}
-      {{ dyn_clients | default([]) + [ cfg ] }}
+      {{ (dyn_clients | default([]) + [ cfg ]) | list | unique  }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Fetch pools and define separate one for each client
@@ -22,7 +22,7 @@
       {% set pName = item[0].Name | replace('#client#', item[1]) %}
       {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
       {{
-        pools | default([]) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]
+        (pools | default([]) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]) | list | unique
       }}
   with_nested:
     - "{{ bacula_pools }}"
@@ -72,7 +72,7 @@
       {% if (sto.update({ c.key: c.value }) if c.value is not none else sto) %}
       {% endif %}
       {% endfor %}
-      {{ storages | default([]) + [ sto ] }}
+      {{ (storages | default([]) + [ sto ]) | list | unique  }}
   with_nested:
     - "{{ bacula_director_storages | default(bacula__default__director_storages| default([])) }}"
     - "{{ groups[bacula_client_group] | default([]) }}"
@@ -123,7 +123,7 @@
       {% endfor %}
       {% if res.append(j) %} {% endif %}
       {% endfor %}
-      {{ dyn_jobs | default([]) + res }}
+      {{ (dyn_jobs | default([]) + res) | list | unique  }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
 
 - name: Transform list of jobs
@@ -162,5 +162,5 @@
       {% endfor %}
       {% if job.append(j) %} {% endif %}
       {% endfor %}
-      {{ jobs | default([]) + job }}
+      {{ (jobs | default([]) + job) | list | unique }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
