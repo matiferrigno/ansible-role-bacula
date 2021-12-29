@@ -129,17 +129,20 @@
 - name: Transform list of jobs
   set_fact:
     jobs: |
-      {% set job = bacula__common__jobs | combine(item[0]) %}
-      {% set cName = job.Name | replace('#client#', item[1]) if job.Name | d() else none %}
-      {% set cClient = job.Client | replace('#client#', item[1]) if job.Client | d() else none %}
-      {% set cPool = job.Pool | replace('#client#', item[1]) if job.Pool | d() else none %}
-      {% set cStorage = j.Storage | replace('#client#', item[1]) if j.Storage | d() else none %}
-      {% set cFullBackupPool = job.Full_Backup_Pool | replace('#client#', item[1]) if job.Full_Backup_Pool | d() else none %}
-      {% set cDifferentialBackupPool = job.Differential_Backup_Pool | replace('#client#', item[1]) if job.Differential_Backup_Pool | d() else none %}
-      {% set cIncrementalBackupPool = job.Incremental_Backup_Pool | replace('#client#', item[1]) if job.Incremental_Backup_Pool | d() else none %}
-      {% set cFileSet = job.FileSet | replace('#client#', item[1]) if job.FileSet | d() else none %}
-      {% set cJobDefs = job.JobDefs | replace('#client#', item[1]) if job.JobDefs | d() else none %}
-      {% set cSchedule = job.Schedule | replace('#client#', item[1]) if job.Schedule | d() else none %}
+      {% set job = [] %}
+      {% for i in bacula_jobs | default([]) %}
+      {% set j = i | combine(bacula__common__jobs,i) %}
+      {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
+      {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
+      {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
+      {% set cStorage = j.Storage | replace('#client#', item) if j.Storage | d() else none %}
+      {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
+      {% set cVirtualFullBackupPool = j.VirtualFull_Backup_Pool | replace('#client#', item) if j.VirtualFull_Backup_Pool | d() else none %}
+      {% set cFileSet = j.FileSet | replace('#client#', item) if j.FileSet | d() else none %}
+      {% set cJobDefs = j.JobDefs | replace('#client#', item) if j.JobDefs | d() else none %}
+      {% set cSchedule = j.Schedule | replace('#client#', item) if j.Schedule | d() else none %}
       {% set job_changes = {
         'Name': cName,
         'Client': cClient,
@@ -155,9 +158,9 @@
         }
       %}
       {% for c in job_changes | dict2items %}
-      {% if (job.update({ c.key: c.value }) if c.value is not none else job) %}{% endif %}
+      {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
-      {{ jobs | default([]) + [ job ] }}
-  with_nested:
-    - "{{ bacula_jobs | default([]) }}"
-    - "{{ groups[bacula_client_group] | default([]) }}"
+      {% if res.append(j) %} {% endif %}
+      {% endfor %}
+      {{ dyn_jobs | default([]) + job }}
+  loop: "{{ groups[bacula_client_group] | default([]) }}"

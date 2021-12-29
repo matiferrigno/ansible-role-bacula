@@ -309,16 +309,16 @@ bacula__common__jobs:
   DeleteConsolidatedJobs: yes
 
 bacula__default__jobs:
-  Name: "Restore_#client#"
-  Type: Backup
-  JobDefs: DefaultRestoreJob
-  Storage: "{{ bacula_storage_default }}"
+  - Name: "Restore_#client#"
+    Type: Backup
+    JobDefs: DefaultRestoreJob
+    Storage: "{{ bacula_storage_default }}"
 
 bacula__dynamic__jobs: yes
 
 bacula_jobs: |
   {{
-    [ bacula__default__jobs ] +
+    bacula__default__jobs +
     bacula_jobs_custom | default([])
   }}
 
