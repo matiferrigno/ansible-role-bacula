@@ -270,6 +270,7 @@ bacula__default__jobdefs:
   - Name: DefaultRestoreJob
     Type: Restore
     Storage: "{{ bacula_storage_default }}"
+    FileSet: default-linux-fs
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
 

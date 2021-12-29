@@ -136,7 +136,7 @@
     dest: "{{ bacula_root }}/log"
     owner: "{{ bacula_owner }}"
     group: "{{ bacula_group }}"
-    mode: u=rwx,g=rwx,o=rwx
+    mode: u=rwx,g=rx,o=rx
     state: directory
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
