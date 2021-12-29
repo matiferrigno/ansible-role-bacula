@@ -318,7 +318,7 @@ bacula__dynamic__jobs: yes
 
 bacula_jobs: |
   {{
-    bacula__default__jobs +
+    [ bacula__default__jobs ] +
     bacula_jobs_custom | default([])
   }}
 
