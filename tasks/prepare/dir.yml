@@ -160,7 +160,7 @@
       {% for c in job_changes | dict2items %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
-      {% if j.append(j) %} {% endif %}
+      {% if job.append(j) %} {% endif %}
       {% endfor %}
-      {{ dyn_jobs | default([]) + job }}
+      {{ jobs | default([]) + job }}
   loop: "{{ groups[bacula_client_group] | default([]) }}"
