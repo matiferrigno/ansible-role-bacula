@@ -160,6 +160,12 @@
       %}
       {% else %}
       {% set j = i %}
+      {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
+      {% set job_changes = {
+        'Name': cName,
+        'Client': cClient,
+        }
+      %}
       {% endif %}
       {% for c in job_changes | dict2items %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
