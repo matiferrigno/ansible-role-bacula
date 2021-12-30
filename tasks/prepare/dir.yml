@@ -158,7 +158,9 @@
         }
       %}
       {% for c in job_changes | dict2items %}
+      {% if j.Type is not defined() or j.Type == "Backup" %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
+      {% endif %}
       {% endfor %}
       {% if job.append(j) %} {% endif %}
       {% endfor %}
