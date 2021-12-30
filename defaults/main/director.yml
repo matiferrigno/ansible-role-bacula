@@ -311,6 +311,7 @@ bacula__common__jobs:
 bacula__default__jobs:
   - Name: "Restore_#client#"
     Type: Restore
+    Pool: "#client#-Inc-Pool"
     JobDefs: DefaultRestoreJob
     Storage: "{{ bacula_storage_default }}"
 
