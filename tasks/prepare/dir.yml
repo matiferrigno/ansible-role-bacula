@@ -158,6 +158,8 @@
         'Incremental_Backup_Pool': cIncrementalBackupPool
         }
       %}
+      {% else %}
+      {% set j = i %}
       {% endif %}
       {% for c in job_changes | dict2items %}
       {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
