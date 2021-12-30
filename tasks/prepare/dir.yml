@@ -131,7 +131,7 @@
     jobs: |
       {% set job = [] %}
       {% for i in bacula_jobs | default([]) %}
-      {% if i.Type is not defined() or i.Type == "Backup" %}
+      {% if i.Type is not defined or i.Type == "Backup" %}
       {% set j = i | combine(bacula__common__jobs,i) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
       {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
