@@ -161,6 +161,7 @@
       {% else %}
       {% set j = i %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
+      {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
       {% set job_changes = {
         'Name': cName,
         'Client': cClient,
