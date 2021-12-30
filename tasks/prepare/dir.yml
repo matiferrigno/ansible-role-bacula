@@ -131,6 +131,7 @@
     jobs: |
       {% set job = [] %}
       {% for i in bacula_jobs | default([]) %}
+      {% if i.Type is not defined() or i.Type == "Backup" %}
       {% set j = i | combine(bacula__common__jobs,i) %}
       {% set cName = j.Name | replace('#client#', item) if j.Name | d() else none %}
       {% set cClient = j.Client | replace('#client#', item) if j.Client | d() else none %}
@@ -157,10 +158,9 @@
         'Incremental_Backup_Pool': cIncrementalBackupPool
         }
       %}
-      {% for c in job_changes | dict2items %}
-      {% if j.Type is not defined() or j.Type == "Backup" %}
-      {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endif %}
+      {% for c in job_changes | dict2items %}
+      {% if (j.update({ c.key: c.value }) if c.value is not none else j) %}{% endif %}
       {% endfor %}
       {% if job.append(j) %} {% endif %}
       {% endfor %}
