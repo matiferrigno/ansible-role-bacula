@@ -32,6 +32,7 @@ Autochanger {
 {{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
+{%  endfor %}
 
 {%  for device in Devices | default([]) -%}
 Device {
@@ -39,7 +40,6 @@ Device {
 {{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
 }
-
 {%  endfor %}
 
 {% for e in file_raw_lines | default([]) %}
