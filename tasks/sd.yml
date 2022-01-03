@@ -16,6 +16,7 @@
   vars:
     Directors: "{{ ([ bacula__default__storage_director ] + hostvars[inventory_hostname][bacula_storage_directors_var] | default([]))  | unique | list }}"
     Storage: "{{ bacula_storage }}"
+    Autochanger: "{{ bacula_autochanger | default([]) }}"
     Devices: "{{ (devices | default([]) + dyn_devices if bacula__dynamic__devices else devices | default([])) | unique | list  }}"
   notify:
     - bacula-sd configtest

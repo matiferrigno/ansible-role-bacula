@@ -22,6 +22,12 @@ bacula_storage: |
   }}
 
 ###
+# Autochanger
+###
+
+bacula_autochanger: []
+
+###
 # Devices
 ###
 
