@@ -49,7 +49,7 @@
   set_fact:
     dyn_storages: |
       {{
-        dyn_storages | default([]) + hostvars[item][bacula_storage_var]
+        dyn_storages | default([]) + [hostvars[item][bacula_storage_var]]
           if hostvars[item][bacula_storage_var] | d()
             else dyn_storages | default([])
       }}
