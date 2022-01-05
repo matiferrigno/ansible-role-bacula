@@ -157,7 +157,43 @@ schedule_DailyVDI_Monthly: |
   {% endfor %}
   {{ res }}
 
-bacula__default__schedules: "{{ schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly }}"
+schedule_CopyVFull_Daily: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull daily at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'CopyVFull-Daily-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_MigrationVFull_Daily: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull daily at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'MigrationVFull-Daily-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+bacula__default__schedules: "{{ schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly + schedule_CopyVFull_Daily + schedule_MigrationVFull_Daily }}"
 
 bacula_schedules: |
   {{
@@ -273,6 +309,24 @@ bacula__default__jobdefs:
     FileSet: default-linux-fs
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
+  - Name: DefaultCopyJob
+    Type: Copy
+    Level: VirtualFull
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: default-linux-fs
+    Messages: "{{ bacula_messages_default }}"
+    Selection_Type: PoolUncopiedJobs
+    Schedule: CopyVFull_Daily
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
+  - Name: DefaultMigrateJob
+    Type: Migrate
+    Level: VirtualFull
+    Storage: "{{ bacula_storage_default }}"
+    FileSet: default-linux-fs
+    Messages: "{{ bacula_messages_default }}"
+    Selection_Type: PoolUncopiedJobs
+    Schedule: MigrationVFull_Daily
+    Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
 
 bacula_jobdefs: |
   {{
@@ -372,7 +426,7 @@ bacula__default__pools:
     Maximum Volume Jobs: 10
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
-    LabelFormat: "#client#-Inc-"
+    Label_Format: "#client#-VFull-"
   - Name: "#client#-Full-Pool"
     Pool_Type: Backup
     Recycle: yes
@@ -381,7 +435,7 @@ bacula__default__pools:
     Maximum_Volume_Jobs: 3
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
-    LabelFormat: "#client#-Full-"
+    Label_Format: "#client#-Full-"
   - Name: "#client#-Diff-Pool"
     Pool_Type: Backup
     Recycle: yes
@@ -390,7 +444,7 @@ bacula__default__pools:
     Maximum_Volume_Jobs: 10
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
-    LabelFormat: "#client#-Diff-"
+    Label_Format: "#client#-Diff-"
   - Name: "#client#-Inc-Pool"
     Pool_Type: Backup
     Recycle: yes
@@ -399,7 +453,7 @@ bacula__default__pools:
     Maximum Volume Jobs: 10
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
-    LabelFormat: "#client#-Inc-"
+    Label_Format: "#client#-Inc-"
 
 bacula_pools: |
   {{
