@@ -20,9 +20,9 @@
   set_fact:
     pools: |
       {% set pName = item[0].Name | replace('#client#', item[1]) %}
-      {% set pLabelFormat = item[0].LabelFormat | replace('#client#', item[1]) %}
+      {% set pLabelFormat = item[0].Label_Format | replace('#client#', item[1]) %}
       {{
-        (pools | default([]) + [item[0] | combine({ 'Name': pName, 'LabelFormat': pLabelFormat })]) | list | unique
+        (pools | default([]) + [item[0] | combine({ 'Name': pName, 'Label_Format': pLabelFormat })]) | list | unique
       }}
   with_nested:
     - "{{ bacula_pools }}"
