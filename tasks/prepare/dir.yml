@@ -22,7 +22,7 @@
       {% set res = [] %}
       {% set p = item[0] | combine(bacula__common__pools,item[0]) %}
       {% set pName = item[0].Name | replace('#client#', item[1]) %}
-      {% set pNextPool = item[0].Next_Pool | replace('#client#', item[1]) %}
+      {% set pNextPool = item[0].Next_Pool | replace('#client#', item[1]) if item[0].Next_Pool | d() else none  %}
       {% set pLabelFormat = item[0].Label_Format | replace('#client#', item[1]) %}
       {% set pool_changes = {
         'Name': pName,
