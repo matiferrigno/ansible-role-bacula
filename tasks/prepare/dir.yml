@@ -31,7 +31,7 @@
         }
       %}
       {% for p in pool_changes | dict2items %}
-      {% if (p.update({ p.key: p.value }) if p.value is not none else j) %}{% endif %}
+      {% if (p.update({ p.key: p.value }) if p.value is not none else p) %}{% endif %}
       {% endfor %}
       {% if res.append(p) %} {% endif %}
       {{
