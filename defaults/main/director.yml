@@ -307,6 +307,7 @@ bacula__default__jobdefs:
     Prune_Jobs: yes
     Prune_Volumes: yes
     Priority: 10
+    Accurate: yes
   - Name: DefaultLinuxJob
     Type: Backup
     Level: Incremental
@@ -321,6 +322,7 @@ bacula__default__jobdefs:
     Prune_Jobs: yes
     Prune_Volumes: yes
     Priority: 10
+    Accurate: yes
   - Name: DefaultRestoreJob
     Type: Restore
     Storage: "{{ bacula_storage_default }}"
