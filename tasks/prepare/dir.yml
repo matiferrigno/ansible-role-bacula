@@ -34,7 +34,6 @@
       {% if (p.update({ p.key: p.value }) if p.value is not none else j) %}{% endif %}
       {% endfor %}
       {% if res.append(p) %} {% endif %}
-      {% endfor %}
       {{
         (pools | default([]) + res) | list | unique
       }}
