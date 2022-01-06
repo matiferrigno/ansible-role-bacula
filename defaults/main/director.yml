@@ -211,7 +211,7 @@ schedule_MigrationVFull_Daily: |
   {% endfor %}
   {{ res }}
 
-bacula__default__schedules: "{{ schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly + schedule_CopyVFull_Daily + schedule_MigrationVFull_Daily }}"
+bacula__default__schedules: "{{ schedule_DailyVFull + schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly + schedule_CopyVFull_Daily + schedule_MigrationVFull_Daily }}"
 
 bacula_schedules: |
   {{
