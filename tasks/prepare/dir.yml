@@ -19,10 +19,24 @@
 - name: Fetch pools and define separate one for each client
   set_fact:
     pools: |
+      {% set res = [] %}
+      {% set p = item[0] | combine(bacula__common__pools,item[0]) %}
       {% set pName = item[0].Name | replace('#client#', item[1]) %}
+      {% set pNextPool = item[0].Next_Pool | replace('#client#', item[1]) %}
       {% set pLabelFormat = item[0].Label_Format | replace('#client#', item[1]) %}
+      {% set pool_changes = {
+        'Name': pName,
+        'Next_Pool': pNextPool,
+        'Label_Format': pLabelFormat,
+        }
+      %}
+      {% for p in pool_changes | dict2items %}
+      {% if (p.update({ p.key: p.value }) if p.value is not none else j) %}{% endif %}
+      {% endfor %}
+      {% if res.append(p) %} {% endif %}
+      {% endfor %}
       {{
-        (pools | default([]) + [item[0] | combine({ 'Name': pName, 'Label_Format': pLabelFormat })]) | list | unique
+        (pools | default([]) + res) | list | unique
       }}
   with_nested:
     - "{{ bacula_pools }}"

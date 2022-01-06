@@ -434,7 +434,7 @@ bacula_messages: |
 #      client1 -> client1-Full-Pool
 #      client2 -> client2-Full-Pool
 # Only Name and LabelFormat is being evaluated.
-
+bacula__common__pools: {}
 bacula__default__pools:
   - Name: "#client#-VFull-Pool"
     Pool_Type: Backup
