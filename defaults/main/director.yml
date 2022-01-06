@@ -157,6 +157,24 @@ schedule_DailyVDI_Monthly: |
   {% endfor %}
   {{ res }}
 
+schedule_DailyVFull: |
+  {% set res = [ ] %}
+  {% set runs = [ "Level=VirtualFull daily at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'DailyVFull-'+'%02d' | format(h)|string+m,
+        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
 schedule_CopyVFull_Daily: |
   {% set res = [ ] %}
   {% set runs = [ "Level=VirtualFull daily at "] %}
