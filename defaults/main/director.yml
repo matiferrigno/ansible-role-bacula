@@ -157,61 +157,7 @@ schedule_DailyVDI_Monthly: |
   {% endfor %}
   {{ res }}
 
-schedule_DailyVFull: |
-  {% set res = [ ] %}
-  {% set runs = [ "Level=VirtualFull daily at "] %}
-  {% for h in range(24) %}
-  {% for m in ['00','30'] %}
-  {%
-    if res.append(
-      {
-        'name': 'DailyVFull-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
-      }
-    )
-  %}
-  {% endif %}
-  {% endfor %}
-  {% endfor %}
-  {{ res }}
-
-schedule_CopyVFull_Daily: |
-  {% set res = [ ] %}
-  {% set runs = [ "Level=VirtualFull daily at "] %}
-  {% for h in range(24) %}
-  {% for m in ['00','30'] %}
-  {%
-    if res.append(
-      {
-        'name': 'CopyVFull-Daily-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
-      }
-    )
-  %}
-  {% endif %}
-  {% endfor %}
-  {% endfor %}
-  {{ res }}
-
-schedule_MigrationVFull_Daily: |
-  {% set res = [ ] %}
-  {% set runs = [ "Level=VirtualFull daily at "] %}
-  {% for h in range(24) %}
-  {% for m in ['00','30'] %}
-  {%
-    if res.append(
-      {
-        'name': 'MigrationVFull-Daily-'+'%02d' | format(h)|string+m,
-        'run': runs | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
-      }
-    )
-  %}
-  {% endif %}
-  {% endfor %}
-  {% endfor %}
-  {{ res }}
-
-bacula__default__schedules: "{{ schedule_DailyVFull + schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly + schedule_CopyVFull_Daily + schedule_MigrationVFull_Daily }}"
+bacula__default__schedules: "{{ schedule_DailyVI_Weekly + schedule_DailyVDI_Biweekly + schedule_DailyVDI_Monthly }}"
 
 bacula_schedules: |
   {{
@@ -342,7 +288,7 @@ bacula__default__jobdefs:
     FileSet: default-linux-fs
     Messages: "{{ bacula_messages_default }}"
     Selection_Type: PoolUncopiedJobs
-    Schedule: CopyVFull-Daily-1200
+    Schedule: CopyVFull-Daily-0800
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
   - Name: DefaultMigrateJob
     Type: Migrate
