@@ -310,6 +310,7 @@ bacula__default__jobdefs:
     Accurate: yes
     Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c/%c_%n.bsr"
     Backups_To_Keep: 30
+    Delete_Consolidated_Jobs: yes
   - Name: DefaultLinuxJob
     Type: Backup
     Level: Incremental
@@ -326,6 +327,7 @@ bacula__default__jobdefs:
     Priority: 10
     Accurate: yes
     Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c/%c_%n.bsr"
+    Delete_Consolidated_Jobs: yes
   - Name: DefaultRestoreJob
     Type: Restore
     Storage: "{{ bacula_storage_default }}"
@@ -450,7 +452,6 @@ bacula__default__pools:
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
     Label_Format: "#client#-VFull-"
-    DeleteConsolidatedJobs: yes
   - Name: "#client#-Full-Pool"
     Pool_Type: Backup
     Recycle: yes
