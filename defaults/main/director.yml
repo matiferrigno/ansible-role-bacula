@@ -308,6 +308,8 @@ bacula__default__jobdefs:
     Prune_Volumes: yes
     Priority: 10
     Accurate: yes
+    Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c/%c_%n.bsr"
+    Backups_To_Keep: 30
   - Name: DefaultLinuxJob
     Type: Backup
     Level: Incremental
@@ -323,12 +325,14 @@ bacula__default__jobdefs:
     Prune_Volumes: yes
     Priority: 10
     Accurate: yes
+    Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c/%c_%n.bsr"
   - Name: DefaultRestoreJob
     Type: Restore
     Storage: "{{ bacula_storage_default }}"
     FileSet: default-linux-fs
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
+    Bootstrap: "{{ bacula_storage_devices_root }}/%c/%c_%n.bsr"
   - Name: DefaultCopyJob
     Type: Copy
     Level: VirtualFull
@@ -379,6 +383,7 @@ bacula__common__jobs:
   Schedule: "DailyVDI-Monthly-0000"
   Client: "#client#-fd"
   Storage: "stg-#client#"
+
 
 bacula__default__jobs:
   - Name: "Restore_#client#"
@@ -445,6 +450,7 @@ bacula__default__pools:
     Use_Volume_Once: yes
     Cleaning_Prefix: Clean
     Label_Format: "#client#-VFull-"
+    DeleteConsolidatedJobs: yes
   - Name: "#client#-Full-Pool"
     Pool_Type: Backup
     Recycle: yes
