@@ -288,7 +288,7 @@ bacula__default__jobdefs:
     FileSet: default-linux-fs
     Messages: "{{ bacula_messages_default }}"
     Selection_Type: PoolUncopiedJobs
-    Schedule: CopyVFull-Daily-0800
+    Schedule: DailyVDI-Monthly-0800
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
   - Name: DefaultMigrateJob
     Type: Migrate
@@ -297,7 +297,7 @@ bacula__default__jobdefs:
     FileSet: default-linux-fs
     Messages: "{{ bacula_messages_default }}"
     Selection_Type: PoolUncopiedJobs
-    Schedule: MigrationVFull-Daily-1200
+    Schedule: DailyVDI-Monthly-0800
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
 
 bacula_jobdefs: |
