@@ -55,7 +55,7 @@ bacula__common__director_storage:
 bacula_director_storages: |
   {{
     bacula__default__director_storages +
-    bacula__custom__storages | default([])
+    bacula__custom__director_storages | default([])
   }}
 
 ###
