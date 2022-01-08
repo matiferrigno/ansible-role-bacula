@@ -24,10 +24,12 @@
       {% set p = i | combine(bacula__common__pools,i) %}
       {% set pName = p.Name | replace('#client#', item) %}
       {% set pNextPool = p.Next_Pool | replace('#client#', item) if p.Next_Pool | d() else none  %}
+      {% set pStorage = p.Storage | replace('#client#', item) if p.Storage | d() else none  %}
       {% set pLabelFormat = p.Label_Format | replace('#client#', item) %}
       {% set pool_changes = {
         'Name': pName,
         'Next_Pool': pNextPool,
+        'Storage': pStorage,
         'Label_Format': pLabelFormat,
         }
       %}
