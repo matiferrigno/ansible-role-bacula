@@ -283,7 +283,7 @@ bacula__default__jobdefs:
     Bootstrap: "{{ bacula_storage_devices_root }}/%c_%n.bsr"
   - Name: DefaultCopyJob
     Type: Copy
-    Level: VirtualFull
+    Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: default-linux-fs
     Messages: "{{ bacula_messages_default }}"
@@ -292,7 +292,7 @@ bacula__default__jobdefs:
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
   - Name: DefaultMigrateJob
     Type: Migrate
-    Level: VirtualFull
+    Level: Incremental
     Storage: "{{ bacula_storage_default }}"
     FileSet: default-linux-fs
     Messages: "{{ bacula_messages_default }}"
