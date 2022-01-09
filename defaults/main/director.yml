@@ -254,7 +254,6 @@ bacula__default__jobdefs:
     Prune_Volumes: yes
     Priority: 10
     Accurate: yes
-    Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c_%n.bsr"
     Backups_To_Keep: 30
     Delete_Consolidated_Jobs: yes
   - Name: DefaultLinuxJob
@@ -272,7 +271,6 @@ bacula__default__jobdefs:
     Prune_Volumes: yes
     Priority: 10
     Accurate: yes
-    Write_Bootstrap: "{{ bacula_storage_devices_root }}/%c_%n.bsr"
     Delete_Consolidated_Jobs: yes
   - Name: DefaultRestoreJob
     Type: Restore
@@ -280,7 +278,6 @@ bacula__default__jobdefs:
     FileSet: default-linux-fs
     Maximum_Concurrent_Jobs: "{{ bacula_jobdef_maximum_concurrent_jobs | default(8) }}"
     Messages: "{{ bacula_messages_default }}"
-    Bootstrap: "{{ bacula_storage_devices_root }}/%c_%n.bsr"
   - Name: DefaultCopyJob
     Type: Copy
     Level: Incremental
