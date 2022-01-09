@@ -182,12 +182,20 @@
       {% set cPool = j.Pool | replace('#client#', item) if j.Pool | d() else none %}
       {% set cNextPool = j.Next_Pool | replace('#client#', item) if j.Next_Pool | d() else none %}
       {% set cStorage = j.Storage | replace('#client#', item) if j.Storage | d() else none %}
+      {% set cFullBackupPool = j.Full_Backup_Pool | replace('#client#', item) if j.Full_Backup_Pool | d() else none %}
+      {% set cDifferentialBackupPool = j.Differential_Backup_Pool | replace('#client#', item) if j.Differential_Backup_Pool | d() else none %}
+      {% set cIncrementalBackupPool = j.Incremental_Backup_Pool | replace('#client#', item) if j.Incremental_Backup_Pool | d() else none %}
+      {% set cVirtualFullBackupPool = j.VirtualFull_Backup_Pool | replace('#client#', item) if j.VirtualFull_Backup_Pool | d() else none %}
       {% set job_changes = {
         'Name': cName,
         'Client': cClient,
         'Storage': cStorage,
         'Pool': cPool,
         'Next_Pool': cNextPool,
+        'VirtualFull_Backup_Pool': cVirtualFullBackupPool,
+        'Full_Backup_Pool': cFullBackupPool,
+        'Differential_Backup_Pool': cDifferentialBackupPool,
+        'Incremental_Backup_Pool': cIncrementalBackupPool
         }
       %}
       {% endif %}
