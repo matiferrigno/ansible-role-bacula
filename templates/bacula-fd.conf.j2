@@ -17,33 +17,37 @@ Director {
 {%  endfor %}
 
 FileDaemon {
-<<<<<<< HEAD
-  Name = {{ item.name }}-fd
-  FDPort = {{ item.fdport | default(bacula__default__client_fdport) }}
-  WorkingDirectory = /var/lib/bacula
-  Pid Directory = /run/bacula
-  Maximum Concurrent Jobs = 20
-  Plugin Directory = /usr/lib/bacula
-  FDAddress = {{ item.host | default(ansible_default_ipv4.address) }}
-{% if bacula_fd_tls_enabled|bool %}
-  TLS Enable = yes
-  TLS Require = {{ bacula_fd_tls_require }}
-  TLS Certificate = {{ bacula_fd_tls_certificate }}
-  TLS Key = {{ bacula_fd_tls_key }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
-{% endif %}
-
-=======
 {%  for opt in FileDaemon | dict2items %}
 {{ macro.proccess_opt(opt,2) }}
 {%  endfor %}
->>>>>>> develop
 }
 
 Messages {
   Name = Standard
   director = {{ bacula_director_default }} = all, !skipped, !restored
 }
+
+{% for e in file_raw_lines | default([]) %}
+{{ e }}
+{% endfor %}
+
+
+##
+## Default Schedules (for ClientToDirector)
+##
+
+{%  for res in bacula_schedules_connect | default([]) | default([]) -%}
+Schedule {
+
+{%  for opt in res | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+{% for f in resource_raw_lines | default([]) %}
+{{ f }}
+{% endfor %}
+}
+
+{%  endfor %}
 
 {% for e in file_raw_lines | default([]) %}
 {{ e }}

@@ -16,3 +16,73 @@ bacula__default__filedaemon_director:
   Name: "{{ bacula__default__director.Name }}"
   Description: "{{ bacula__default__director.Description }}"
   Password: "{{ bacula_client_password | default('changeme!') }}"
+  Address: "{{ hostvars[bacula_director_default]['ansible_default_ipv4'].address }}"
+  Connect_To_Director: "{{ bacula_client_nat_default }}"
+  Schedule: "{{ bacula_filedaemon_default_schedule_connect }}"
+
+
+
+###
+# Connect Hours
+###
+schedule_connect_WeekWait4h: |
+  {% set res = [ ] %}
+  {% set connects = [ "MaxConnectTime=4h on mon-sun at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'WeekWait4h-'+'%02d' | format(h)|string+m,
+        'Connect': connects | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_connect_WeekWait2h: |
+  {% set res = [ ] %}
+  {% set connects = [ "MaxConnectTime=2h on mon-sun at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'WeekWait2h-'+'%02d' | format(h)|string+m,
+        'Connect': connects | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+schedule_connect_WeekWait1h: |
+  {% set res = [ ] %}
+  {% set connects = [ "MaxConnectTime=1h on mon-sun at "] %}
+  {% for h in range(24) %}
+  {% for m in ['00','30'] %}
+  {%
+    if res.append(
+      {
+        'name': 'WeekWait1h-'+'%02d' | format(h)|string+m,
+        'Connect': connects | map('regex_replace', '^(.*) at $', '\\1 at '+h|string+':'+m) | list
+      }
+    )
+  %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {{ res }}
+
+bacula__default__schedule_connect: "{{ schedule_connect_WeekWait1h + schedule_connect_WeekWait2h + schedule_connect_WeekWait4h }}"
+
+bacula_schedules_connect: |
+  {{
+    bacula__default__schedule_connect +
+    bacula_schedule_connect | default([])
+  }}

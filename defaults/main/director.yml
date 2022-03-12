@@ -90,7 +90,7 @@ bacula__common__clients:
   Maximum_Concurrent_Jobs: 3
   Password: "#client_password#"
   Catalog: bacula-catalog
-
+  Allow_FD_Connections: "{{ bacula_director_default_allow_fd_connections }}"
 
 bacula__default__clients: []
 bacula__dynamic__clients: yes
