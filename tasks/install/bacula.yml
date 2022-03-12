@@ -1,0 +1,171 @@
+---
+
+- set_fact:
+    base_url: "{{ bacula_download_url }}/{{ bacula_distribution_release | default(ansible_distribution_release) }}/amd64"
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: install libwrap0
+  apt:
+    pkg:
+      - gpg
+      - gpg-agent
+      - libwrap0
+    state: present
+    update_cache: yes
+
+- name: Create temporary file
+  ansible.builtin.tempfile:
+    state: file
+    suffix: temp
+  register: tempfile_1
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu")
+  delegate_to: localhost
+
+# https://www.bacula.org/bacula-binary-package-download/
+- name: Fetch Packages file
+  ansible.builtin.get_url:
+    url: "{{ base_url }}/dists/{{ bacula_distribution_release | default(ansible_distribution_release) }}/main/binary-amd64/Packages"
+    dest: "{{ tempfile_1.path }}"
+    mode: u=r,g=r,o=
+    force: yes
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
+  delegate_to: localhost
+
+- name: Getting filenames from Package file
+  ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
+  register: filenames
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
+  delegate_to: localhost
+
+- name: Remove the temporary file
+  ansible.builtin.file:
+    path: "{{ tempfile_1.path }}"
+    state: absent
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
+  delegate_to: localhost
+
+- name: Create directory for debs
+  ansible.builtin.file:
+    path: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/"
+    state: directory
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
+  delegate_to: localhost
+
+- name: Download deb packages
+  ansible.builtin.get_url:
+    url: "{{ base_url }}/{{ item }}"
+    mode: u=rx,g=rx,o=
+    dest: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
+  loop: "{{ filenames.stdout_lines }}"
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
+  delegate_to: localhost
+
+- name: Create directory for win64
+  ansible.builtin.file:
+    path: "files/win64/"
+    state: directory
+  when: ansible_facts['os_family'] == "Windows"
+  delegate_to: localhost
+
+- name: Download windows binary
+  ansible.builtin.get_url:
+    url: "{{ bacula_download_url_windows }}"
+    mode: u=r,g=r,o=
+    dest: "files/win64/{{ bacula_download_url_windows | basename }}"
+  when: ansible_facts['os_family'] == "Windows"
+  delegate_to: localhost
+
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: bacula
+  register: tempdir_1
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Create temporary directory
+  ansible.windows.win_tempfile:
+    state: directory
+    suffix: bacula
+  register: win_tempdir
+  when: ansible_facts['os_family'] == "Windows"
+
+- name: Copy debs to server
+  ansible.builtin.copy:
+    src: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
+    dest: "{{ tempdir_1.path }}/{{ item | basename }}"
+    mode: '0755'
+  loop: "{{ filenames.stdout_lines }}"
+  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0 and tempdir_1.path is defined
+
+- name: Copy exe to server
+  ansible.windows.win_copy:
+    src: "files/win64/{{ bacula_download_url_windows | basename }}"
+    dest: "{{ win_tempdir.path }}/{{ bacula_download_url_windows | basename }}"
+  when: ansible_facts['os_family'] == "Windows"
+
+- name: Install fd on linux
+  include_tasks: fd-linux.yml
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Install fd on windows
+  include_tasks: fd-win64.yml
+  when: ansible_facts['os_family'] == "Windows"
+
+- name: Remove the temporary directory
+  ansible.builtin.file:
+    path: "{{ tempdir_1.path }}"
+    state: absent
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu" and tempdir_1.path is defined
+
+# - name: Remove windows temporary directory
+#   ansible.builtin.file:
+#     path: "{{ win_tempdir.path }}"
+#     state: absent
+#   when: ansible_facts['os_family'] == "Windows" and win_tempdir.path is defined
+
+- name: Create a symlink /etc/bacula
+  ansible.builtin.file:
+    src: "{{ bacula_root }}/etc"
+    dest: /etc/bacula
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: link
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Create directory config.d/
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}/etc/config.d/"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Create log directory
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}/log"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: u=rwx,g=rx,o=rx
+    state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Create log files
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}/log/{{ item }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: u=rwx,g=rwx,o=rwx
+    state: touch
+  loop:
+    - info.log
+    - error_warning.log
+    - all.log
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
+
+- name: Check permissions on "{{ bacula_root }}"
+  ansible.builtin.file:
+    dest: "{{ bacula_root }}"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    state: directory
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"

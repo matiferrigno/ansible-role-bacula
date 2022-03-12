@@ -5,52 +5,19 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
-#
-# Default  Bacula File Daemon Configuration file
-#
-#  For Bacula release 9.4.2 (04 February 2019) -- ubuntu 20.04
-#
-# There is not much to change here except perhaps the
-# File daemon Name to
-#
-#
-# Copyright (C) 2000-2015 Kern Sibbald
-# License: BSD 2-Clause; see file LICENSE-FOSS
-#
+{% import "./templates/macros.j2" as macro %}
 
-#
-# List Directors who are permitted to contact this File daemon
-#
+{%  for dir in Directors | default([]) -%}
 Director {
-  Name = {{ bacula_dir_name }}
-  Password = "{{ item.pass | default(bacula__default__client_pass) }}"
-{% if bacula_fd_tls_enabled|bool %}
-  TLS Enable = yes
-  TLS Require = {{ bacula_fd_tls_require }}
-  TLS Verify Peer = {{ bacula_fd_tls_verify_peer }}
-  TLS Certificate = {{ bacula_fd_tls_certificate }}
-  TLS Key = {{ bacula_fd_tls_key }}
-  TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
-{% else %}
-  TLS Enable = no
-{% endif %}
-
+{%  for opt in dir | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
 }
 
-#
-# Restricted Director, used by tray-monitor to get the
-#   status of the file daemon
-#
-Director {
-  Name = {{ bacula_dir_name }}-mon
-  Password = "{{ item.pass | default(bacula__default__client_pass) }}"
-  Monitor = yes
-}
+{%  endfor %}
 
-#
-# "Global" File daemon configuration specifications
-#
 FileDaemon {
+<<<<<<< HEAD
   Name = {{ item.name }}-fd
   FDPort = {{ item.fdport | default(bacula__default__client_fdport) }}
   WorkingDirectory = /var/lib/bacula
@@ -66,10 +33,18 @@ FileDaemon {
   TLS CA Certificate File = {{ bacula_dir_tls_ca_certificate }}
 {% endif %}
 
+=======
+{%  for opt in FileDaemon | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+>>>>>>> develop
 }
 
-# Send all messages except skipped files back to Director
 Messages {
   Name = Standard
-  director = {{ bacula_dir_name }} = all, !skipped, !restored
+  director = {{ bacula_director_default }} = all, !skipped, !restored
 }
+
+{% for e in file_raw_lines | default([]) %}
+{{ e }}
+{% endfor %}

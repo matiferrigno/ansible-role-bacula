@@ -1,0 +1,15 @@
+---
+
+###
+# Telegram
+###
+
+bacula_addons:
+  telegram:
+    enabled: yes
+    id: ""
+    api_token: ""
+    logfile: "{{ bacula_root }}/log/telegram.log"
+    on_failure: yes
+    on_client: no
+    on_success: yes

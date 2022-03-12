@@ -1,0 +1,20 @@
+---
+
+bacula_community_registration: changeme!
+bacula_storage_default_address: bacula
+bacula_catalog_default_password: STRYSTRES29UVURoeVBlU1ZPNDdielJn
+bacula_director_default_password: a1hLanQ2SkViaUdJUE9kOWRwM2VBdWF0%
+bacula_storage_director_default_password: MFRDZ1JzdHM0M29JVEp3ZlJFTkl4Y1dH%
+
+bacula_storage_devices_root: /var/backups/
+
+bacula__dynamic__catalogs: no
+# bacula_addons:
+#   telegram:
+#     enabled: yes
+#     id: "changeme!"
+#     api_token: "changeme!"
+#     logfile: "{{ bacula_root }}/log/telegram.log"
+#     on_failure: yes
+#     on_client: no
+#     on_success: yes

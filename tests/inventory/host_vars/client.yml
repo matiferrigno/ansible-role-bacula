@@ -1,0 +1,20 @@
+---
+
+bacula_client_password: Mk9VUFF0WDFJNWdxblJXcDhSWXJ1bGJJ%
+
+bacula_client_jobs:
+  - Name: "Backup_CLIENT"
+    FileSet: "CLIENT-fs"
+    Schedule: "DailyVDI-Monthly-1900"
+    JobDefs: "DefaultLinuxJob"
+
+bacula_filesets:
+  - Name: CLIENT-fs
+    Include:
+      File:
+        - "/etc"
+        - "/root"
+        - "/home"
+        - "/var/lib/k0s"
+        - "/var/lib/mysql"
+    Exclude: {}

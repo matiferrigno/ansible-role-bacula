@@ -1,0 +1,28 @@
+{% macro print_opt(o,n_indent) -%}
+{%- filter indent(width=n_indent, first=true) -%}
+{{ o.key | replace('_',' ') }} = {{ o.value }}
+{%- endfilter -%}
+{%- endmacro %}
+
+{%- macro print_list(o,n_indent) -%}
+{% filter indent(width=n_indent, first=true) %}
+{% for i in o.value %}
+{{ o.key | replace('_',' ') }} = {{ i }}
+{% endfor %}
+{% endfilter %}
+{%- endmacro -%}
+
+{%- macro proccess_opt(opt,n_indent) -%}
+{% if opt.value | type_debug == "dict" %}
+{% set opt_to_items = opt.value | dict2items %}
+{{ opt.key | indent(width=n_indent, first=true) }} {
+{% for o2i in opt_to_items %}
+{{ proccess_opt(o2i,n_indent + 2) }}
+{% endfor -%}
+{{ "}" | indent(width=n_indent, first=true)  }}
+{%- elif opt.value | type_debug == "list" -%}
+{{ print_list(opt,n_indent) }}
+{%- else %}
+{{ print_opt(opt,n_indent) }}
+{%- endif %}
+{%- endmacro -%}

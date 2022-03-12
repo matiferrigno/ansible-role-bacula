@@ -1,18 +1,7 @@
 ---
-# tasks file for matiferrigno.ansible-bacula
 
-- include_tasks: define.yml
+- name: Install dir
+  include_tasks: dir.yml
 
-- name: Install server components
-  include_tasks: components.yml
-  when: not bacula_only_client|bool
-  tags:
-    - server
-
-- name: Install client component
-  include_tasks: client.yml
-  tags:
-    - client
-  when: bacula_only_client|bool and item.enabled|bool
-  with_items:
-    - "{{ bacula_client | default([]) }}"
+- name: Install sd
+  include_tasks: sd.yml

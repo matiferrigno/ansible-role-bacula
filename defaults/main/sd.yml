@@ -1,0 +1,71 @@
+---
+
+bacula_storage_devices_root: "/var/backups"
+bacula_storage_director_default_password: changeme!
+
+bacula__default__storage_director:
+  Name: Bacula-dir
+  Password: "{{ bacula_storage_director_default_password }}"
+
+bacula__common__storage:
+  Name: bacula-sd
+  SDAddress: 0.0.0.0
+  WorkingDirectory: "{{ bacula_root + '/working/' }}"
+  PidDirectory: "{{ bacula_root + '/working/' }}"
+  Maximum_Concurrent_Jobs: 20
+  Plugin_Directory: "{{ bacula_root }}/plugins/"
+
+bacula_storage: |
+  {{
+    bacula__common__storage
+    | combine(bacula__custom__storage | default({}))
+  }}
+
+###
+# Autochanger
+###
+
+bacula_autochanger: []
+
+###
+# Devices
+###
+
+bacula__dynamic__devices: yes
+
+bacula__common__device:
+  Name: FileStorage-#client#
+  Media_Type: File
+  Device_Type: File
+  Archive_Device: "{{ bacula_storage_devices_root }}/#client#"
+  LabelMedia: yes
+  Random_Access: yes
+  AutomaticMount: yes
+  RemovableMedia: no
+  AlwaysOpen: no
+
+bacula__default__devices:
+  - Name: FileStorage-default
+    Media_Type: File
+    Device_Type: File
+    Archive_Device: "{{ bacula_storage_devices_root }}/default"
+    LabelMedia: yes
+    Random_Access: yes
+    AutomaticMount: yes
+    RemovableMedia: no
+    AlwaysOpen: no
+  - Name: FileStorage-#client#
+    Media_Type: File
+    Device_Type: File
+    Archive_Device: "{{ bacula_storage_devices_root }}/#client#"
+    LabelMedia: yes
+    Random_Access: yes
+    AutomaticMount: yes
+    RemovableMedia: no
+    AlwaysOpen: no
+
+bacula_devices: |
+  {{
+    bacula__default__devices | default([]) +
+    bacula__custom__devices | default([])
+  }}

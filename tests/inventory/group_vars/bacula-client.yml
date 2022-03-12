@@ -1,0 +1,7 @@
+---
+
+bacula_client_jobs:
+  - Name: "Backup_#client#"
+    FileSet: "#client#-fs"
+    Schedule: "DailyVDI-Monthly-0930"
+    JobDefs: "DefaultLinuxJob"

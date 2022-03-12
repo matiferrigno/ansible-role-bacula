@@ -1,0 +1,18 @@
+---
+
+###
+# FileDaemon
+###
+bacula__common__filedaemon:
+  Name: "{{ inventory_hostname }}-fd"
+  FDPort: 9102
+  FDAddress: 0.0.0.0
+  WorkingDirectory: "{{ bacula_root }}/"
+  Pid_Directory: "{{ bacula_root }}/working/"
+  Maximum_Concurrent_Jobs: 5
+  Plugin_Directory: "{{ bacula_root }}/plugins/"
+
+bacula__default__filedaemon_director:
+  Name: "{{ bacula__default__director.Name }}"
+  Description: "{{ bacula__default__director.Description }}"
+  Password: "{{ bacula_client_password | default('changeme!') }}"

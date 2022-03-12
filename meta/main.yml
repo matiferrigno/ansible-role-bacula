@@ -12,10 +12,7 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - buster
-    - name: Ubuntu
-      versions:
-        - focal
+        - bullseye
 
   galaxy_tags:
     - system

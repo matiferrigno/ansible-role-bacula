@@ -1,32 +1,29 @@
 ---
 # handlers file for matiferrigno.ansible-bacula
 
-- name: Bacula-director restarted
+- name: restart
   systemd:
-    name: bacula-director
+    name: bacula-dir
     state: restarted
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
-- name: Bacula-client restarted
-  systemd:
-    name: bacula-fd
-    state: restarted
+- name: bacula-dir configtest
+  shell: "./bacula-dir -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
+  changed_when: false
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
-- name: Bacula-director reloaded
-  systemd:
-    name: bacula-director
-    state: reloaded
+- name: bacula-sd configtest
+  shell: "./bacula-sd -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
+  changed_when: false
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
-- name: Bacula-storage restarted
-  systemd:
-    name: bacula-sd
-    state: restarted
-
-- name: Bacula-storage reloaded
-  systemd:
-    name: bacula-sd
-    state: reloaded
-
-- name: Mysqld restarted
-  systemd:
-    name: mysql
-    state: restarted
+- name: bacula-fd configtest
+  shell: "./bacula-fd -t"
+  args:
+    chdir: "{{ bacula_root }}/bin"
+  changed_when: false
+  when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"

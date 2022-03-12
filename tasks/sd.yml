@@ -1,0 +1,22 @@
+---
+
+- name: Fetch binaries and install
+  include_tasks: install/bacula.yml
+
+- name: Prepare configuration (sd)
+  include_tasks: prepare/sd.yml
+
+- name: Update config on sd
+  template:
+    src: bacula-sd.conf.j2
+    dest: "{{ bacula_root }}/etc/bacula-sd.conf"
+    owner: "{{ bacula_owner }}"
+    group: "{{ bacula_group }}"
+    mode: 0664
+  vars:
+    Directors: "{{ ([ bacula__default__storage_director ] + hostvars[inventory_hostname][bacula_storage_directors_var] | default([]))  | unique | list }}"
+    Storage: "{{ bacula_storage | default([]) }}"
+    Autochanger: "{{ bacula_autochanger | default([]) }}"
+    Devices: "{{ (devices | default([]) + dyn_devices if bacula__dynamic__devices else devices | default([])) | unique | list  }}"
+  notify:
+    - bacula-sd configtest

@@ -5,6 +5,7 @@
 ## Role: matiferrigno.bacula ##
 ###############################
 
+<<<<<<< HEAD
 Storage {
 
   ###########
@@ -44,35 +45,45 @@ Storage {
   {{ element.name }} = {{ element.value }}
 {% endif %}
 {% endfor %}
+=======
+{% import "./templates/macros.j2" as macro %}
+>>>>>>> develop
 
+Storage {
+{%  for opt in Storage | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
 }
 
+{%  for dir in Directors | default([]) -%}
 Director {
-  name = {{ bacula_dir_name }}
-  password = "{{ bacula_sd_pass }}"
-
-  #########
-  ## TLS ##
-  #########
-{% if bacula_dir_tls_enabled|bool %}
-  TLS Enable = yes
-  TLS Require = {{ bacula_dir_tls_require }}
-  TLS Verify Peer = {{ bacula_dir_tls_verify_peer }}
-  TLS Certificate = {{ bacula_sd_tls_certificate }}
-  TLS Key = {{ bacula_sd_tls_key }}
-  TLS CA Certificate File = {{ bacula_sd_tls_ca_certificate }}
-{% else %}
-  TLS Enable = no
-{% endif %}
+{%  for opt in dir | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
 }
+{%  endfor %}
 
 Messages {
-  Name = {{ bacula__default__sd_messages }}
-  director = {{ bacula_dir_name }} = all
+  Name = Standard
+  director = {{ bacula_director_default }} = all, !skipped, !restored
 }
 
-########################################
-## Include all clients configuration  ##
-########################################
-@|"find /etc/bacula/devs.d -name '*.conf' -type f -exec echo @{} \;"
+{%  for ac in Autochanger | default([]) -%}
+Autochanger {
+{%  for opt in ac | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+}
+{%  endfor %}
 
+{%  for device in Devices | default([]) -%}
+Device {
+{%  for opt in device | dict2items %}
+{{ macro.proccess_opt(opt,2) }}
+{%  endfor %}
+}
+{%  endfor %}
+
+{% for e in file_raw_lines | default([]) %}
+{{ e }}
+{% endfor %}
