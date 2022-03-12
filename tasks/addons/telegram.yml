@@ -3,8 +3,8 @@
 - name: Install curl and bc
   apt:
     pkg:
-    - curl
-    - bc
+      - curl
+      - bc
     update_cache: yes
 
 - name: Create log file for telegram

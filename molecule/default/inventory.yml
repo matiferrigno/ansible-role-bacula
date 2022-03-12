@@ -1,0 +1,25 @@
+---
+
+all:
+  vars:
+    gather_facts: false
+    bacula_no_log: false
+  children:
+    bacula-storage:
+      hosts: &bacula_storage
+        bacula.molecule:
+    bacula-catalog:
+      hosts: &bacula_catalog
+        bacula.molecule:
+    bacula-director:
+      hosts: &bacula_director
+        bacula.molecule:
+    bacula-client:
+      hosts: &bacula_client
+        client.molecule:
+    bacula:
+      hosts:
+        <<: *bacula_client
+        <<: *bacula_director
+        <<: *bacula_storage
+        <<: *bacula_catalog

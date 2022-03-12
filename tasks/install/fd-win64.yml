@@ -6,4 +6,3 @@
     path: "{{ win_tempdir.path }}/{{ bacula_download_url_windows | basename }}"
     product_id: 'bacula-fd'
     arguments: /S
-

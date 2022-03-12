@@ -69,4 +69,3 @@ bacula_devices: |
     bacula__default__devices | default([]) +
     bacula__custom__devices | default([])
   }}
-

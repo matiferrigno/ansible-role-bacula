@@ -4,6 +4,15 @@
     base_url: "{{ bacula_download_url }}/{{ bacula_distribution_release | default(ansible_distribution_release) }}/amd64"
   when: ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu"
 
+- name: install libwrap0
+  apt:
+    pkg:
+      - gpg
+      - gpg-agent
+      - libwrap0
+    state: present
+    update_cache: yes
+
 - name: Create temporary file
   ansible.builtin.tempfile:
     state: file

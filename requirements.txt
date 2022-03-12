@@ -1,8 +1,4 @@
 ansible
 ansible-lint
-ara
 molecule
 molecule-docker
-molecule-podman
-molecule-vagrant
-python-vagrant
