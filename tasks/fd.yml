@@ -4,12 +4,9 @@
   include_tasks: install/bacula.yml
   when: bacula_filedaemon_install | default(true)
   vars:
-    bacula_install_console: "{{ bacula_install_console | default(true) }}"
-    bacula_install_common: "{{ bacula_install_common | default(true) }}"
-    bacula_install_client: "{{ bacula_install_client | default(true) }}"
-    bacula_install_aligned:  "{{ bacula_install_aligned | default(false) }}"
-    bacula_install_gui:  "{{ bacula_install_gui | default(false) }}"
-    bacula_install_database:  "{{ bacula_install_database | default(false) }}"
+    bacula_install_aligned: false
+    bacula_install_gui: false
+    bacula_install_database: false
 
 - name: Update config on client
   template:
