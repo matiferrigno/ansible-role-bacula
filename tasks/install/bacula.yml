@@ -30,6 +30,7 @@
     force: yes
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
   delegate_to: localhost
+  ignore_errors: true
   register: getPackages
 
 - name: Getting filenames from Package file
