@@ -16,6 +16,7 @@ bacula_install_gui: yes
 bacula_install_common: yes
 bacula_install_client: yes
 bacula_install_database: yes
+
 bacula_root: /opt/bacula
 bacula_owner: bacula
 bacula_group: tape
