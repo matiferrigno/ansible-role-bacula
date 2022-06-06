@@ -30,12 +30,14 @@
     force: yes
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
   delegate_to: localhost
+  ignore_errors: true
 
 - name: Getting filenames from Package file
   ansible.builtin.shell: "cat {{ tempfile_1.path }} | grep -Eo 'dists.*\\.deb'"
   register: filenames
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and  tempfile_1.path is defined
   delegate_to: localhost
+  ignore_errors: true
 
 - name: Remove the temporary file
   ansible.builtin.file:
@@ -51,13 +53,17 @@
   when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and tempfile_1.path is defined
   delegate_to: localhost
 
+- local_action: stat path= "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
+  register: debs
+  loop: "{{ filenames.stdout_lines }}"
+
 - name: Download deb packages
   ansible.builtin.get_url:
-    url: "{{ base_url }}/{{ item }}"
+    url: "{{ base_url }}/{{ item.path | basename }}"
     mode: u=rx,g=rx,o=
-    dest: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item | basename }}"
-  loop: "{{ filenames.stdout_lines }}"
-  when: (ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0
+    dest: "files/debs/{{ bacula_distribution_release | default(ansible_distribution_release) }}/{{ item.path | basename }}"
+  loop: "{{ debs }}"
+  when: item.stat.exists == False and ((ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "Ubuntu") and filenames.rc == 0)
   delegate_to: localhost
 
 - name: Create directory for win64
